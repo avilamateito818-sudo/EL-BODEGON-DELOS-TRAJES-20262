@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / SO
+.vscode/
+.idea/
+*.swp
+
+# Datos locales sensibles / credenciales
+bodegon_admin_session
+*.log
+
+# Construcciones / cache
+dist/
+build/
+.cache/

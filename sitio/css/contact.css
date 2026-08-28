@@ -1,0 +1,578 @@
+/* CONTACT SECTION - TEMA SEGÚN MES ACTIVO */
+#contacto {
+  color: var(--season-accent);
+  background: var(--season-accent-soft);
+}
+
+#contacto span,
+#contacto p,
+#contacto a,
+#contacto label,
+#contacto h2,
+#contacto h3 {
+  color: var(--season-accent);
+  text-shadow: 0 0 12px var(--season-glow);
+  font-weight: 600;
+}
+
+/* Form refinement for contact section */
+#contacto .contact-card h3 {
+  color: var(--season-accent);
+}
+
+#contacto input,
+#contacto textarea {
+  width: 100%;
+  padding: 1.8rem;
+  /* Increased padding for a larger feel */
+  font-size: 1.1rem;
+  border: 1px solid var(--season-accent-soft);
+  border-bottom: 2px solid var(--season-accent);
+  color: var(--season-accent);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  transition: var(--transition-premium);
+  font-family: 'Quicksand', sans-serif;
+}
+
+#contacto input::placeholder,
+#contacto textarea::placeholder {
+  color: var(--season-accent);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+}
+
+#contacto input:focus,
+#contacto textarea:focus {
+  background: var(--season-accent-soft);
+  border-color: var(--season-accent);
+  box-shadow: 0 0 25px var(--season-glow);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.flex-contact {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 6rem;
+  align-items: flex-start;
+}
+
+.contact-form-container {
+  background: var(--season-accent-soft);
+  padding: 4rem;
+  border-radius: 20px;
+  border: 1px solid var(--season-accent-soft);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1.8rem;
+  background: var(--season-accent);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  cursor: pointer;
+  transition: var(--transition-premium);
+  box-shadow: 0 15px 30px var(--season-glow);
+}
+
+.submit-btn:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 20px 40px var(--season-glow);
+  transform: translateY(-5px) scale(1.02);
+}
+
+footer {
+  padding: 8rem 10%;
+  background: var(--pure-black);
+  border-top: 1px solid rgba(159, 34, 46, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+footer p {
+  color: #CBD5E1;
+  font-size: 1rem;
+  margin-top: 1.2rem;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* ESSENCE SECTION (MOVING FROM INLINE) */
+.essence-container {
+  max-width: 900px;
+  margin: 1rem auto 0;
+  text-align: center;
+}
+
+.essence-heading {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: var(--halloween-vivid);
+}
+
+.essence-cover {
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 140, 0, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.55);
+}
+
+.essence-cover img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  display: block;
+}
+
+.essence-lead {
+  font-size: 1.15rem;
+  line-height: 2.2;
+  color: var(--ghostly-white);
+  font-weight: 500;
+}
+
+.essence-detail {
+  margin-top: 2rem;
+  font-size: 1.11rem;
+  color: var(--halloween-vivid);
+  font-weight: 600;
+}
+
+.essence-cat {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  line-height: 2.1;
+  color: var(--ghostly-white);
+  font-weight: 500;
+}
+
+.essence-cat strong {
+  color: var(--halloween-vivid);
+}
+
+.essence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.essence-links .season-cta {
+  padding: 0.9rem 1.8rem;
+  font-size: 0.7rem;
+}
+
+/* UTILITY CLASSES */
+.section-ambient-bg {
+  background: rgba(255, 140, 0, 0.015);
+}
+
+.contact-intro {
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.footer-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* ANIMATIONS */
+@keyframes floatEffect {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-25px) rotate(1deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .flex-contact {
+    grid-template-columns: 1fr;
+    gap: 5rem;
+  }
+
+  .hero-box h2 {
+    font-size: 3.5rem;
+  }
+
+  section {
+    padding: 8rem 8%;
+  }
+}
+
+/* CONTACTO: COLOR DEL MES ACTIVO */
+#contacto {
+  color: var(--season-accent) !important;
+}
+
+#contacto .section-head h2,
+#contacto .section-head span {
+  color: var(--season-dark) !important;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#contacto h3,
+#contacto .contact-intro,
+#contacto .contact-detail p,
+#contacto label {
+  color: var(--season-dark) !important;
+  font-weight: 700;
+}
+
+#contacto p {
+  color: var(--season-dark-soft) !important;
+  font-weight: 600;
+}
+
+#contacto input,
+#contacto textarea {
+  border-bottom: 2px solid var(--season-accent) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #1a1a1a !important;
+  font-weight: 600;
+}
+
+#contacto .submit-btn {
+  background: var(--season-accent) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+  font-weight: 700;
+  box-shadow: 0 0 20px var(--season-glow);
+}
+
+#contacto .submit-btn:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 30px var(--season-glow);
+}
+
+#contacto .contact-card {
+  border: 2px solid var(--season-accent) !important;
+  box-shadow: 0 0 25px var(--season-glow), 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+#contacto .contact-card h3 {
+  color: var(--season-dark) !important;
+  font-size: 1.8rem;
+}
+
+#contacto .season-cta {
+  color: var(--season-dark) !important;
+  border-color: var(--season-accent) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+#contacto .season-cta:hover {
+  background: var(--season-accent) !important;
+  color: #fff !important;
+}
+
+/* CONTACTO: COLOR DEL MES ACTIVO */
+#temporadas ~ #contacto {
+  --season-accent: #d4af37;
+  --season-glow: rgba(212, 175, 55, 0.35);
+  --season-accent-soft: rgba(212, 175, 55, 0.08);
+}
+
+#temporadas[data-season="enero"] ~ #contacto {
+  --season-accent: #FFD700;
+  --season-glow: rgba(255, 215, 0, 0.5);
+  --season-accent-soft: rgba(255, 215, 0, 0.18);
+  --season-dark: #0D2440;
+  --season-dark-soft: #1A3A6B;
+  background: linear-gradient(165deg, #1A3A6B, #0D2440, #162D50);
+}
+
+#temporadas[data-season="febrero"] ~ #contacto {
+  --season-accent: #cf7f8a;
+  --season-glow: rgba(207, 127, 138, 0.4);
+  --season-accent-soft: rgba(207, 127, 138, 0.12);
+  --season-dark: #6e3540;
+  --season-dark-soft: #8a5560;
+  background: linear-gradient(165deg, #fde2e4, #fad2cf, #fce4ec);
+}
+
+#temporadas[data-season="marzo"] ~ #contacto {
+  --season-accent: #c9a227;
+  --season-glow: rgba(201, 162, 39, 0.4);
+  --season-accent-soft: rgba(201, 162, 39, 0.12);
+  --season-dark: #6b5613;
+  --season-dark-soft: #8a7325;
+  background: linear-gradient(165deg, #f9e79f, #fdebd0, #fcf3cf);
+}
+
+#temporadas[data-season="abril"] ~ #contacto {
+  --season-accent: #5aa75a;
+  --season-glow: rgba(90, 167, 90, 0.4);
+  --season-accent-soft: rgba(90, 167, 90, 0.12);
+  --season-dark: #2f5d2f;
+  --season-dark-soft: #4c744c;
+  background: linear-gradient(165deg, #d5f5e3, #e8f8f5, #d4efdf);
+}
+
+#temporadas[data-season="mayo"] ~ #contacto {
+  --season-accent: #8f7bc9;
+  --season-glow: rgba(143, 123, 201, 0.4);
+  --season-accent-soft: rgba(143, 123, 201, 0.12);
+  --season-dark: #4b3a7a;
+  --season-dark-soft: #6b5799;
+  background: linear-gradient(165deg, #e8daef, #ebdef0, #d7bde2);
+}
+
+#temporadas[data-season="junio"] ~ #contacto {
+  --season-accent: #d4a72e;
+  --season-glow: rgba(212, 167, 46, 0.4);
+  --season-accent-soft: rgba(212, 167, 46, 0.12);
+  --season-dark: #6b5613;
+  --season-dark-soft: #8a7325;
+  background: linear-gradient(165deg, #fdebd0, #fef9e7, #fcf3cf);
+}
+
+#temporadas[data-season="julio"] ~ #contacto {
+  --season-accent: #3fa49b;
+  --season-glow: rgba(63, 164, 155, 0.4);
+  --season-accent-soft: rgba(63, 164, 155, 0.12);
+  --season-dark: #1f5b56;
+  --season-dark-soft: #3d7570;
+  background: linear-gradient(165deg, #d1f2eb, #e8f8f5, #d0ece7);
+}
+
+#temporadas[data-season="agosto"] ~ #contacto {
+  --season-accent: #cf8b4a;
+  --season-glow: rgba(207, 139, 74, 0.4);
+  --season-accent-soft: rgba(207, 139, 74, 0.12);
+  --season-dark: #7a4a24;
+  --season-dark-soft: #9a6438;
+  background: linear-gradient(165deg, #fdebd0, #f9e79f, #f5cba7);
+}
+
+#temporadas[data-season="septiembre"] ~ #contacto {
+  --season-accent: #64748b;
+  --season-glow: rgba(100, 116, 139, 0.4);
+  --season-accent-soft: rgba(100, 116, 139, 0.12);
+  --season-dark: #33445c;
+  --season-dark-soft: #51647e;
+  background: linear-gradient(165deg, #d6eaf8, #eaf2f8, #d4e6f1);
+}
+
+#temporadas[data-season="octubre"] ~ #contacto {
+  --season-accent: #ff6600;
+  --season-glow: rgba(255, 102, 0, 0.4);
+  --season-accent-soft: rgba(255, 102, 0, 0.12);
+  background-color: #0a0000 !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .section-head h2,
+#temporadas[data-season="octubre"] ~ #contacto .section-head span,
+#temporadas[data-season="octubre"] ~ #contacto h3,
+#temporadas[data-season="octubre"] ~ #contacto .contact-intro,
+#temporadas[data-season="octubre"] ~ #contacto .contact-detail p,
+#temporadas[data-season="octubre"] ~ #contacto label,
+#temporadas[data-season="octubre"] ~ #contacto p {
+  color: #ff8c00 !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .contact-card {
+  background: rgba(30, 10, 0, 0.85) !important;
+  border-color: #ff6600 !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .season-cta {
+  color: #fff !important;
+  border-color: #ff6600 !important;
+  background: linear-gradient(135deg, #ff6600, #ff8c00) !important;
+  box-shadow: 0 8px 32px rgba(255, 102, 0, 0.5), 0 0 0 3px #ff6600, 0 0 60px rgba(255, 102, 0, 0.35) !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .season-cta:hover {
+  background: linear-gradient(135deg, #ff8533, #ff6600) !important;
+  color: #fff !important;
+  box-shadow: 0 14px 44px rgba(255, 102, 0, 0.6), 0 0 0 4px #ff6600, 0 0 80px rgba(255, 102, 0, 0.45) !important;
+}
+
+#temporadas[data-season="noviembre"] ~ #contacto {
+  --season-accent: #1a5276;
+  --season-glow: rgba(26, 82, 118, 0.4);
+  --season-accent-soft: rgba(26, 82, 118, 0.12);
+  --season-dark: #1a3c5e;
+  --season-dark-soft: #2c5f8a;
+  background: linear-gradient(165deg, #d4e6f1, #a9cce3, #f9e79f);
+}
+
+#temporadas[data-season="diciembre"] ~ #contacto {
+  --season-accent: #1b5e20;
+  --season-glow: rgba(27, 94, 32, 0.4);
+  --season-accent-soft: rgba(27, 94, 32, 0.12);
+  --season-dark: #1b5e20;
+  --season-dark-soft: #2e7d32;
+  background: linear-gradient(165deg, #d5f5e3, #e8f5e9, #fce4ec);
+}
+
+/* ===================================================================
+   CONTACTO · PULIDO PROFESIONAL · BORDES SUAVES · NADA SE OPAQUE
+   Paneles sólidos, esquinas redondeadas y texto siempre legible.
+   =================================================================== */
+
+/* Panel del formulario: sólido, cálido, con esquinas redondeadas */
+#contacto .contact-form-container {
+  background: linear-gradient(180deg, #FFFDF7 0%, #FBF4E2 100%) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  padding: 4rem !important;
+}
+
+/* Tarjeta de datos: panel sólido cálido con acento superior suave */
+#contacto .contact-card {
+  background: linear-gradient(180deg, #FFFDF7 0%, #FDF7E8 100%) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-top: 4px solid var(--season-accent) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.14), 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+  padding: 3rem !important;
+}
+
+/* Campos: sólidos, legibles y con bordeado suave */
+#contacto input,
+#contacto textarea {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  border-bottom: 2px solid var(--season-accent) !important;
+  border-radius: 14px !important;
+  color: #241A08 !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+}
+#contacto input::placeholder,
+#contacto textarea::placeholder {
+  color: #8A806B !important;
+  opacity: 1 !important;
+}
+#contacto input:focus,
+#contacto textarea:focus {
+  background: #FFFFFF !important;
+  border-color: var(--season-accent) !important;
+  box-shadow: 0 0 0 4px var(--season-glow), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Botón principal: dorado de marca, siempre legible y con borde suave */
+#contacto .submit-btn {
+  background: linear-gradient(135deg, #EECB7C 0%, #D6A63A 55%, #B8860B 100%) !important;
+  color: #2A1D05 !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: 0 14px 28px rgba(184, 134, 11, 0.35), 0 4px 10px rgba(0, 0, 0, 0.10) !important;
+  opacity: 1 !important;
+}
+#contacto .submit-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(184, 134, 11, 0.42), 0 6px 12px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Encabezados y textos internos: opacidad plena */
+#contacto .section-head h2,
+#contacto .section-head span,
+#contacto .contact-card h3 {
+  opacity: 1 !important;
+}
+#contacto .contact-intro,
+#contacto .contact-detail p {
+  color: var(--season-dark) !important;
+  opacity: 1 !important;
+}
+#contacto .contact-alt {
+  color: var(--season-dark-soft) !important;
+  opacity: 1 !important;
+}
+#contacto .contact-alt a {
+  color: #C44706 !important;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(196, 71, 6, 0.5);
+  text-underline-offset: 3px;
+  text-shadow: 0 1px 2px rgba(196, 71, 6, 0.15);
+}
+#contacto .contact-alt a:hover {
+  color: #A63704 !important;
+}
+#contacto .contact-save {
+  margin-top: 1.6rem;
+  padding: 1.1rem 1.4rem;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(196, 71, 6, 0.25) !important;
+  border-left: 5px solid #C44706 !important;
+  border-radius: 12px !important;
+  color: var(--season-dark) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  opacity: 1 !important;
+}
+#contacto .contact-save strong {
+  color: #C44706 !important;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(196, 71, 6, 0.15);
+}
+
+/* Encabezado legible también sobre fondos oscuros (enero) */
+#temporadas[data-season="enero"] ~ #contacto .section-head h2,
+#temporadas[data-season="enero"] ~ #contacto .section-head span {
+  color: #FFFDF7 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* Variante oscura de OCTUBRE: profesional, suave y legible */
+#temporadas[data-season="octubre"] ~ #contacto .contact-form-container {
+  background: linear-gradient(180deg, rgba(44, 18, 0, 0.97), rgba(20, 6, 0, 0.98)) !important;
+  border: 1px solid rgba(255, 102, 0, 0.35) !important;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto input,
+#temporadas[data-season="octubre"] ~ #contacto textarea {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  border-bottom-color: #ff6600 !important;
+  color: #1c1c1c !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .contact-form-container h3,
+#temporadas[data-season="octubre"] ~ #contacto .contact-intro,
+#temporadas[data-season="octubre"] ~ #contacto .contact-alt {
+  color: #ff8c00 !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .contact-save {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 102, 0, 0.35) !important;
+  color: #ffc15e !important;
+}
+#temporadas[data-season="octubre"] ~ #contacto .contact-save strong {
+  color: #ff6600 !important;
+}
+
+/* Responsivo: relleno cómodo en pantallas pequeñas */
+@media (max-width: 768px) {
+  #contacto .contact-form-container { padding: 2.2rem !important; }
+  #contacto .contact-card { padding: 2.2rem !important; }
+}
+

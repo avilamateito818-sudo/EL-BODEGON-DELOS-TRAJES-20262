@@ -1,0 +1,73 @@
+/* ==========================================================
+   email/styles.css
+   Toast de notificación para el formulario de contacto
+   ========================================================== */
+
+.email-toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 9999;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-align: center;
+  max-width: 90vw;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.email-toast.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.email-toast--success {
+  background: linear-gradient(135deg, #1a5c1a, #2d8c2d);
+  color: #e0ffe0;
+  border: 1px solid rgba(100, 255, 100, 0.3);
+}
+
+.email-toast--error {
+  background: linear-gradient(135deg, #7a1a1a, #b33030);
+  color: #ffe0e0;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+.email-toast--info {
+  background: linear-gradient(135deg, #1a3c5e, #2a6aae);
+  color: #e0f0ff;
+  border: 1px solid rgba(100, 180, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .email-toast {
+    bottom: 80px;
+    font-size: 0.85rem;
+    padding: 12px 20px;
+  }
+}
+
+/* enlace alternativo debajo del formulario */
+.contact-alt {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+.contact-alt a {
+  color: #25d366;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-alt a:hover {
+  color: #4cff7b;
+}

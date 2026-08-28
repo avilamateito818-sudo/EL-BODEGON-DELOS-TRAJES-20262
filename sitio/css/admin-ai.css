@@ -1,0 +1,125 @@
+/* ==========================================================
+   css/admin-ai.css
+   Asistente del administrador — El Bodegón de los Trajes
+   Widget de comandos para el administrador.
+   SOLO visible cuando hay sesión de administrador activa.
+   No accede ni expone contraseñas, usuarios ni datos internos:
+   solo señala el elemento y abre la herramienta de edición nativa.
+   ========================================================== */
+
+.admin-ai-launch {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 975;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c5cff, #4a2fb0);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-ai-launch:hover { transform: scale(1.1); }
+.admin-ai-launch::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid rgba(124, 92, 255, 0.5); animation: adminai-pulse 2.4s infinite;
+}
+body.admin-edit-mode .admin-ai-launch { display: flex; }
+@keyframes adminai-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70% { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Panel */
+.admin-ai {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 5.2rem;
+  z-index: 980;
+  width: 21rem;
+  max-width: calc(100vw - 2.5rem);
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1b1726, #120e1c);
+  border: 1px solid rgba(124, 92, 255, 0.5);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  font-family: 'Quicksand', sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.admin-ai.is-open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+
+.admin-ai-head {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.22), rgba(255, 184, 77, 0.12));
+  border-bottom: 1px solid rgba(124, 92, 255, 0.3);
+}
+.admin-ai-ava {
+  width: 2.4rem; height: 2.4rem; border-radius: 50%; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #7c5cff, #4a2fb0); color: #fff; font-weight: 800;
+}
+.admin-ai-title { font-family: 'Cinzel Decorative', cursive; font-size: 0.85rem; color: #FBF6EA; letter-spacing: 1px; }
+.admin-ai-sub { font-size: 0.72rem; color: rgba(251, 246, 234, 0.65); }
+
+.admin-ai-body { flex: 1 1 auto; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.admin-ai-msg { max-width: 90%; padding: 0.6rem 0.8rem; border-radius: 14px; font-size: 0.82rem; line-height: 1.4; white-space: pre-line; }
+.admin-ai-msg.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.07); color: #FBF6EA; border: 1px solid rgba(255, 255, 255, 0.1); border-bottom-left-radius: 4px; }
+.admin-ai-msg.user { align-self: flex-end; background: linear-gradient(135deg, #8a6cff, #6141d6); color: #fff; border-bottom-right-radius: 4px; font-weight: 600; }
+
+.admin-ai-line { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; padding: 0.55rem 0.7rem; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; background: rgba(255,255,255,0.05); color: #FBF6EA; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.admin-ai-line:hover { border-color: rgba(124, 92, 255, 0.6); background: rgba(124, 92, 255, 0.1); }
+.admin-ai-line .k { flex: 0 0 auto; font-weight: 800; color: #c4b5ff; }
+.admin-ai-line .c { font-weight: 600; color: #ffd27a; }
+
+.admin-ai-chipwrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.admin-ai-chip {
+  background: rgba(124, 92, 255, 0.14); color: #d3c8ff;
+  border: 1px solid rgba(124, 92, 255, 0.4); border-radius: 20px;
+  padding: 0.35rem 0.7rem; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  font-family: 'Quicksand', sans-serif; transition: all 0.15s;
+}
+.admin-ai-chip:hover { background: rgba(124, 92, 255, 0.3); color: #fff; }
+
+.admin-ai-foot { border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem; display: flex; gap: 0.5rem; }
+.admin-ai-input {
+  flex: 1 1 auto; background: rgba(255, 255, 255, 0.07); color: #FBF6EA;
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 20px; padding: 0.5rem 0.85rem;
+  font-size: 0.82rem; font-family: 'Quicksand', sans-serif; outline: none;
+}
+.admin-ai-input:focus { border-color: rgba(124, 92, 255, 0.7); }
+.admin-ai-go {
+  flex: 0 0 auto; padding: 0 1rem; border: none; border-radius: 20px;
+  background: linear-gradient(135deg, #7c5cff, #4a2fb0); color: #fff; font-weight: 700;
+  cursor: pointer; font-family: 'Quicksand', sans-serif;
+}
+.admin-ai-go:hover { filter: brightness(1.12); }
+.admin-ai-go:disabled { opacity: 0.5; cursor: default; }
+
+.admin-ai-hint { padding: 0.5rem 1rem; font-size: 0.66rem; color: rgba(251, 246, 234, 0.5); }
+.admin-ai-hint b { color: #c4b5ff; }
+
+.admin-ai-body::-webkit-scrollbar { width: 8px; }
+.admin-ai-body::-webkit-scrollbar-thumb { background: rgba(124, 92, 255, 0.4); border-radius: 8px; }
+
+/* Resaltar elemento objetivo antes de editar */
+.admin-ai-focus { outline: 3px dashed #7c5cff !important; outline-offset: 3px; animation: adminai-blink 1.1s ease-in-out infinite; }
+@keyframes adminai-blink { 50% { outline-color: transparent; } }
+
+@media (max-width: 768px) {
+  .admin-ai-launch { width: 3rem; height: 3rem; right: 1rem; bottom: 1rem; }
+  .admin-ai { right: 1rem; bottom: 4.6rem; width: 20rem; }
+}

@@ -1,0 +1,725 @@
+/* ============ MENÚ INTERACTIVO ============ */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--halloween-primary);
+  transition: var(--transition-premium);
+}
+
+.menu-toggle.is-active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.is-active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.nav-menu li {
+  position: relative;
+}
+
+.has-dropdown > .dropdown-toggle {
+  background: transparent;
+  border: none;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--ghostly-white);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-haunted);
+  font-weight: 600;
+}
+
+.has-dropdown > .dropdown-toggle:hover,
+.has-dropdown.is-open > .dropdown-toggle {
+  color: var(--halloween-vivid);
+  text-shadow: 0 0 15px var(--halloween-primary);
+}
+
+.caret {
+  font-size: 0.6rem;
+  transition: transform 0.3s ease;
+}
+
+.has-dropdown.is-open .caret {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  min-width: 190px;
+  padding: 0.8rem;
+  margin: 0;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: var(--transition-premium);
+  z-index: 100;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+}
+
+.has-dropdown:hover .dropdown,
+.has-dropdown.is-open .dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(6px);
+}
+
+.dropdown.dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.2rem 0.8rem;
+  min-width: 300px;
+}
+
+.dropdown li {
+  margin: 0;
+}
+
+.dropdown a {
+  display: block;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  transition: var(--transition-premium);
+  color: var(--ghostly-white);
+  font-weight: 500;
+}
+
+.dropdown a:hover {
+  background: var(--glass-bg);
+  color: var(--halloween-vivid);
+  transform: none;
+}
+
+.dropdown a::after {
+  display: none;
+}
+
+.nav-menu a.is-active {
+  color: var(--halloween-vivid);
+  text-shadow: 0 0 15px var(--halloween-primary);
+}
+
+.nav-menu a.is-active::after {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  nav ul.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -110%;
+    height: 100vh;
+    width: min(320px, 85vw);
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 6rem 2rem 2rem;
+    background: rgba(5, 5, 5, 0.97);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid var(--border-glow);
+    transition: right 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+    z-index: 1000;
+  }
+
+  nav ul.nav-menu.is-open {
+    right: 0;
+  }
+
+  .nav-menu li {
+    width: 100%;
+  }
+
+  .nav-menu li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-menu > li > a,
+  .has-dropdown > .dropdown-toggle {
+    display: flex;
+    width: 100%;
+    padding: 1.4rem 0.5rem;
+    font-size: 0.85rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dropdown {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    transition: max-height 0.4s ease, padding 0.4s ease, visibility 0.4s ease;
+  }
+
+  .has-dropdown:hover .dropdown,
+  .has-dropdown.is-open .dropdown {
+    transform: none;
+    max-height: 320px;
+    padding: 0.6rem 0 0.6rem 1rem;
+    visibility: visible;
+  }
+
+  .dropdown a {
+    padding: 0.9rem 0.8rem;
+    font-size: 0.78rem;
+    white-space: normal;
+  }
+  .dropdown.dropdown-grid {
+    grid-template-columns: 1fr;
+    min-width: 0;
+    width: 100%;
+    gap: 0;
+  }
+}
+
+/* ================= AJUSTES RESPONSIVE (PC / TABLET / CELULAR) ================= */
+
+/* --- Textos fluidos (se adaptan al ancho sin cortes) --- */
+.hero-box h2 { font-size: clamp(2rem, 6vw, 5.5rem); }
+.hero-box p { font-size: clamp(0.8rem, 1.6vw, 1.2rem); }
+.section-head h2,
+#temporadas[data-season] .section-head h2 {
+  font-size: clamp(1.9rem, 4.5vw, 3.8rem);
+}
+.section-head span { letter-spacing: clamp(3px, 1.2vw, 10px); }
+.season-title { font-size: clamp(1.5rem, 3.4vw, 2.6rem); }
+.season-subtitle { font-size: clamp(0.95rem, 1.3vw, 1.05rem); }
+.season-catalog h4 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); }
+.halloween-landing-title { font-size: clamp(1.4rem, 4vw, 3.2rem); }
+
+/* --- Hero dvh con fallback --- */
+.hero-horror { height: 100vh; height: 100dvh; }
+@supports (height: 100dvh) {
+  .hero-horror { height: 100dvh; }
+}
+
+/* --- Ajustes generales de caja --- */
+section {
+  padding: 8rem 7%;
+  overflow-x: clip;
+}
+
+@media (min-width: 1025px) {
+  section { padding: 10rem 10%; }
+}
+
+/* ===== TABLET (<= 1024px) ===== */
+@media (max-width: 1024px) {
+  header { padding: 1rem 4%; }
+  section { padding: 5rem 5%; }
+  #temporadas { padding: 5rem 5%; }
+  .section-head { margin-bottom: 4rem; }
+  .img-ghost { height: 340px; }
+  .card-body-haunted { padding: 2rem 1.6rem; }
+  .season-catalog { padding: 2rem; }
+  .season-tab { padding: 1.1rem 1.7rem; font-size: 1rem; }
+  footer { padding: 4rem 5%; }
+  .flex-contact { gap: 3rem; }
+  .contact-form-container { padding: 2.5rem; }
+}
+
+/* ===== CELULAR GRANDE / TABLET PEQUEÑA (<= 768px) ===== */
+@media (max-width: 768px) {
+  .hero-horror { background-attachment: scroll; }
+  .hero-box h2 { font-size: clamp(1.7rem, 6.5vw, 2.6rem); line-height: 1.25; }
+  .hero-box p { letter-spacing: 3px; }
+  .btn-haunted { padding: 1rem 2.4rem; font-size: 0.78rem; letter-spacing: 3px; }
+
+  section { padding: 4rem 4%; }
+  #temporadas { padding: 4rem 4%; }
+  footer { padding: 3.5rem 4%; }
+
+  .logo-container { gap: 0.7rem; }
+  .logo-container img { height: 38px; }
+  header h1 { font-size: 1.05rem; letter-spacing: 1px; }
+  header.scrolled { padding: 0.8rem 4%; }
+
+  .grid-haunted {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .img-ghost { height: 260px; }
+  .season-catalog .grid-haunted { gap: 1.6rem; }
+
+  .season-panel.is-active { gap: 2.5rem; }
+  .season-panel.is-active.season-panel-stack { gap: 2.5rem; }
+  .season-sub-sections { gap: 1.8rem; }
+  .season-hero { padding: 2rem; }
+  .season-title { font-size: 1.55rem; letter-spacing: 1px; }
+  .season-subtitle { line-height: 1.8; }
+  .season-quick-nav { margin: -1rem 0 2.5rem; }
+
+  .halloween-landing { padding: 5rem 1.5rem; }
+
+  .season-marquee {
+    margin-bottom: 3rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  }
+  .season-tab {
+    flex: 0 0 auto;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+  }
+  .season-tab .tab-label { font-size: 0.55rem; letter-spacing: 1px; }
+
+  .season-item { grid-template-columns: 96px 1fr; gap: 1.1rem; padding: 0.7rem; }
+  .season-item img { width: 96px; height: 96px; }
+  .season-item-body h4 { font-size: 0.95rem; }
+  .season-item-body p { font-size: 0.85rem; }
+
+  .season-subsection { gap: 1.6rem; padding: 1.6rem; }
+  .subsection-img img { height: 200px; }
+
+  .contact-form-container { padding: 2rem; }
+  #contacto input, #contacto textarea { padding: 1.3rem; font-size: 1rem; }
+  #contacto .submit-btn { padding: 1.3rem; font-size: 1rem; letter-spacing: 3px; }
+
+  .catalog-note { padding: 1.4rem 1.4rem; font-size: 0.98rem; }
+  .season-blank { padding: 4rem 1.5rem; }
+  .season-blank-title { letter-spacing: 6px; }
+
+  /* Admin toolbar debajo del header */
+  .admin-toolbar { top: 56px; }
+
+  /* FABs: stack vertical */
+  .whatsapp-float { width: 3rem; height: 3rem; left: 1rem; bottom: 1rem; }
+  .edit-float { width: 3rem; height: 3rem; left: 1rem; bottom: 4.5rem; }
+  .admin-fab { left: 1rem; bottom: 5rem; }
+  .admin-save-fab { width: 3rem; height: 3rem; left: 4.5rem; bottom: 1rem; }
+  .admin-logout-fab { left: 4.5rem; bottom: 5rem; }
+
+  .admin-modal-actions { flex-wrap: wrap; }
+  .admin-photorow { flex-wrap: wrap; }
+}
+
+/* ===== CELULAR (<= 640px) ===== */
+@media (max-width: 640px) {
+  .hero-horror { height: 100svh; min-height: 520px; }
+  .hero-box h2 { margin-bottom: 1.4rem; }
+  .hero-box p { letter-spacing: 2px; line-height: 1.7; }
+
+  section { padding: 3.5rem 4%; }
+  #temporadas { padding: 3.5rem 4%; }
+  .section-head { margin-bottom: 3rem; }
+  .section-head h2,
+  #temporadas[data-season] .section-head h2 { letter-spacing: 1px; }
+
+  .grid-haunted { grid-template-columns: 1fr; }
+  .img-ghost { height: 250px; }
+  .card-body-haunted { padding: 1.8rem 1.3rem; }
+  .card-body-haunted h3 { font-size: 1.5rem; }
+
+  .season-catalog { padding: 1.4rem; border-radius: 12px; }
+  .season-hero { padding: 1.7rem; }
+  .season-title { font-size: 1.35rem; }
+  .season-milestone { font-size: clamp(0.55rem, 2.5vw, 0.62rem); letter-spacing: 2px; padding: 0.45rem 1rem; }
+  .season-subtitle { font-size: 0.95rem; margin-bottom: 1.8rem; }
+
+  .halloween-landing { padding: 4rem 1.2rem; }
+  .halloween-landing-sub { letter-spacing: 2px; font-size: 0.85rem; }
+
+  .season-cta {
+    width: 100%;
+    text-align: center;
+    padding: 1.05rem 1.4rem;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+  }
+  .season-item { grid-template-columns: 82px 1fr; gap: 0.9rem; padding: 0.55rem; }
+  .season-item img { width: 82px; height: 82px; }
+  .season-item-body p { font-size: 0.82rem; }
+  .expand-icon { font-size: 0.85rem; }
+
+  .season-subsection { padding: 1.3rem; gap: 1.3rem; }
+  .subsection-img img { height: 185px; }
+  .season-subsection h4 { font-size: 1.25rem; }
+  .season-subsection p { font-size: 0.92rem; line-height: 1.75; }
+
+  .season-quick-nav a { padding: 0.6rem 1.2rem; font-size: 0.68rem; letter-spacing: 2px; }
+
+  .contact-form-container { padding: 1.5rem; border-radius: 14px; }
+  #contacto input, #contacto textarea { padding: 1.1rem; margin-bottom: 1.4rem; font-size: 0.98rem; }
+  #contacto .submit-btn { padding: 1.1rem; font-size: 0.95rem; }
+
+  footer { padding: 3rem 4%; }
+  footer p { font-size: 0.9rem; line-height: 1.8; }
+
+  .lightbox-close { top: 1rem; right: 1rem; width: 2.8rem; height: 2.8rem; font-size: 1.4rem; }
+  .lightbox img { max-width: 95vw; }
+}
+
+/* ===== CELULAR MUY PEQUEÑO (<= 420px) ===== */
+@media (max-width: 420px) {
+  header { padding: 0.7rem 3%; }
+  header h1 { font-size: 0.85rem; white-space: normal; line-height: 1.2; }
+  .logo-container img { height: 32px; }
+  .hero-box h2 { font-size: 1.6rem; }
+  .hero-box p { letter-spacing: 1.5px; font-size: 0.72rem; }
+  .btn-haunted { padding: 0.9rem 1.8rem; font-size: 0.7rem; letter-spacing: 2px; }
+  .season-cta { font-size: 0.7rem; letter-spacing: 1.5px; }
+  .season-quick-nav a { font-size: 0.62rem; padding: 0.55rem 0.95rem; letter-spacing: 1px; }
+  .season-item { grid-template-columns: 72px 1fr; }
+  .season-item img { width: 72px; height: 72px; }
+  .section-head span { letter-spacing: 2px; font-size: 0.75rem; }
+  .season-tab { padding: 0.75rem 0.95rem; font-size: 0.78rem; }
+  .season-tab-exclusive::before { right: -38px; }
+
+  .halloween-landing { padding: 3.5rem 1rem; gap: 1.6rem; }
+  .halloween-landing-title { font-size: clamp(1.2rem, 5vw, 2rem); letter-spacing: 1px; }
+  .halloween-landing-sub { letter-spacing: 1.5px; font-size: 0.75rem; }
+
+  /* FABs más compactos en ≤420px */
+  .whatsapp-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 0.8rem; font-size: 1.2rem; }
+  .edit-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 3.8rem; font-size: 1rem; }
+  .admin-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 4.2rem; font-size: 1.1rem; }
+  .admin-save-fab { width: 2.6rem; height: 2.6rem; left: 4rem; bottom: 0.8rem; font-size: 1rem; }
+  .admin-logout-fab { width: 2.4rem; height: 2.4rem; left: 4rem; bottom: 4.2rem; }
+
+  /* Admin modal compacto */
+  .admin-modal { padding: 0.5rem; }
+  .admin-modal-box { padding: 1rem; max-height: 90vh; font-size: 0.85rem; }
+  .admin-modal-box h3 { font-size: 0.95rem; }
+  .admin-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; }
+  .admin-input, .admin-textarea { font-size: 0.85rem; }
+  .admin-preview img { max-height: 160px; }
+
+  /* Admin toolbar compacto */
+  .admin-toolbar { padding: 0.4rem 0.6rem; }
+  .admin-toolbar-title { font-size: 0.75rem; }
+}
+
+/* ===== TOQUES FINALES PROFESIONALES ===== */
+
+/* Selección de texto */
+::selection {
+  background: var(--halloween-vivid);
+  color: #0a0a0a;
+}
+
+/* Barra de desplazamiento */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #b8860b #0c0c0c;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0c0c0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b8860b, #ff8c00);
+  border-radius: 8px;
+  border: 3px solid #0c0c0c;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff8c00, #ffa500);
+}
+
+/* Enfoque visible para accesibilidad */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--halloween-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Hero: fondo en calma en móvil (rendimiento) */
+@media (max-width: 768px) {
+  .hero-horror::before {
+    animation: none;
+  }
+}
+
+/* ===== FOOTER MEJORADO ===== */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 3rem;
+  text-align: left;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-col h4 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  color: var(--halloween-vivid);
+  margin-bottom: 1.4rem;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.footer-col ul li {
+  color: var(--ghostly-white);
+  font-size: 0.92rem;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.footer-col a {
+  color: var(--ghostly-white);
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  font-weight: 500;
+}
+
+.footer-col a:hover {
+  color: var(--halloween-vivid);
+  text-shadow: 0 0 12px rgba(255, 179, 71, 0.4);
+}
+
+.footer-brand .footer-logo-wrapper {
+  justify-content: flex-start;
+  margin-bottom: 1.2rem;
+}
+
+.footer-brand p {
+  margin-top: 0;
+  max-width: 38ch;
+  line-height: 1.9;
+}
+
+.footer-bottom {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.footer-bottom p {
+  margin-top: 0;
+}
+
+/* ===== REVEAL AL HACER SCROLL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--d, 0s);
+  will-change: opacity, transform;
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+
+  .footer-brand .footer-logo-wrapper {
+    justify-content: center;
+  }
+
+  .footer-brand p {
+    margin: 0 auto;
+  }
+}
+
+/* ===== ENERO - RESPONSIVE ===== */
+@media (max-width: 900px) {
+  #temporadas[data-season="enero"] .enero-hero-wrapper {
+    flex-direction: column;
+  }
+  #temporadas[data-season="enero"] .enero-hero-photo {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    order: -1;
+  }
+  #temporadas[data-season="enero"] .enero-hero-wrapper .season-hero {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  #temporadas[data-season="enero"] .season-hero {
+    padding: 2rem 1.5rem;
+  }
+  #temporadas[data-season="enero"] .season-title {
+    font-size: 1.7rem;
+  }
+  #temporadas[data-season="enero"] .season-milestone {
+    font-size: 0.55rem;
+    padding: 0.4rem 1rem;
+    letter-spacing: 3px;
+  }
+  #temporadas[data-season="enero"] .enero-quick-nav {
+    gap: 0.6rem;
+  }
+  #temporadas[data-season="enero"] .enero-quick-nav a {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+  #temporadas[data-season="enero"] .enero-hero-photo {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+/* ===== MOBILE PEQUENO (<= 480px) ===== */
+@media (max-width: 480px) {
+  section { padding: 4rem 5%; }
+  #temporadas { padding: 4rem 5%; }
+  #temporadas[data-season="enero"] .enero-hero-wrapper {
+    gap: 1.5rem;
+  }
+  #temporadas[data-season="enero"] .season-hero {
+    padding: 1.5rem 1rem;
+  }
+  #temporadas[data-season="enero"] .season-title {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+  #temporadas[data-season="enero"] .season-subtitle {
+    font-size: 1rem;
+  }
+  #temporadas[data-season="enero"] .enero-hero-photo {
+    width: 220px;
+    height: 220px;
+  }
+  #temporadas[data-season="enero"] .enero-quick-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #temporadas[data-season="enero"] .enero-quick-nav a {
+    padding: 0.5rem 1rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* ===== SUB-SECCIONES IMAGEN + TEXTO: apilar en pantallas estrechas =====
+   Evita que la columna de texto quede recortada al mantener 2 columnas (280px + 1fr) */
+@media (max-width: 700px) {
+  .season-subsection {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .season-subsection .subsection-img,
+  .season-subsection .subsection-body {
+    width: 100%;
+  }
+
+  .season-subsection .subsection-img {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .season-subsection .subsection-img img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .season-subsection .season-cta {
+    align-self: flex-start;
+  }
+}
+
+/* Respeta usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Cinta: sin movimiento automático; navegable deslizando con el dedo */
+  .season-marquee-track {
+    animation: none;
+    transform: none;
+  }
+  .season-marquee {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .season-marquee .season-tabs {
+    padding-right: 1.2rem;
+  }
+}

@@ -1,0 +1,52 @@
+:root {
+  --pure-black: #0A0704;
+  --soft-black: #120D08;
+  --halloween-primary: #FF9D2E;
+  --halloween-vivid: #FFC15E;
+  --halloween-muted: #D9A441;
+  --ghostly-white: #FBF6EA;
+  --ashen-grey: #EADFC5;
+  /* Improved readability */
+  --blood-red: #E52020;
+  --border-glow: rgba(255, 157, 46, 0.35);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --transition-premium: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  --transition-haunted: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  /* Season defaults */
+  --season-accent: #FFC15E;
+  --season-bg1: rgba(255, 157, 46, 0.18);
+  --season-bg2: rgba(255, 157, 46, 0.06);
+  --season-dark: #FBF6EA;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--pure-black);
+  color: var(--ashen-grey);
+  line-height: 1.7;
+  overflow-x: hidden;
+  font-weight: 500;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--halloween-vivid);
+  text-transform: uppercase;
+}
+

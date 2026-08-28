@@ -1,0 +1,113 @@
+/* ===== Guía del administrador — rejilla, guías, ayuda y más contenido ===== */
+
+/* ---- Botones "Guías / Rejilla / Ayuda" del toolbar ---- */
+.admin-toolbar .admin-btn-guide,
+.admin-toolbar .admin-btn-help {
+  border-color: rgba(255, 184, 77, 0.35);
+  color: #ffd27a;
+  background: rgba(255, 184, 77, 0.08);
+}
+.admin-toolbar .admin-btn-guide:hover,
+.admin-toolbar .admin-btn-help:hover {
+  background: rgba(255, 184, 77, 0.2);
+  color: #fff;
+}
+.admin-toolbar .admin-btn-guide.is-on {
+  background: linear-gradient(135deg, #e0a030, #ffb84d);
+  color: #1a1026;
+  border-color: #ffd27a;
+  font-weight: 700;
+}
+
+/* ---- Capa de líneas guía durante el arrastre ---- */
+.admin-guide-layer { position: fixed; inset: 0; z-index: 999; pointer-events: none; }
+.admin-guide-layer .admin-guide-v,
+.admin-guide-layer .admin-guide-h { position: absolute; background: #ffd27a; box-shadow: 0 0 8px rgba(255, 184, 77, 0.8); display: none; }
+.admin-guide-layer .admin-guide-v { width: 1.5px; height: 100vh; top: 0; }
+.admin-guide-layer .admin-guide-h { height: 1.5px; width: 100vw; left: 0; }
+
+/* ---- Rejilla de alineación (overlay) ---- */
+.admin-grid-overlay {
+  position: fixed; inset: 0; z-index: 990; pointer-events: none;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.admin-grid-overlay.is-visible { display: block; opacity: 1; }
+.admin-grid-overlay {
+  background-image:
+    linear-gradient(rgba(255, 184, 77, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 184, 77, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(255, 184, 77, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 184, 77, 0.06) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+}
+
+/* ---- Elementos añadidos: título y foto ---- */
+body.admin-edit-mode .admin-added-title {
+  display: block; width: 100%;
+  margin: 0.3rem 0;
+  outline: 1.5px dashed rgba(255, 184, 77, 0.55);
+  outline-offset: 4px;
+  cursor: pointer;
+}
+body.admin-edit-mode .admin-added-photo {
+  display: block; width: 100%; max-width: 520px; height: auto;
+  margin: 0.8rem auto;
+  border-radius: 10px;
+  outline: 1.5px dashed rgba(255, 184, 77, 0.55);
+  outline-offset: 4px;
+  cursor: pointer;
+}
+
+/* ---- Botones "Agregar título" y "Agregar foto" ---- */
+.admin-addbtn-title { background: linear-gradient(135deg, #7c4dff, #a06bff) !important; }
+.admin-addbtn-title:hover { background: linear-gradient(135deg, #9166ff, #b98cff) !important; }
+.admin-addbtn-photo { background: linear-gradient(135deg, #0a58ca, #1f7ae0) !important; }
+.admin-addbtn-photo:hover { background: linear-gradient(135deg, #1a6cdb, #3f96ff) !important; }
+
+/* ---- Panel de ayuda / tutorial ---- */
+.admin-help-panel {
+  position: fixed; inset: 0; z-index: 1120;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem; background: rgba(10, 5, 18, 0.72);
+  backdrop-filter: blur(3px);
+}
+.admin-help-box {
+  position: relative; width: 100%; max-width: 620px; max-height: 88vh; overflow: auto;
+  padding: 1.6rem; border-radius: 16px;
+  background: #17102a; color: #f3eaff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+}
+.admin-help-close {
+  position: absolute; top: 0.6rem; right: 0.8rem;
+  border: none; background: none; color: #c9b8e6;
+  font-size: 1.8rem; line-height: 1; cursor: pointer;
+}
+.admin-help-close:hover { color: #ffb84d; }
+.admin-help-title {
+  margin: 0 0 0.6rem; font-size: 1.35rem; color: #fff;
+  padding-right: 2rem;
+}
+.admin-help-intro { margin: 0 0 1rem; font-size: 0.88rem; color: #c9b8e6; }
+.admin-help-section {
+  margin: 1rem 0 0; padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #ffb84d; border-radius: 8px;
+}
+.admin-help-section h4 { margin: 0 0 0.4rem; font-size: 0.95rem; color: #ffd27a; }
+.admin-help-section ul { margin: 0; padding-left: 1.1rem; }
+.admin-help-section li { margin: 0.25rem 0; font-size: 0.84rem; line-height: 1.5; color: #e4d8f6; }
+.admin-help-hint {
+  margin: 1.2rem 0 0; padding: 0.8rem 1rem;
+  font-size: 0.82rem; color: #1a1026;
+  background: linear-gradient(135deg, #e0a030, #ffb84d);
+  border-radius: 8px; font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .admin-help-box { padding: 1.1rem; }
+  .admin-help-section { padding: 0.7rem 0.8rem; }
+}
