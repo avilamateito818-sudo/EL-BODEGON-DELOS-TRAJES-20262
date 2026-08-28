@@ -12,7 +12,7 @@
   var AUTOSAVE_KEY = 'bodegon_autosave';
   var PENDING_SYNC_KEY = 'bodegon_pending_sync';
   var CLOUD_SYNC_API = '/api/save-content';
-  var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-los-trajes-3-2026.vercel.app/api/save-content';
+  var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-los-trajes-20262.vercel.app/api/save-content';
   var cloudSyncTimer = null;
   var CLOUD_SYNC_DELAY = 2500;
   var cloudSyncRetries = 0;
@@ -2374,7 +2374,7 @@
 
   /* ---------- iniciar ---------- */
 
-  var GITHUB_REPO = 'avimateo2-ui/EL-BODEGON-LOS-TRAJES-3-2026';
+  var GITHUB_REPO = 'avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262';
   var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/data/admin-content.js';
 
   function fetchFromGitHub(callback) {

@@ -23,11 +23,13 @@ el-bodegon-de-los-trajes/
 │   │   └── chat.js         #     Bot de ayuda al cliente
 │   ├── data/admin-content.js  # Contenido administrable persistido
 │   └── email/              #   Config + manejo del formulario de contacto
-├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker)
+├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, Vercel)
 ├── docker/                 # 🐳 Dockerfile y configuración de Nginx
+├── api/                    # ☁️ Funciones serverless (Vercel): save-content y chat-ask
 ├── scripts/                # 🔧 Utilidades del proyecto (dev, build, docker…)
 ├── .github/workflows/      # ⚙️ (opcional) CI/CD
 ├── docker-compose.yml      # Orquesta el contenedor (sitio estático)
+├── vercel.json             # ☁️ Configuración de despliegue en Vercel
 ├── .gitignore
 └── README.md
 ```
@@ -64,6 +66,10 @@ docker compose up --build
 
 El contenedor sirve el contenido estático de `sitio/` con Nginx (configuración en `docker/nginx.conf`).
 
+### 3) En producción (Vercel)
+
+El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `api/` para los asistentes y la sincronización del panel). Ver [`docs/VERCEL.md`](docs/VERCEL.md) para importar el proyecto y configurar la variable `GITHUB_TOKEN`.
+
 ---
 
 ## Documentación
@@ -76,6 +82,7 @@ El contenedor sirve el contenido estático de `sitio/` con Nginx (configuración
 | Docker / despliegue | [`docs/DOCKER.md`](docs/DOCKER.md) |
 | Estructura de carpetas | [`docs/DIRECTORY_STRUCTURE.md`](docs/DIRECTORY_STRUCTURE.md) |
 | Credenciales de administración | [`docs/ADMIN.md`](docs/ADMIN.md) |
+| Despliegue en Vercel (asistentes + sincronización) | [`docs/VERCEL.md`](docs/VERCEL.md) |
 
 ---
 
