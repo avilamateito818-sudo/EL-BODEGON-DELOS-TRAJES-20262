@@ -26,7 +26,7 @@
   var BUSINESS = {
     nombre: 'El Bodegón de los Trajes',
     ciudad: 'Tunja, Boyacá',
-    direccion: 'Diagonal 66 2B 04, Tunja',
+    direccion: 'Diagonal 66 2B 04',
     telefono: '+57 310 770 6615',
     whatsappInt: '573107706615',
     email: 'avilamateito818@gmail.com',
@@ -402,7 +402,7 @@
           el.addEventListener('click', function () { if (a.act) a.act(); });
         }
         el.textContent = a.label;
-        el.classList.add(a.neutral ? 'chat-btn-neutral' : '');
+        if (a.neutral) el.classList.add('chat-btn-neutral');
         wrap.appendChild(el);
       });
       body.appendChild(wrap);
