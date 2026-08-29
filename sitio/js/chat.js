@@ -35,6 +35,42 @@
 
   var API = '/api/chat-ask';
 
+  /* Reenvío al equipo: correo (Formspree) + WhatsApp (enlace directo).
+     Se usa cuando el bot no puede resolver la consulta: se le informa
+     al dueño por CORREO y se le abre el WHATSAPP del equipo con el detalle. */
+  var FORMSPREE_ID = (window.EMAIL_CONFIG && window.EMAIL_CONFIG.formspreeId) ? window.EMAIL_CONFIG.formspreeId : null;
+
+  function buildWaLink(prefill) {
+    return 'https://wa.me/' + BUSINESS.whatsappInt + '?text=' + encodeURIComponent(prefill || '');
+  }
+
+  /* Envía por correo (Formspree) la consulta no resuelta al dueño.
+     Retorna true/false para que la UI pueda confirmar el envío. */
+  function sendEmailNotice(payload) {
+    if (!FORMSPREE_ID) return Promise.resolve(false);
+    var subject = '📩 Nueva consulta del asistente — ' + BUSINESS.nombre;
+    var when = new Date().toLocaleString('es-CO');
+    var data = new URLSearchParams();
+    data.append('_subject', subject);
+    data.append('_replyto', BUSINESS.email);
+    data.append('_template', 'table');
+    data.append('fecha', when);
+    data.append('categoria', payload.categoria || 'consulta libre');
+    data.append('nombre', payload.nombre || '');
+    data.append('whatsapp', payload.whatsapp || '');
+    data.append('consulta', payload.consulta || '');
+    data.append('mensaje', payload.consulta || '');
+    try {
+      return fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      }).then(function (res) {
+        return res && (res.ok || res.redirected);
+      }).catch(function () { return false; });
+    } catch (e) { return Promise.resolve(false); }
+  }
+
   var CATEGORIES = [
     'Uniformes Escolares',
     'Batas de Laboratorio',
@@ -66,7 +102,9 @@
     'smoking': 'Smoking y Trajes de Gala',
     'esmoquin': 'Smoking y Trajes de Gala',
     'smoking y gala': 'Smoking y Trajes de Gala',
-    'gala': 'Smoking y Trajes de Gala',
+    'traje de gala': 'Smoking y Trajes de Gala',
+    'trajes de gala': 'Smoking y Trajes de Gala',
+    'vestido de gala': 'Smoking y Trajes de Gala',
     'vestido de fiesta': 'Vestidos de Fiesta',
     'vestido': 'Vestidos de Fiesta',
     'fiesta': 'Vestidos de Fiesta',
@@ -138,7 +176,7 @@
       };
     }
 
-    if (hasAny(t, ['gracias', 'thank', 'genial', 'excelente', 'perfecto', 'super'])) {
+    if (hasAny(t, ['gracias', 'thank', 'genial', 'excelente', 'perfecto'])) {
       return { text: '¡Con mucho gusto! 🙌 ¿Hay algo más en lo que pueda ayudarte? Puedes seguir preguntando o reenviar tus datos al equipo si lo necesitas.' };
     }
 
@@ -453,34 +491,53 @@
   function sendConsultation(name, phones, extraMsg) {
     setEnabled(false);
     addMsg('📩 ¡Listo! Registramos tu consulta. El equipo de **' + BUSINESS.nombre + '** te contactará por WhatsApp lo antes posible. ¡Gracias por tu paciencia! 🙌', 'bot');
-    addActions([{ label: '💬 Abrir WhatsApp', url: BUSINESS.waLink, neutral: true }]);
+
+    var consulta = (lastQuestion || '') + (extraMsg ? ' | ' + extraMsg : '');
+    var categoria = detectCategory(lastQuestion || '') || 'consulta libre';
 
     var payload = {
-      categoria: detectCategory(lastQuestion || '') || 'consulta libre',
+      categoria: categoria,
       nombre: name,
       whatsapp: phones,
-      consulta: (lastQuestion || '') + (extraMsg ? ' | ' + extraMsg : '')
+      consulta: consulta
     };
 
+    /* 1) WhatsApp directo al dueño, ya con el detalle de la consulta.
+       Así el mensaje llega completo sin que el cliente tenga que reescribir. */
+    var waPrefill = 'Nueva consulta en ' + BUSINESS.nombre +
+      ' | Categoría: ' + categoria +
+      (consulta ? ' | Consulta: ' + consulta : '') +
+      ' | Nombre: ' + name +
+      (phones ? ' | WhatsApp: ' + phones : '');
+    var directWa = buildWaLink(waPrefill);
+
+    /* 2) Correo al dueño (Formspree): confirmamos el envío en pantalla. */
+    sendEmailNotice(payload).then(function (sent) {
+      try {
+        if (sent) {
+          addMsg('✅ Tu consulta también fue enviada por correo al equipo. ¡Te atenderemos muy pronto!', 'bot');
+        } else {
+          addActions([{ label: '✉️ Correo directo', url: 'mailto:' + BUSINESS.email, neutral: true }]);
+        }
+        setEnabled(true);
+      } catch (e) {}
+    });
+
+    /* 3) Guardado en GitHub a través de la API (el dueño lo ve en consultas.json). */
     try {
       fetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      }).then(function (res) {
-        if (!res || !res.ok) {
-          addActions([{ label: '☎️ También escríbenos', url: BUSINESS.waLink, neutral: true }]);
-        }
-        setEnabled(true);
-      }).catch(function () {
-        addActions([{ label: '☎️ Contáctanos directo', url: BUSINESS.waLink, neutral: true }]);
-        setEnabled(true);
-      });
+      }).catch(function () {});
       /* el fetch puede fallar sin red; nunca rompe la UI */
-    } catch (e) {
-      addActions([{ label: '☎️ Contáctanos directo', url: BUSINESS.waLink, neutral: true }]);
-      setEnabled(true);
-    }
+    } catch (e) {}
+
+    addActions([
+      { label: '💬 Abrir WhatsApp (consulta enviada)', url: directWa },
+      { label: '☎️ Escríbenos directo', url: BUSINESS.waLink, neutral: true }
+    ]);
+    setEnabled(true);
     pendingCustom = null;
   }
 

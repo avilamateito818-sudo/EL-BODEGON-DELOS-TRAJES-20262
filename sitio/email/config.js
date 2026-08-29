@@ -24,7 +24,7 @@
 
 window.EMAIL_CONFIG = {
   // ID de Formspree — reemplazar con el tuyo
-  formspreeId: 'xppabela',
+  formspreeId: 'xqpkaggl',
 
   // Dirección de destino (solo referencia, Formspree usa la configurada en su panel)
   recipient: 'avilamateito818@gmail.com',

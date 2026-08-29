@@ -61,18 +61,17 @@
     submitBtn.disabled = true;
     submitBtn.textContent = cfg.messages.sending;
 
-    var body = {
-      _subject: 'Nuevo mensaje desde el sitio — ' + cfg.businessName,
-      nombre: nombre,
-      correo: correo,
-      mensaje: mensaje,
-      _replyto: correo
-    };
+    var data = new URLSearchParams();
+    data.append('_subject', 'Nuevo mensaje desde el sitio — ' + cfg.businessName);
+    data.append('_replyto', correo);
+    data.append('nombre', nombre);
+    data.append('correo', correo);
+    data.append('mensaje', mensaje);
 
     fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: { 'Accept': 'application/json' },
+      body: data
     })
       .then(function (res) {
         if (res.ok) {

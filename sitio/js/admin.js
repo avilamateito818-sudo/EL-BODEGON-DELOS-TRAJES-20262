@@ -234,22 +234,21 @@
     if (!formspreeId) return Promise.resolve(false);
 
     var endpoint = 'https://formspree.io/f/' + formspreeId;
-    var body = {
-      _subject: '⚠️ [Bodegón] ' + titulo,
-      tipo: type,
-      titulo: titulo,
-      detalle: detalle,
-      fecha: new Date().toISOString(),
-      dispositivo: navigator.userAgent ? navigator.userAgent.slice(0, 120) : '',
-      _replyto: (window.EMAIL_CONFIG && window.EMAIL_CONFIG.recipient) || ''
-    };
+    var data = new URLSearchParams();
+    data.append('_subject', '⚠️ [Bodegón] ' + titulo);
+    data.append('_replyto', (window.EMAIL_CONFIG && window.EMAIL_CONFIG.recipient) || '');
+    data.append('tipo', type);
+    data.append('titulo', titulo);
+    data.append('detalle', detalle);
+    data.append('fecha', new Date().toISOString());
+    data.append('dispositivo', navigator.userAgent ? navigator.userAgent.slice(0, 120) : '');
 
     return fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: { 'Accept': 'application/json' },
+      body: data
     }).then(function (res) {
-      if (res.ok) { setNotifTime(type); return true; }
+      if (res.ok || res.redirected) { setNotifTime(type); return true; }
       return false;
     }).catch(function () {
       /* recién pero sin conexión: se reintentará; no registrar como enviado */
@@ -2862,6 +2861,73 @@
     if (override.usernameHash) result.usernameHash = override.usernameHash;
     return result;
   }
+
+  /* ==========================================================
+     API pública y mínima para el Asistente del Administrador
+     (js/admin-ai.js). Solo expone operaciones de edición visual;
+     NUNCA expone contraseñas, hashes, tokens ni configuración
+     interna del panel.
+     ========================================================== */
+  var PX_PROPS = { width: 1, height: 1, left: 1, top: 1, borderWidth: 1, borderRadius: 1, fontSize: 1 };
+
+  function exposeAdminApi() {
+    if (window.BodegonAdminApi) return;
+    window.BodegonAdminApi = {
+      isActive: function () { return !!editMode; },
+
+      select: function (el) { try { if (el) { selectElement(el); return true; } } catch (e) {} return false; },
+      deselect: function () { try { deselectElement(); } catch (e) {} },
+
+      getSelected: function () {
+        try {
+          if (!selectedEl) return null;
+          return 'ETIQUETA ' + selectedEl.tagName.toLowerCase() +
+            (selectedEl.id ? ' (#' + selectedEl.id + ')' : '') +
+            (selectedEl.className ? ' .' + String(selectedEl.className).split(' ')[0] : '');
+        } catch (e) { return null; }
+      },
+
+      resetSelected: function () {
+        try {
+          if (!selectedEl || !selectedEl.dataset.origStyles) return false;
+          selectedEl.style.cssText = selectedEl.dataset.origStyles;
+          delete selectedEl.dataset.origStyles;
+          syncPanel(); updateHandle(); autoSave();
+          return true;
+        } catch (e) { return false; }
+      },
+
+      applyProp: function (prop, value) {
+        try {
+          if (!selectedEl) return false;
+          var panel = document.getElementById('editor-panel');
+          var input = panel ? panel.querySelector('[data-prop="' + prop + '"]') : null;
+          if (input) {
+            input.value = value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            return true;
+          }
+          selectedEl.style[prop] = PX_PROPS[prop] ? String(Number(value)) + 'px' : value;
+          updateHandle();
+          autoSave();
+          return true;
+        } catch (e) { return false; }
+      },
+
+      pos: function (key) {
+        try {
+          if (!selectedEl) return false;
+          var panel = document.getElementById('editor-panel');
+          var btn = panel ? panel.querySelector('.editor-pos-btn[data-pos="' + key + '"]') : null;
+          if (!btn) return false;
+          btn.click();
+          return true;
+        } catch (e) { return false; }
+      }
+    };
+  }
+
+  exposeAdminApi();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
