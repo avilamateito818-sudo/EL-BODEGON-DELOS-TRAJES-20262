@@ -2766,6 +2766,30 @@
     }
 
     fetchFromGitHub(function (remoteData) {
+      var pendingRaw = null;
+      try { pendingRaw = localStorage.getItem(PENDING_SYNC_KEY); } catch (e) {}
+      var localRaw = null;
+      try { localRaw = localStorage.getItem(AUTOSAVE_KEY); } catch (e) {}
+
+      /* Si hay cambios locales sin subir (pendiente de sincronización), el
+         contenido local es MÁS RECIENTE que el remoto (GitHub). NO hay que
+         pisarlo: se mantiene en pantalla, se guarda y se vuelve a intentar
+         subir. Esto evita perder el trabajo del administrador al recargar
+         (fallo: "se pierden los cambios al recargar"). */
+      if (pendingRaw) {
+        try {
+          var pendingObj = JSON.parse(pendingRaw);
+          if (pendingObj && pendingObj.version) {
+            applyData(pendingObj);
+            applySeasonCovers();
+            localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(pendingObj));
+            scheduleCloudSync();
+            retryPendingSyncs();
+            return;
+          }
+        } catch (e) {}
+      }
+
       var remoteBase = null;
       if (base) {
         try { remoteBase = mergeData(base, remoteData); } catch (e) { remoteBase = remoteData; }
@@ -2780,7 +2804,6 @@
       }
       try {
         var remoteSerial = JSON.stringify(remoteBase);
-        var localRaw = localStorage.getItem(AUTOSAVE_KEY);
         if (localRaw && localRaw !== remoteSerial) {
           /* Hay contenido local que difiere del remoto: respáldalo ANTES de
              sobrescribir, así el trabajo del administrador nunca se pierde. */
