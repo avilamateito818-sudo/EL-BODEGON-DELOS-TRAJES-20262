@@ -56,25 +56,57 @@
 
   /* ---------- utilidades ---------- */
 
+  /* Comprime una imagen subida para que ocupe poco espacio:
+     - Limita la dimensión mayor (ancho o alto) a MAX_IMG_DIM px.
+     - Ajusta la calidad en pasos hasta que la imagen quede por debajo de
+       MAX_IMG_BYTES, para que las fotos no ocupen tanto espacio.
+     Cuanto más pequeña/quede la imagen, mejor (se liberan fácilmente 10-30x). */
+  var MAX_IMG_DIM = 1200;
+  var MAX_IMG_BYTES = 220 * 1024; /* ~220 KB por foto */
+
   function compressImage(dataUrl, maxWidth, quality) {
     return new Promise(function (resolve) {
       var img = new Image();
       img.onload = function () {
+        var target = maxWidth || MAX_IMG_DIM;
         var w = img.width;
         var h = img.height;
-        if (w > maxWidth) {
-          h = Math.round(h * maxWidth / w);
-          w = maxWidth;
+        /* límite por la dimensión mayor (no solo ancho) */
+        var maxDim = Math.max(w, h);
+        if (maxDim > target) {
+          var ratio = target / maxDim;
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
         }
-        var canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        var q = (typeof quality === 'number') ? quality : 0.6;
+        tryCompress(w, h, q, 0);
       };
       img.onerror = function () { resolve(dataUrl); };
       img.src = dataUrl;
+
+      function tryCompress(cw, ch, cq, attempt) {
+        try {
+          var canvas = document.createElement('canvas');
+          canvas.width = cw;
+          canvas.height = ch;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, cw, ch);
+          var out = canvas.toDataURL('image/jpeg', cq);
+          var bytes = out.length * 3 / 4; /* aprox. bytes de base64 */
+          if (bytes <= MAX_IMG_BYTES || attempt >= 3 || (cw <= 400 && ch <= 400)) {
+            resolve(out);
+          } else {
+            /* seguir reduciendo: bajar calidad y, si hace falta, dimensiones */
+            var nextQ = cq * 0.7;
+            var nextScale = 0.8;
+            var nw = Math.max(240, Math.round(cw * (attempt >= 2 ? nextScale : 1)));
+            var nh = Math.max(240, Math.round(ch * (attempt >= 2 ? nextScale : 1)));
+            tryCompress(nw, nh, nextQ, attempt + 1);
+          }
+        } catch (e) {
+          resolve(dataUrl);
+        }
+      }
     });
   }
 
@@ -2528,40 +2560,48 @@
   /* ---------- recomprimir fotos viejas grandes ---------- */
 
   function isBigBase64(s) {
-    return s && s.indexOf('data:image') === 0 && s.length > 150000;
+    /* marca imágenes que excedan el objetivo de peso para re-comprimir */
+    return s && s.indexOf('data:image') === 0 && s.length > (MAX_IMG_BYTES * 4 / 3);
   }
 
   function reCompressOld() {
     var changed = false;
+    var processed = 0;
+    var total = 0;
+    Object.keys(content.seasonCovers || {}).forEach(function (k) { if (isBigBase64(content.seasonCovers[k])) total++; });
+    content.images.forEach(function (im) { if (isBigBase64(im.src)) total++; });
+    content.addCards.forEach(function (c) { if (isBigBase64(c.img)) total++; });
+
+    function finishOne() {
+      processed++;
+      if (processed >= total) {
+        if (changed) toast('Fotos antiguas comprimidas para liberar espacio.');
+      }
+    }
+    function runCompress(current, assign) {
+      compressImage(current, null, null).then(function (c) {
+        if (c !== current) { assign(c); autoSave(); changed = true; }
+        finishOne();
+      });
+    }
+
     Object.keys(content.seasonCovers || {}).forEach(function (k) {
       var v = content.seasonCovers[k];
       if (isBigBase64(v)) {
-        compressImage(v, 1000, 0.55).then(function (c) {
-          content.seasonCovers[k] = c;
-          autoSave();
-        });
-        changed = true;
+        runCompress(v, function (c) { content.seasonCovers[k] = c; });
       }
     });
     content.images.forEach(function (im) {
       if (isBigBase64(im.src)) {
-        compressImage(im.src, 1000, 0.55).then(function (c) {
-          im.src = c;
-          autoSave();
-        });
-        changed = true;
+        runCompress(im.src, function (c) { im.src = c; });
       }
     });
     content.addCards.forEach(function (c) {
       if (isBigBase64(c.img)) {
-        compressImage(c.img, 1000, 0.55).then(function (cc) {
-          c.img = cc;
-          autoSave();
-        });
-        changed = true;
+        runCompress(c.img, function (cc) { c.img = cc; });
       }
     });
-    if (changed) toast('Fotos antiguas comprimidas para liberar espacio.');
+    if (total === 0 && changed) toast('Fotos antiguas comprimidas para liberar espacio.');
   }
 
   /* ---------- iniciar ---------- */
