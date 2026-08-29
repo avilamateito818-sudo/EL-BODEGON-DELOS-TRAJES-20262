@@ -37,19 +37,22 @@ module.exports = async (req, res) => {
 
   let p;
   try {
-    p = JSON.parse(req.body || '{}');
+    p = (typeof req.body === 'object' && req.body !== null)
+      ? req.body
+      : JSON.parse(req.body || '{}');
   } catch (e) {
     return send(res, 400, { ok: false, error: 'JSON inválido' });
   }
 
   const record = {
     fecha: new Date().toISOString(),
-    categoria: String(p.categoria || ''),
+    categoria: String(p.categoria || 'consulta libre'),
+    consulta: String(p.consulta || ''),
     nombre: String(p.nombre || ''),
     whatsapp: String(p.whatsapp || ''),
   };
   const waLink = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(
-    `Nueva consulta en El Bodegón: ${record.categoria}. Nombre: ${record.nombre}. WhatsApp: ${record.whatsapp}`
+    `Nueva consulta en El Bodegón: ${record.categoria}. ${record.consulta ? 'Mensaje: ' + record.consulta + '. ' : ''}Nombre: ${record.nombre}. WhatsApp: ${record.whatsapp}`
   )}`;
 
   if (!TOKEN) {

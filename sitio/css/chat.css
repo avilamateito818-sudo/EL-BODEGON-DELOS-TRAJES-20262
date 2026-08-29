@@ -116,6 +116,21 @@
 }
 .chat-opt:hover { background: rgba(212, 175, 55, 0.28); color: #fff; }
 
+/* Enlaces y acciones dentro del chat */
+.chat-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; padding-top: 0.15rem; }
+.chat-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: linear-gradient(135deg, #25D366, #128C7E); color: #fff;
+  border: none; border-radius: 20px; padding: 0.45rem 0.85rem;
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; text-decoration: none;
+  font-family: 'Quicksand', sans-serif;
+}
+.chat-btn:hover { filter: brightness(1.1); }
+.chat-btn.chat-btn-neutral {
+  background: rgba(212, 175, 55, 0.12); color: #F6D98A;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+}
+
 /* Entrada */
 .chat-foot { border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem; display: flex; gap: 0.5rem; }
 .chat-input {
