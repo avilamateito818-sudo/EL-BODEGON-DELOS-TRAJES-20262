@@ -10,6 +10,9 @@
   var DEFAULT_USERNAME = 'Ana Avila';
   var SESSION_KEY = 'bodegon_admin_session';
   var AUTOSAVE_KEY = 'bodegon_autosave';
+  var BACKUP_KEY_PREFIX = 'bodegon_backup_';
+  var BACKUP_SLOTS = 5;
+  var BACKUP_LOG_KEY = 'bodegon_backup_log';
   var PENDING_SYNC_KEY = 'bodegon_pending_sync';
   var CLOUD_SYNC_API = '/api/save-content';
   var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-delos-trajes-20265-s5qo.vercel.app/api/save-content';
@@ -1604,6 +1607,7 @@
       '<button type="button" class="admin-btn admin-btn-help" data-guide="help" title="Abrir la guía de uso">Ayuda ?</button>' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="save">Guardar</button>' +
       '<button type="button" class="admin-btn admin-btn-sync" data-role="sync">Sincronizar ahora</button>' +
+      '<button type="button" class="admin-btn admin-btn-backup" data-role="backup" title="Ver y restaurar copias de seguridad automáticas">Respaldos</button>' +
       '<button type="button" class="admin-btn admin-btn-export" data-role="export">Descargar cambios</button>' +
       '<button type="button" class="admin-btn" data-role="verify">Verificar</button>' +
       '<button type="button" class="admin-btn" data-role="password">Cambiar contraseña</button>';
@@ -1623,6 +1627,10 @@
       toast('Guardado en el navegador.');
     });
     tb.querySelector('[data-role="sync"]').addEventListener('click', forceSyncNow);
+    tb.querySelector('[data-role="backup"]').addEventListener('click', function () {
+      backupNow('manual');
+      openBackupPanel();
+    });
     tb.querySelector('[data-role="export"]').addEventListener('click', function () {
       saveToDisk();
     });
@@ -1970,6 +1978,127 @@
     }
   }
 
+  /* ---------- backups rotativos (nada se pierde) ---------- */
+
+  function backupNow(reason, dataToBackup) {
+    try {
+      var data = dataToBackup || serialize();
+      var ts = new Date();
+      var stamp = ts.getFullYear() + '-' +
+        ('0' + (ts.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + ts.getDate()).slice(-2) + ' ' +
+        ('0' + ts.getHours()).slice(-2) + ':' +
+        ('0' + ts.getMinutes()).slice(-2) + ':' +
+        ('0' + ts.getSeconds()).slice(-2);
+      var entry = {
+        id: ts.getTime(),
+        created: stamp,
+        reason: reason || 'manual',
+        data: data
+      };
+      /* rotación: mover cada slot hacia atrás */
+      try {
+        var oldest = BACKUP_SLOTS - 1;
+        var old = localStorage.getItem(BACKUP_KEY_PREFIX + oldest);
+        if (old) localStorage.removeItem(BACKUP_KEY_PREFIX + oldest);
+        for (var i = oldest - 1; i >= 0; i--) {
+          var cur = localStorage.getItem(BACKUP_KEY_PREFIX + i);
+          if (cur) localStorage.setItem(BACKUP_KEY_PREFIX + (i + 1), cur);
+        }
+      } catch (e) {}
+
+      /* guardar respaldo en slots 1..N, mantener slot 0 como "último" para no perder lo más reciente */
+      try {
+        var penultimate = localStorage.getItem(BACKUP_KEY_PREFIX + '0');
+        if (penultimate) localStorage.setItem(BACKUP_KEY_PREFIX + '1', penultimate);
+        localStorage.setItem(BACKUP_KEY_PREFIX + '0', JSON.stringify(entry));
+      } catch (e) {}
+
+      /* registro de respaldos (fecha/contenido) */
+      try {
+        var log = [];
+        try { log = JSON.parse(localStorage.getItem(BACKUP_LOG_KEY) || '[]'); } catch (e) { log = []; }
+        log.unshift({ ts: stamp, reason: reason || 'manual', len: data.length });
+        if (log.length > 20) log.length = 20;
+        localStorage.setItem(BACKUP_LOG_KEY, JSON.stringify(log));
+      } catch (e) {}
+
+      return entry.id;
+    } catch (e) { return null; }
+  }
+
+  function listBackups() {
+    var out = [];
+    for (var i = 0; i < BACKUP_SLOTS; i++) {
+      try {
+        var raw = localStorage.getItem(BACKUP_KEY_PREFIX + i);
+        if (!raw) continue;
+        var entry = JSON.parse(raw);
+        out.push({ slot: i, id: entry.id, created: entry.created, reason: entry.reason, len: entry.data ? entry.data.length : 0 });
+      } catch (e) {}
+    }
+    return out.sort(function (a, b) { return b.id - a.id; });
+  }
+
+  function restoreBackup(slot) {
+    try {
+      var raw = localStorage.getItem(BACKUP_KEY_PREFIX + slot);
+      if (!raw) { toast('No existe ese respaldo.'); return false; }
+      var entry = JSON.parse(raw);
+      var obj = JSON.parse(entry.data);
+      /* antes de restaurar, respaldar lo actual para no perder el estado presente */
+      backupNow('antes-de-restaurar');
+      applyData(obj);
+      applySeasonCovers();
+      localStorage.setItem(AUTOSAVE_KEY, entry.data);
+      clearPendingSync();
+      toast('Respaldo restaurado (' + entry.created + ', ' + entry.reason + '). Sincronizando...');
+      scheduleCloudSync();
+      return true;
+    } catch (e) {
+      toast('No se pudo restaurar el respaldo: ' + e.message);
+      return false;
+    }
+  }
+
+  function openBackupPanel() {
+    var list = listBackups();
+    if (!list.length) {
+      toast('No hay respaldos guardados todavía.');
+      return;
+    }
+    var rows = list.map(function (b) {
+      return '<div class="admin-backup-row">' +
+        '<span class="admin-backup-info">' +
+        '<b>' + b.created + '</b> · ' + (b.reason || 'manual') +
+        '</span>' +
+        '<button type="button" class="admin-btn admin-btn-primary admin-backup-restore" data-slot="' + b.slot + '">Restaurar</button>' +
+        '</div>';
+    }).join('');
+    var box = openModal(
+      '<h3>Respaldos automáticos</h3>' +
+      '<p class="admin-backup-hint">Copias de seguridad guardadas en este navegador. Restaura una si algo se perdió.</p>' +
+      '<div class="admin-backup-list">' + rows + '</div>' +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn" data-role="now">Crear respaldo ahora</button>' +
+      '<button type="button" class="admin-btn" data-role="close">Cerrar</button>' +
+      '</div>'
+    );
+    box.querySelector('[data-role="now"]').addEventListener('click', function () {
+      backupNow('manual');
+      toast('Respaldo creado.');
+      closeModal(box);
+      openBackupPanel();
+    });
+    box.querySelector('[data-role="close"]').addEventListener('click', function () { closeModal(box); });
+    box.querySelectorAll('.admin-backup-restore').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var slot = parseInt(btn.getAttribute('data-slot'), 10);
+        if (restoreBackup(slot)) closeModal(box);
+      });
+    });
+  }
+
   function showSaveIndicator() {
     var ind = document.querySelector('.admin-save-indicator');
     if (!ind) {
@@ -2013,6 +2142,10 @@
     if (cloudSyncing) return;
     cloudSyncing = true;
 
+    /* Copia de seguridad local justo antes de escribir en GitHub: si el
+       guardado remoto falla o algo se corrompe, siempre queda la versión. */
+    backupNow('antes-de-sincronizar', data);
+
     var syncBadge = document.querySelector('.admin-cloud-sync');
     if (!syncBadge) {
       syncBadge = document.createElement('div');
@@ -2032,7 +2165,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         content: data,
-        message: 'Admin update: contenido actualizado desde el panel'
+        message: 'Admin update (' + new Date().toLocaleString() + ')'
       })
     })
       .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, json: j }; }); })
@@ -2120,7 +2253,7 @@
     try {
       navigator.sendBeacon(getCloudUrl(), JSON.stringify({
         content: pending,
-        message: 'Admin update (cierre de pestaña)'
+        message: 'Admin update (cierre de pestaña ' + new Date().toLocaleString() + ')'
       }));
     } catch (e) {}
   }
@@ -2151,15 +2284,15 @@
     fetch(getCloudUrl(), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: '{}', message: 'Test connection' })
+      body: JSON.stringify({ test: true, message: 'Test connection' })
     })
       .then(function (res) { return res.json(); })
       .then(function (r) {
-        if (r.ok) {
+        if (r.ok && r.test) {
           syncBadge.innerHTML = '<span class="admin-cloud-icon">✓</span> Conexión OK — GitHub sync activo';
           syncBadge.classList.add('is-ok');
         } else {
-          throw new Error(r.error);
+          throw new Error(r.error || 'Sin token');
         }
       })
       .catch(function (err) {
@@ -2375,7 +2508,8 @@
   /* ---------- iniciar ---------- */
 
   var GITHUB_REPO = 'avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262';
-  var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/data/admin-content.js';
+  var GITHUB_CONTENT_PATH = 'sitio/data/admin-content.js';
+  var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + GITHUB_CONTENT_PATH;
 
   function fetchFromGitHub(callback) {
     fetch(GITHUB_API)
@@ -2391,7 +2525,7 @@
       })
       .catch(function () {
         var bust = '?t=' + Date.now();
-        fetch('https://raw.githubusercontent.com/' + GITHUB_REPO + '/main/data/admin-content.js' + bust)
+        fetch('https://raw.githubusercontent.com/' + GITHUB_REPO + '/main/' + GITHUB_CONTENT_PATH + bust)
           .then(function (res) { return res.ok ? res.text() : ''; })
           .then(function (text) {
             if (!text) return;
@@ -2435,6 +2569,16 @@
       try {
         var remoteSerial = JSON.stringify(remoteBase);
         var localRaw = localStorage.getItem(AUTOSAVE_KEY);
+        if (localRaw && localRaw !== remoteSerial) {
+          /* Hay contenido local que difiere del remoto: respáldalo ANTES de
+             sobrescribir, así el trabajo del administrador nunca se pierde. */
+          try {
+            var localObj = parseWrapped(localRaw);
+            if (localObj && localObj.version) {
+              backupNow('autosave-local-diferente-al-cargar', localRaw);
+            }
+          } catch (e) {}
+        }
         if (!localRaw || localRaw !== remoteSerial) {
           localStorage.setItem(AUTOSAVE_KEY, remoteSerial);
         }

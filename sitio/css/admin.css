@@ -82,6 +82,19 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 }
 .admin-modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.1rem; }
 
+.admin-backup-hint { margin: 0 0 0.8rem; font-size: 0.8rem; color: #c9b8e6; }
+.admin-backup-list { display: flex; flex-direction: column; gap: 0.45rem; max-height: 44vh; overflow: auto; }
+.admin-backup-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+  padding: 0.55rem 0.7rem; border-radius: 8px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+}
+.admin-backup-info { font-size: 0.78rem; color: #f3eaff; line-height: 1.3; }
+.admin-backup-info b { color: #fff; }
+.admin-backup-restore { flex-shrink: 0; }
+.admin-btn-backup { border-color: rgba(160,107,255,.45); background: rgba(160,107,255,.14); }
+.admin-btn-backup:hover { background: rgba(160,107,255,.28); }
+
 .admin-btn {
   padding: 0.5rem 0.9rem; border: 1px solid rgba(255,255,255,.22); border-radius: 8px;
   background: rgba(255,255,255,.08); color: #fff; font: inherit; font-size: 0.82rem;

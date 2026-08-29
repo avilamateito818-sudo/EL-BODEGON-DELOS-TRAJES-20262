@@ -35,11 +35,24 @@ module.exports = async (req, res) => {
     return send(res, 500, { ok: false, error: 'GITHUB_TOKEN no está configurado en Vercel' });
   }
 
+  let bodyText = typeof req.body === 'string' ? req.body
+    : Buffer.isBuffer(req.body) ? req.body.toString('utf-8')
+    : typeof req.body === 'object' && req.body !== null ? JSON.stringify(req.body)
+    : String(req.body || '');
   let payload;
   try {
-    payload = JSON.parse(req.body || '{}');
+    payload = JSON.parse(bodyText);
   } catch (e) {
     return send(res, 400, { ok: false, error: 'JSON inválido' });
+  }
+
+  if (payload.test) {
+    const sha = await getFileSha();
+    return send(res, 200, {
+      ok: !!(TOKEN && sha),
+      test: true,
+      sha: sha || null,
+    });
   }
 
   let parsed;
