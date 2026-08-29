@@ -27,8 +27,8 @@ El panel **auto-sincroniza** el contenido editado hacia la nube:
 2. `scheduleCloudSync()` — programa la sincronización (con debounce) y, si no hay red, encola en `bodegon_pending_sync` (cola offline de localStorage).
 3. `syncToCloud()` — envía a la nube:
    - Endpoint local: `CLOUD_SYNC_API = '/api/save-content'`
-   - Respaldo: `https://el-bodegon-los-trajes-3-2026.vercel.app/api/save-content`
-   - Repositorio: `avimateo2-ui/EL-BODEGON-LOS-TRAJES-3-2026`
+   - Respaldo: `https://el-bodegon-delos-trajes-20265-s5qo.vercel.app/api/save-content`
+   - Repositorio: `avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262`
 4. `fetchFromGitHub()` — al iniciar el admin, intenta cargar el contenido último desde GitHub.
 
 ---

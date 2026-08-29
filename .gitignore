@@ -25,3 +25,5 @@ bodegon_admin_session
 dist/
 build/
 .cache/
+
+.vercel

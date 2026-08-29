@@ -12,7 +12,7 @@
   var AUTOSAVE_KEY = 'bodegon_autosave';
   var PENDING_SYNC_KEY = 'bodegon_pending_sync';
   var CLOUD_SYNC_API = '/api/save-content';
-  var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-los-trajes-20262.vercel.app/api/save-content';
+  var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-delos-trajes-20265-s5qo.vercel.app/api/save-content';
   var cloudSyncTimer = null;
   var CLOUD_SYNC_DELAY = 2500;
   var cloudSyncRetries = 0;

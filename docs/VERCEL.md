@@ -42,7 +42,7 @@ Opcionales:
 
 Clic en **Deploy**. Vercel publica la web **y** las funciones `/api/*` automáticamente en cada push a `main`.
 
-La URL quedaría similar a `https://el-bodegon-los-trajes-20262.vercel.app`.
+La URL quedaría similar a `https://el-bodegon-delos-trajes-20265-s5qo.vercel.app`.
 
 ---
 
