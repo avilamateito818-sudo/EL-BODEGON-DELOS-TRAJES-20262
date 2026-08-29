@@ -1,7 +1,7 @@
-/* ==========================================================
+﻿/* ==========================================================
    email/form-handler.js
    Manejo del formulario de contacto — El Bodegón de los Trajes
-   Envía mensajes por correo a avimateo2@gmail.com vía Formspree
+   Envía mensajes por correo a avilamateito818@gmail.com vía Formspree
    ========================================================== */
 
 (function () {

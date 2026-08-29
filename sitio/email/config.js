@@ -1,10 +1,10 @@
-/* ==========================================================
+﻿/* ==========================================================
    email/config.js
    Configuración del formulario de contacto — El Bodegón de los Trajes
    ==========================================================
    INSTRUCCIONES:
    1. Ve a https://formspree.io y crea una cuenta gratuita
-   2. Crea un nuevo formulario con el correo avimateo2@gmail.com
+   2. Crea un nuevo formulario con el correo avilamateito818@gmail.com
    3. Copia el ID del formulario (la parte final de la URL)
       Ejemplo: si tu URL es https://formspree.io/f/mwkgpkwn
       el ID es "mwkgpkwn"
@@ -16,7 +16,7 @@ window.EMAIL_CONFIG = {
   formspreeId: 'xppabela',
 
   // Dirección de destino (solo referencia, Formspree usa la configurada en su panel)
-  recipient: 'avimateo2@gmail.com',
+  recipient: 'avilamateito818@gmail.com',
 
   // Nombre del negocio
   businessName: 'El Bodegón de los Trajes',
