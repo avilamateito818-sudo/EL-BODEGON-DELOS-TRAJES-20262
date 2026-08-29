@@ -6,6 +6,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(10) > span:nth-child(1)",
       "html": "Halloween te trae los mejores disfraces, bailes de clausura "
+    },
+    {
+      "sel": "#inicio > div:nth-child(1) > h2:nth-child(2)",
+      "html": "PRUEBA_TEMP_XYZ123 sincronizado"
     }
   ],
   "images": [
