@@ -20,7 +20,13 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [],
+  "addTitles": [
+    {
+      "id": "amtf0o6ejd2c0g",
+      "container": "#reyes-magos",
+      "html": "UNIFORMES Y BATAS DE LABORITORIO COLEGIO Y UNIVERSIDADES"
+    }
+  ],
   "addPhotos": [],
   "deleteCards": [],
   "deleteTexts": [],
