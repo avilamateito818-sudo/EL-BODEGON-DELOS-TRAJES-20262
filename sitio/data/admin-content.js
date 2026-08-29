@@ -2,7 +2,12 @@ window.ADMIN_CONTENT = {
   "version": 2,
   "usernameHash": null,
   "passwordHash": null,
-  "texts": [],
+  "texts": [
+    {
+      "sel": "#temporadas > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(10) > span:nth-child(1)",
+      "html": "Halloween te trae los mejores disfraces, bailes de clausura "
+    }
+  ],
   "images": [
     {
       "sel": "#batas > div:nth-child(1) > img:nth-child(1)",
