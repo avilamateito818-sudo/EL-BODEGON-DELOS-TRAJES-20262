@@ -9,7 +9,7 @@ window.ADMIN_CONTENT = {
     },
     {
       "sel": "#inicio > div:nth-child(1) > h2:nth-child(2)",
-      "html": "PRUEBA_TEMP_XYZ123 sincronizado"
+      "html": "Viste tu imaginación, vive tu historia."
     }
   ],
   "images": [
