@@ -175,6 +175,88 @@
     }, 2600);
   }
 
+  /* ---------- notificaciones al administrador (por correo) ---------- */
+  /* Envía una alerta al correo del admin (vía Formspree) cuando ocurre algo
+     que requiere su atención: espacio lleno, fallo de sincronización, token
+     faltante, etc. Limita la frecuencia para no inundar el correo. */
+
+  var NOTIF_STORAGE_KEY = 'bodegon_notif_log';
+  var NOTIF_VERSION = '1';
+  /* Registro en memoria como respaldo: si localStorage está lleno (justo el caso
+     de "espacio lleno") igual podemos limitar la frecuencia sin inundar el correo. */
+  var notifMemLog = {};
+
+  function getNotifConfig() {
+    try { return window.EMAIL_CONFIG && window.EMAIL_CONFIG.formspreeId; }
+    catch (e) { return null; }
+  }
+
+  /* Registra último envio por tipo para limitar frecuencia */
+  function lastNotifTime(type) {
+    if (notifMemLog[type]) return notifMemLog[type];
+    try {
+      var log = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}');
+      return log[type] || 0;
+    } catch (e) { return 0; }
+  }
+  function setNotifTime(type) {
+    notifMemLog[type] = Date.now();
+    try {
+      var log = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}');
+      log[type] = Date.now();
+      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(log));
+    } catch (e) {}
+  }
+
+  /* Minutos entre alertas del mismo tipo (evita spam de correo) */
+  function notifIntervalMinutes(type) {
+    if (type === 'espacio-lleno') return 10;
+    if (type === 'sin-conexion') return 15;
+    return 5;
+  }
+
+  /* Envía la alerta al admin. Devuelve promesa. */
+  function notifyAdmin(type, titulo, detalle, opts) {
+    opts = opts || {};
+    var intervalMs = notifIntervalMinutes(type) * 60 * 1000;
+    var last = lastNotifTime(type);
+
+    /* siempre mostrar el aviso local aunque no se agote la frecuencia */
+    try { toast((opts.localMsg || titulo)); } catch (e) {}
+
+    /* si ya se avisó recientemente del mismo tipo, no repetir el correo
+       (excepto si la alerta pide forzarse, como la de prueba manual) */
+    if (!opts.force && (Date.now() - last) < intervalMs) {
+      return Promise.resolve(false);
+    }
+
+    var formspreeId = getNotifConfig();
+    if (!formspreeId) return Promise.resolve(false);
+
+    var endpoint = 'https://formspree.io/f/' + formspreeId;
+    var body = {
+      _subject: '⚠️ [Bodegón] ' + titulo,
+      tipo: type,
+      titulo: titulo,
+      detalle: detalle,
+      fecha: new Date().toISOString(),
+      dispositivo: navigator.userAgent ? navigator.userAgent.slice(0, 120) : '',
+      _replyto: (window.EMAIL_CONFIG && window.EMAIL_CONFIG.recipient) || ''
+    };
+
+    return fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      if (res.ok) { setNotifTime(type); return true; }
+      return false;
+    }).catch(function () {
+      /* recién pero sin conexión: se reintentará; no registrar como enviado */
+      return false;
+    });
+  }
+
   /* ---------- edición de texto ---------- */
 
   var TEXT_SEL = [
@@ -1644,6 +1726,7 @@
       '<button type="button" class="admin-btn admin-btn-help" data-guide="help" title="Abrir la guía de uso">Ayuda ?</button>' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="save">Guardar</button>' +
       '<button type="button" class="admin-btn admin-btn-sync" data-role="sync">Sincronizar ahora</button>' +
+      '<button type="button" class="admin-btn admin-btn-notif" data-role="notify" title="Enviar una alerta de prueba al correo del administrador">Probar alerta</button>' +
       '<button type="button" class="admin-btn admin-btn-backup" data-role="backup" title="Ver y restaurar copias de seguridad automáticas">Respaldos</button>' +
       '<button type="button" class="admin-btn admin-btn-export" data-role="export">Descargar cambios</button>' +
       '<button type="button" class="admin-btn" data-role="verify">Verificar</button>' +
@@ -1664,6 +1747,12 @@
       toast('Guardado en el navegador.');
     });
     tb.querySelector('[data-role="sync"]').addEventListener('click', forceSyncNow);
+    tb.querySelector('[data-role="notify"]').addEventListener('click', function () {
+      notifyAdmin('prueba', '✅ Alerta de prueba del panel',
+        'Esta es una alerta de prueba. Si la recibiste por correo, las notificaciones ' +
+        'al administrador están funcionando correctamente.', { force: true });
+      toast('Alerta de prueba enviada al correo.');
+    });
     tb.querySelector('[data-role="backup"]').addEventListener('click', function () {
       backupNow('manual');
       openBackupPanel();
@@ -2016,6 +2105,10 @@
       scheduleCloudSync();
     } catch (e) {
       toast('⚠️ No se pudo guardar. El almacenamiento está lleno. Intenta con fotos más pequeñas.');
+      notifyAdmin('espacio-lleno', '⚠️ Almacenamiento lleno del panel',
+        'El espacio de guardado de este dispositivo está lleno (QuotaExceeded). ' +
+        'Revisa que las fotos estén comprimidas y libera espacio o sube con fotos ' +
+        'más pequeñas para no perder cambios. Detalle: ' + (e && e.message ? e.message : e));
     }
   }
 
@@ -2095,6 +2188,9 @@
       clearPendingSync();
       toast('Respaldo restaurado (' + entry.created + ', ' + entry.reason + '). Sincronizando...');
       scheduleCloudSync();
+      notifyAdmin('accion', '✅ Respaldo restaurado',
+        'Se restauro una copia de seguridad del panel: ' + entry.created +
+        ' (motivo: ' + (entry.reason || 'manual') + ') y se sincronizo a GitHub.');
       return true;
     } catch (e) {
       toast('No se pudo restaurar el respaldo: ' + e.message);
@@ -2267,6 +2363,10 @@
           syncBadge.classList.add('is-error');
           syncBadge.title = 'Ve a Vercel → Settings → Environment Variables y crea GITHUB_TOKEN';
           setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 6000);
+          notifyAdmin('token-faltante', '⚠️ Token de GitHub no configurado',
+            'La sincronización con GitHub falla: la variable GITHUB_TOKEN no está ' +
+            'configurada. Ve a Vercel → Project → Settings → Environment Variables ' +
+            'y créala con un token de GitHub con permiso repo (ver docs/VERCEL.md).');
           return;
         }
 
@@ -2304,6 +2404,14 @@
     syncBadge.classList.add('is-error');
     syncBadge.classList.remove('is-ok');
     setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 8000);
+    /* Si hay cambios sin subir (pendientes), avisar al admin por correo porque
+       el dispositivo quedó sin conexión y el panel no está sincronizando. */
+    if (hasPendingSync()) {
+      notifyAdmin('sin-conexion', '⚠️ Sin conexión: hay cambios sin subir',
+        'Hay cambios guardados localmente que aún no se suben a GitHub porque el ' +
+        'dispositivo perdió la conexión. Se subirán automáticamente al reconectar. ' +
+        'Si esto se repite en varios dispositivos, revisa que todos tengan internet.');
+    }
   }
 
   function retryPendingSyncs() {

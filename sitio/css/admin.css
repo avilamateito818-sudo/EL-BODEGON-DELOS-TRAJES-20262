@@ -789,6 +789,17 @@ body.admin-edit-mode .admin-save-fab { display: flex !important; }
   background: linear-gradient(135deg, #42a5f5, #1e88e5) !important;
 }
 
+/* ===== Botón alerta de prueba ===== */
+.admin-btn-notif {
+  background: linear-gradient(135deg, #00c853, #1b5e20) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 600;
+}
+.admin-btn-notif:hover {
+  background: linear-gradient(135deg, #33d96a, #2e7d32) !important;
+}
+
 @media (max-width: 768px) {
   .admin-save-indicator {
     top: auto;
