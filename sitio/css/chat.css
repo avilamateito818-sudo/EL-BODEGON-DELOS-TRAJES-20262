@@ -158,10 +158,10 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .chat-fab { width: 3rem; height: 3rem; left: 1rem; bottom: 8.2rem; }
-  .chat-window { left: 1rem; bottom: 11.7rem; width: 20rem; max-height: 65vh; }
+  .chat-fab { width: 3rem; height: 3rem; left: 1rem; bottom: 13rem; }
+  .chat-window { left: 1rem; bottom: 16.5rem; width: 20rem; max-height: 62vh; }
 }
 @media (max-width: 480px) {
-  .chat-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 7.2rem; }
-  .chat-window { left: 0.8rem; bottom: 10.2rem; width: calc(100vw - 1.6rem); max-height: 62vh; }
+  .chat-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 11rem; }
+  .chat-window { left: 0.8rem; bottom: 14rem; width: calc(100vw - 1.6rem); max-height: 58vh; }
 }

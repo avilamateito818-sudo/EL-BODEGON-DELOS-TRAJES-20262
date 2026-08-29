@@ -328,15 +328,43 @@ section {
   .season-blank { padding: 4rem 1.5rem; }
   .season-blank-title { letter-spacing: 6px; }
 
-  /* Admin toolbar debajo del header */
-  .admin-toolbar { top: 56px; }
+  /* Admin toolbar: franja deslizable horizontal (no envuelve en muchas filas) */
+  .admin-toolbar {
+    top: 56px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: center;
+    gap: 0.45rem;
+    height: 54px;
+    padding: 0.5rem 0.7rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .admin-toolbar::-webkit-scrollbar { display: none; }
+  .admin-toolbar-title {
+    position: sticky;
+    left: 0;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    padding-right: 0.6rem;
+    background: #140a22;
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .admin-toolbar .admin-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.76rem;
+  }
 
-  /* FABs: stack vertical */
+  /* FABs: apilados verticalmente en 2 columnas sin solaparse */
   .whatsapp-float { width: 3rem; height: 3rem; left: 1rem; bottom: 1rem; }
-  .edit-float { width: 3rem; height: 3rem; left: 1rem; bottom: 4.5rem; }
-  .admin-fab { left: 1rem; bottom: 5rem; }
+  .edit-float { width: 3rem; height: 3rem; left: 1rem; bottom: 5rem; }
+  .admin-fab { width: 3rem; height: 3rem; left: 1rem; bottom: 9rem; }
   .admin-save-fab { width: 3rem; height: 3rem; left: 4.5rem; bottom: 1rem; }
-  .admin-logout-fab { left: 4.5rem; bottom: 5rem; }
+  .admin-logout-fab { width: 3rem; height: 3rem; left: 4.5rem; bottom: 5rem; }
 
   .admin-modal-actions { flex-wrap: wrap; }
   .admin-photorow { flex-wrap: wrap; }
@@ -418,10 +446,10 @@ section {
   .halloween-landing-title { font-size: clamp(1.2rem, 5vw, 2rem); letter-spacing: 1px; }
   .halloween-landing-sub { letter-spacing: 1.5px; font-size: 0.75rem; }
 
-  /* FABs más compactos en ≤420px */
+  /* FABs más compactos en ≤420px (apilados sin solaparse) */
   .whatsapp-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 0.8rem; font-size: 1.2rem; }
-  .edit-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 3.8rem; font-size: 1rem; }
-  .admin-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 4.2rem; font-size: 1.1rem; }
+  .edit-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 4.2rem; font-size: 1rem; }
+  .admin-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 7.6rem; font-size: 1.1rem; }
   .admin-save-fab { width: 2.6rem; height: 2.6rem; left: 4rem; bottom: 0.8rem; font-size: 1rem; }
   .admin-logout-fab { width: 2.4rem; height: 2.4rem; left: 4rem; bottom: 4.2rem; }
 
