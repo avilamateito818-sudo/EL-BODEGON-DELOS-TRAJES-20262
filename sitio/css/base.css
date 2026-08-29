@@ -39,6 +39,14 @@ body {
   font-weight: 500;
 }
 
+/* Salvaguarda global: ninguna imagen se desborda de su contenedor en ningún
+   dispositivo (PC, tablet, celular). Los componentes con alta/relación fija
+   usan object-fit para no deformarse. */
+img {
+  max-width: 100%;
+  display: block;
+}
+
 h1,
 h2,
 h3,

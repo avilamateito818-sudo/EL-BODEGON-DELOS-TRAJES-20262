@@ -56,13 +56,16 @@
 
   /* ---------- utilidades ---------- */
 
-  /* Comprime una imagen subida para que ocupe poco espacio:
-     - Limita la dimensión mayor (ancho o alto) a MAX_IMG_DIM px.
-     - Ajusta la calidad en pasos hasta que la imagen quede por debajo de
-       MAX_IMG_BYTES, para que las fotos no ocupen tanto espacio.
-     Cuanto más pequeña/quede la imagen, mejor (se liberan fácilmente 10-30x). */
-  var MAX_IMG_DIM = 1200;
-  var MAX_IMG_BYTES = 220 * 1024; /* ~220 KB por foto */
+  /* Comprime una imagen subida para que OBTENGA DOS COSAS A LA VEZ:
+     1. Se vea SUPER BIEN (nítida): guardamos buena resolución (hasta 1920px
+        en la dimensión mayor) y calidad alta (0.78) para que se vea nítida en
+        PC, tablet y celular.
+     2. Este OPTIMIZADA (no ocupe de más): si la foto sigue pesando mucho tras
+        el primer pase, se baja la calidad y las dimensiones en pasos hasta un
+        máximo razonable (~450 KB), mucho menor que el original (se liberan
+        típicamente 5-20x). */
+  var MAX_IMG_DIM = 1920;
+  var MAX_IMG_BYTES = 450 * 1024; /* ~450 KB por foto (nitidez + peso equilibrados) */
 
   function compressImage(dataUrl, maxWidth, quality) {
     return new Promise(function (resolve) {
@@ -78,7 +81,7 @@
           w = Math.round(w * ratio);
           h = Math.round(h * ratio);
         }
-        var q = (typeof quality === 'number') ? quality : 0.6;
+        var q = (typeof quality === 'number') ? quality : 0.78;
         tryCompress(w, h, q, 0);
       };
       img.onerror = function () { resolve(dataUrl); };
@@ -93,12 +96,14 @@
           ctx.drawImage(img, 0, 0, cw, ch);
           var out = canvas.toDataURL('image/jpeg', cq);
           var bytes = out.length * 3 / 4; /* aprox. bytes de base64 */
-          if (bytes <= MAX_IMG_BYTES || attempt >= 3 || (cw <= 400 && ch <= 400)) {
+          if (bytes <= MAX_IMG_BYTES || attempt >= 4 || (cw <= 360 && ch <= 360)) {
             resolve(out);
           } else {
-            /* seguir reduciendo: bajar calidad y, si hace falta, dimensiones */
-            var nextQ = cq * 0.7;
-            var nextScale = 0.8;
+            /* seguir reduciendo: bajar calidad y, si hace falta, dimensiones.
+               Se prioriza mantener nitidez (calidad antes que tamaño) hasta el
+               tercer pase; luego se reduce la resolución si aún pesa. */
+            var nextQ = cq * 0.82;
+            var nextScale = 0.85;
             var nw = Math.max(240, Math.round(cw * (attempt >= 2 ? nextScale : 1)));
             var nh = Math.max(240, Math.round(ch * (attempt >= 2 ? nextScale : 1)));
             tryCompress(nw, nh, nextQ, attempt + 1);
