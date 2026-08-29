@@ -1971,6 +1971,10 @@
     try {
       var data = serialize();
       localStorage.setItem(AUTOSAVE_KEY, data);
+      /* Mantener siempre actualizado el pendiente de sincronización: si ya hay
+         cambios sin subir y el usuario sigue editando, se combinan para no
+         perder nunca las ediciones más recientes. */
+      if (hasPendingSync()) savePendingSync(data);
       showSaveIndicator();
       scheduleCloudSync();
     } catch (e) {
@@ -2137,10 +2141,33 @@
     } catch (e) { return false; }
   }
 
+  /* Detecta si el fallo se debe a falta de conexión (red caída, sin internet,
+     servidor inaccesible, timeout). Cualquier error no relacionado con el token. */
+  function isOfflineError(err) {
+    var m = String((err && err.message) || err || '');
+    if (m.indexOf('GITHUB_TOKEN') !== -1 || m.indexOf('no está configurado') !== -1) return false;
+    if (m.indexOf('Sin conexión') !== -1 || m.indexOf('offline') !== -1 ||
+        m.indexOf('Failed to fetch') !== -1 || m.indexOf('NetworkError') !== -1 ||
+        m.indexOf('network') !== -1 || m.indexOf('Network request failed') !== -1 ||
+        m.indexOf('timed out') !== -1 || m.indexOf('timeout') !== -1 ||
+        m.indexOf('TypeError') !== -1) return true;
+    return true;
+  }
+
   function syncToCloud(dataToSend) {
-    var data = dataToSend || serialize();
     if (cloudSyncing) return;
     cloudSyncing = true;
+
+    /* Usar siempre lo más reciente y fresco para no perder ni enviar datos viejos:
+       si hay un pendiente guardado, ese es el contenido más reciente. */
+    var data;
+    if (dataToSend) {
+      data = dataToSend;
+    } else if (hasPendingSync()) {
+      data = localStorage.getItem(PENDING_SYNC_KEY);
+    } else {
+      data = serialize();
+    }
 
     /* Copia de seguridad local justo antes de escribir en GitHub: si el
        guardado remoto falla o algo se corrompe, siempre queda la versión. */
@@ -2157,8 +2184,15 @@
     syncBadge.classList.remove('is-error', 'is-ok');
 
     var url = getCloudUrl();
-
     console.log('[cloud-sync] Enviando a:', url, '| online:', navigator.onLine);
+
+    /* Timeout para que un fetch colgado no bloquee nunca el flujo de guardado. */
+    var controller = null;
+    if (window.AbortController) controller = new AbortController();
+    var timeoutId = null;
+    if (controller) {
+      timeoutId = setTimeout(function () { controller.abort(); }, 15000);
+    }
 
     fetch(url, {
       method: 'POST',
@@ -2166,11 +2200,16 @@
       body: JSON.stringify({
         content: data,
         message: 'Admin update (' + new Date().toLocaleString() + ')'
-      })
+      }),
+      signal: controller ? controller.signal : undefined
     })
-      .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, json: j }; }); })
+      .then(function (res) {
+        if (timeoutId) clearTimeout(timeoutId);
+        return res.json().then(function (j) { return { ok: res.ok, json: j }; });
+      })
       .then(function (r) {
         cloudSyncing = false;
+        if (timeoutId) clearTimeout(timeoutId);
         if (r.ok && r.json.ok) {
           clearPendingSync();
           syncBadge.innerHTML = '<span class="admin-cloud-icon">✓</span> Sincronizado con GitHub';
@@ -2182,8 +2221,8 @@
         }
       })
       .catch(function (err) {
-        cloudSyncRetries++;
         cloudSyncing = false;
+        if (timeoutId) clearTimeout(timeoutId);
         var errMsg = err.message || String(err);
 
         if (errMsg.indexOf('GITHUB_TOKEN') !== -1 || errMsg.indexOf('no está configurado') !== -1) {
@@ -2194,14 +2233,24 @@
           return;
         }
 
+        /* Guardado local garantizado: los cambios NUNCA se pierden aunque no
+           haya conexión. Se subirán cuando la conexión vuelva. */
         savePendingSync(data);
 
-        if (cloudSyncRetries < MAX_RETRIES) {
-          syncBadge.innerHTML = '<span class="admin-cloud-icon">⟳</span> Reintentando... (' + cloudSyncRetries + '/' + MAX_RETRIES + ')';
-          setTimeout(function () { syncToCloud(data); }, 3000);
-        } else {
+        if (isOfflineError(err)) {
           showOfflineBadge();
           cloudSyncRetries = 0;
+          /* Se reintentará automáticamente desde el intervalo periódico,
+             el evento 'online' y al hacer clic en "Sincronizar ahora". */
+        } else {
+          cloudSyncRetries++;
+          if (cloudSyncRetries < MAX_RETRIES) {
+            syncBadge.innerHTML = '<span class="admin-cloud-icon">⟳</span> Reintentando... (' + cloudSyncRetries + '/' + MAX_RETRIES + ')';
+            setTimeout(function () { syncToCloud(data); }, 3000);
+          } else {
+            showOfflineBadge();
+            cloudSyncRetries = 0;
+          }
         }
         console.warn('[cloud-sync]', errMsg);
       });
@@ -2214,10 +2263,10 @@
       syncBadge.className = 'admin-ui admin-cloud-sync';
       document.body.appendChild(syncBadge);
     }
-    syncBadge.innerHTML = '<span class="admin-cloud-icon">⚠</span> Sin conexión — guardado local. Se sincroniza al reconectar.';
+    syncBadge.innerHTML = '<span class="admin-cloud-icon">✓</span> Guardado en este dispositivo. Sin conexión: se subirá solo al reconectar.';
     syncBadge.classList.add('is-error');
     syncBadge.classList.remove('is-ok');
-    setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 6000);
+    setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 8000);
   }
 
   function retryPendingSyncs() {
@@ -2235,14 +2284,16 @@
   });
 
   /* Guardado automático periódico: si hay cambios sin sincronizar, se reintentan
-     aunque el navegador no haya lanzado el evento 'online'. */
+     de forma continua aunque el navegador no haya lanzado el evento 'online' y
+     aunque `navigator.onLine` sea poco fiable. El propio fetch (con timeout)
+     detectará si realmente hay conexión y reintentará hasta completar. */
   setInterval(function () {
     if (cloudSyncing) return;
     if (!hasPendingSync()) return;
-    if (!navigator.onLine) return;
+    if (navigator.onLine === false) return; /* si el navegador dice offline, esperar */
     var pending = localStorage.getItem(PENDING_SYNC_KEY);
     if (pending) syncToCloud(pending);
-  }, 20000);
+  }, 15000);
 
   /* Al cerrar la pestaña o pasar a segundo plano: no perder cambios pendientes */
   function flushBeforeUnload() {
@@ -2281,13 +2332,20 @@
     syncBadge.classList.add('is-visible');
     syncBadge.classList.remove('is-error', 'is-ok');
 
+    var controller = null;
+    if (window.AbortController) controller = new AbortController();
+    var timeoutId = null;
+    if (controller) timeoutId = setTimeout(function () { controller.abort(); }, 12000);
+
     fetch(getCloudUrl(), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ test: true, message: 'Test connection' })
+      body: JSON.stringify({ test: true, message: 'Test connection' }),
+      signal: controller ? controller.signal : undefined
     })
-      .then(function (res) { return res.json(); })
+      .then(function (res) { if (timeoutId) clearTimeout(timeoutId); return res.json(); })
       .then(function (r) {
+        if (timeoutId) clearTimeout(timeoutId);
         if (r.ok && r.test) {
           syncBadge.innerHTML = '<span class="admin-cloud-icon">✓</span> Conexión OK — GitHub sync activo';
           syncBadge.classList.add('is-ok');
@@ -2296,7 +2354,8 @@
         }
       })
       .catch(function (err) {
-        syncBadge.innerHTML = '<span class="admin-cloud-icon">✗</span> Error: ' + (err.message || 'desconocido');
+        if (timeoutId) clearTimeout(timeoutId);
+        syncBadge.innerHTML = '<span class="admin-cloud-icon">✗</span> Sin conexión o error. Los cambios siguen guardados localmente.';
         syncBadge.classList.add('is-error');
       });
     setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-ok', 'is-error'); }, 5000);
