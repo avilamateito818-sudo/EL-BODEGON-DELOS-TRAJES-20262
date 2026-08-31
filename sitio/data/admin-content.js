@@ -70,6 +70,7 @@ window.ADMIN_CONTENT = {
   "editorStyles": {
     "e1788193662577_ipfe": "",
     "e1788193177481_z9be": "",
+    "e1788193723424_ujdh": "--d: 360ms;",
     "e1788193180018_k21n": ""
   }
 };
