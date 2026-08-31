@@ -39,7 +39,7 @@ window.ADMIN_CONTENT = {
     {
       "id": "amthg7t14h4dcd",
       "container": "#batas",
-      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunion \n*vestidos para fiesta \n* matrimonios"
+      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunion \n*vestidos para fiesta \n* matrimonios<button type=\"button\" class=\"admin-ui admin-delbtn\" title=\"Quitar este elemento\">✕</button>"
     }
   ],
   "addTitles": [
