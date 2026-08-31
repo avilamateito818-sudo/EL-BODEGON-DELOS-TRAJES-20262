@@ -987,6 +987,7 @@
           '<button type="button" class="editor-btn editor-btn-reset" data-action="reset">Restablecer</button>' +
           '<button type="button" class="editor-btn editor-btn-delete" data-action="delete">Eliminar</button>' +
         '</div>' +
+        '<p class="editor-hint">Mueve con las <strong>flechas del teclado</strong> (Shift = paso grande) o arrastra el recuadro. Cambia el tamaño con la <strong>rueda del mouse</strong>.</p>' +
       '</div>';
     document.body.appendChild(panel);
 
@@ -1129,11 +1130,29 @@
       selectElement(e.target);
     });
 
-    /* ESC para deseleccionar */
+    /* ESC para deseleccionar + Flechas para mover */
     document.addEventListener('keydown', function (e) {
+      if (!selectedEl) return;
+
       if (e.key === 'Escape' && editorActive) {
         deselectElement();
+        return;
       }
+
+      var ARROW_STEP = e.shiftKey ? 50 : 10;
+      var keyMap = { ArrowUp: 'top', ArrowDown: 'top', ArrowLeft: 'left', ArrowRight: 'left' };
+      var prop = keyMap[e.key];
+      if (!prop) return;
+
+      e.preventDefault();
+      var computed = window.getComputedStyle(selectedEl);
+      if (computed.position === 'static') selectedEl.style.position = 'relative';
+      var cur = parseInt(selectedEl.style[prop], 10) || 0;
+      var dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
+      selectedEl.style[prop] = (cur + dir * ARROW_STEP) + 'px';
+      syncPanel();
+      updateHandle();
+      autoSave();
     });
 
     /* Drag con handle */
@@ -1329,6 +1348,8 @@
       sec.appendChild(grid);
       var blank = sec.querySelector('.season-blank-title');
       if (blank) blank.style.display = 'none';
+      var emptyBox = sec.querySelector('.season-empty');
+      if (emptyBox) emptyBox.style.display = 'none';
       var secTag = sec.querySelector('.season-catalog-tag');
       if (secTag) {
         sec.insertBefore(grid, secTag.nextSibling ? secTag.nextSibling : null);
@@ -2826,9 +2847,7 @@
 
     try {
       if (localStorage.getItem(SESSION_KEY)) {
-        authed = true;
-        enableEditMode();
-        updateFabState();
+        localStorage.removeItem(SESSION_KEY);
       }
     } catch (e) {}
 
