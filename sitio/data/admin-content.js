@@ -13,7 +13,7 @@ window.ADMIN_CONTENT = {
     },
     {
       "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > p:nth-child(3)",
-      "html": "Celebra el Día de Reyes con nuestros trajes y prepárate para el nuevo año escolar con uniformes y batas ajustados a la medida. Elige una categoría y te llevamos a su sección., si te interesa vestidos elegante para primera comunion, bautizo, matrimonios ,  fiesta . Nos alegra tenerte con nosotros"
+      "html": "Celebra el Día de Reyes con nuestros trajes y prepárate para el nuevo año escolar con uniformes y batas ajustados a la medida. Elige una categoría y te llevamos a su sección., si te interesa vestidos elegante para primera comuniones, bautizo, matrimonios ,  fiesta . Nos alegra tenerte con nosotros"
     }
   ],
   "images": [
