@@ -40,7 +40,7 @@ window.ADMIN_CONTENT = {
     {
       "id": "amthg2pg4u6n9z",
       "container": "#batas",
-      "html": "TRAJES Y VESTIDOS ELEGANTE PARA TUS MEJORES CELEBRACIONES"
+      "html": "Trajes  y vestidos  Elegantes para tus mejores  CELEBRACIONES"
     }
   ],
   "addPhotos": [],
