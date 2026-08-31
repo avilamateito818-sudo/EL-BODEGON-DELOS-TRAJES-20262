@@ -36,7 +36,13 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [],
+  "addTitles": [
+    {
+      "id": "amthg2pg4u6n9z",
+      "container": "#batas",
+      "html": "TRAJES Y VESTIDOS ELEGANTE PARA TUS MEJORES CELEBRACIONES"
+    }
+  ],
   "addPhotos": [],
   "deleteCards": [],
   "deleteTexts": [],
@@ -49,5 +55,8 @@ window.ADMIN_CONTENT = {
       "width": 441
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1788193177481_z9be": "",
+    "e1788193180018_k21n": ""
+  }
 };
