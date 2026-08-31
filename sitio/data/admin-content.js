@@ -70,6 +70,6 @@ window.ADMIN_CONTENT = {
   "editorStyles": {
     "e1788193177481_z9be": "",
     "e1788193180018_k21n": "",
-    "e1788193514584_0nrd": "color: rgb(131, 162, 22); opacity: 1; font-size: 12px; font-family: Arial, sans-serif;"
+    "e1788193514584_0nrd": "color: rgb(131, 162, 22); opacity: 1; font-size: 12px; font-family: Arial, sans-serif; background-color: rgb(28, 39, 94);"
   }
 };
