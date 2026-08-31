@@ -39,7 +39,7 @@ window.ADMIN_CONTENT = {
     {
       "id": "amthg7t14h4dcd",
       "container": "#batas",
-      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunion \n*vestidos para fiesta \n* matrimonios<button type=\"button\" class=\"admin-ui admin-delbtn\" title=\"Quitar este elemento\">✕</button>"
+      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunión \n*vestidos para fiesta \n* matrimonios<button type=\"button\" class=\"admin-ui admin-delbtn\" title=\"Quitar este elemento\">✕</button>"
     }
   ],
   "addTitles": [
@@ -68,8 +68,8 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
+    "e1788193662577_ipfe": "",
     "e1788193177481_z9be": "",
-    "e1788193180018_k21n": "",
-    "e1788193514584_0nrd": "color: rgb(196, 249, 6); opacity: 1; font-size: 12px; font-family: Arial, sans-serif; background-color: rgb(28, 39, 94);"
+    "e1788193180018_k21n": ""
   }
 };
