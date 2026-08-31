@@ -39,7 +39,7 @@ window.ADMIN_CONTENT = {
     {
       "id": "amthg7t14h4dcd",
       "container": "#batas",
-      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunión \n*vestidos para fiesta \n* matrimonios<"
+      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunión \n*vestidos para fiesta \n* matrimonios"
     }
   ],
   "addTitles": [
@@ -71,7 +71,6 @@ window.ADMIN_CONTENT = {
     "e1788193662577_ipfe": "",
     "e1788193177481_z9be": "",
     "e1788193723424_ujdh": "--d: 360ms;",
-    "e1788193180018_k21n": "",
-    "e1788193775777_574r": "width: 393px; height: 160px;"
+    "e1788193180018_k21n": ""
   }
 };
