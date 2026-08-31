@@ -66,6 +66,7 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "e1788209867828_isl7": ""
+    "e1788209867828_isl7": "",
+    "e1788210069041_bfa8": "--d: 360ms; width: 1098px; height: 1569px;"
   }
 };
