@@ -35,13 +35,7 @@ window.ADMIN_CONTENT = {
     }
   ],
   "addCards": [],
-  "addTexts": [
-    {
-      "id": "amthg7t14h4dcd",
-      "container": "#batas",
-      "html": "Te traemos los mejores vestidos y trajes para tus celebraciones \n* bautizos\n* primera comunión \n*vestidos para fiesta \n* matrimonios"
-    }
-  ],
+  "addTexts": [],
   "addTitles": [
     {
       "id": "amthg2pg4u6n9z",
