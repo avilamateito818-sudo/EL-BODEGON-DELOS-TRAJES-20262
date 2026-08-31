@@ -43,7 +43,13 @@ window.ADMIN_CONTENT = {
       "html": "Trajes  y vestidos  Elegantes para tus mejores  CELEBRACIONES"
     }
   ],
-  "addPhotos": [],
+  "addPhotos": [
+    {
+      "id": "amthg5m4cbev0l",
+      "container": "#batas",
+      "src": "https://previews.123rf.com/images/akz/akz1406/akz140600466/29178146-wedding-day-full-length-of-happy-bride-woman-girl-in-white-dress-and-groom-man-in-elegant-suit.jpg"
+    }
+  ],
   "deleteCards": [],
   "deleteTexts": [],
   "seasonCovers": {
