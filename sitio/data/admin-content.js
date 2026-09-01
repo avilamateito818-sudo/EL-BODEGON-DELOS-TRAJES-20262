@@ -21,7 +21,7 @@ window.ADMIN_CONTENT = {
     },
     {
       "sel": "#temporadas > div:nth-child(1) > h2:nth-child(2)",
-      "html": "Regreso a Clases & Celebración de Reyes Magos "
+      "html": "El Bodegón de los Trajes "
     },
     {
       "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(2) > h3:nth-child(2)",
