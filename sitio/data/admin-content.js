@@ -18,6 +18,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > h3:nth-child(2)",
       "html": "Reyes Magos , uniformes para colegio y batas para  laboratorio  ."
+    },
+    {
+      "sel": "#temporadas > div:nth-child(1) > h2:nth-child(2)",
+      "html": "Regreso a Clases & Celebración de Reyes Magos "
     }
   ],
   "images": [
@@ -66,7 +70,8 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "e1788209867828_isl7": "",
-    "e1788210069041_bfa8": "--d: 360ms; width: 1153px; height: 1647px;"
+    "e1788284637601_zajt": "",
+    "e1788284656383_yyiz": "",
+    "e1788285101202_alx6": ""
   }
 };
