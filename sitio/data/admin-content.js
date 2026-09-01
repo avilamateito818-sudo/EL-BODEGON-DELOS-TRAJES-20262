@@ -22,6 +22,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(1) > h2:nth-child(2)",
       "html": "Regreso a Clases & Celebración de Reyes Magos "
+    },
+    {
+      "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(2) > h3:nth-child(2)",
+      "html": "El Bodegón de los Trajes Regreso a Clases & Celebración de Reyes Magos   <span>Enero</span> · Tunja"
     }
   ],
   "images": [
@@ -69,9 +73,5 @@ window.ADMIN_CONTENT = {
       "width": 441
     }
   },
-  "editorStyles": {
-    "e1788284637601_zajt": "",
-    "e1788284656383_yyiz": "",
-    "e1788285101202_alx6": ""
-  }
+  "editorStyles": {}
 };
