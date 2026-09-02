@@ -48,13 +48,7 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [
-    {
-      "id": "amthg2pg4u6n9z",
-      "container": "#batas",
-      "html": "Trajes  y vestidos  Elegantes para tus mejores  CELEBRACIONES"
-    }
-  ],
+  "addTitles": [],
   "addPhotos": [
     {
       "id": "amthg5m4cbev0l",
