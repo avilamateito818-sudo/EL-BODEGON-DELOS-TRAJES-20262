@@ -73,7 +73,7 @@ window.ADMIN_CONTENT = {
   "photoSettings": {
     "enero": {
       "width": 441,
-      "height": 397,
+      "height": 425,
       "posX": -58
     }
   },
