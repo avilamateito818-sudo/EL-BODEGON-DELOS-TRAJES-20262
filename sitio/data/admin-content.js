@@ -81,6 +81,7 @@ window.ADMIN_CONTENT = {
   "editorStyles": {
     "e1788392958586_qmmn": "",
     "e1788392957683_lxro": "",
-    "e1788392973373_x4mi": ""
+    "e1788392973373_x4mi": "",
+    "e1788393411607_xko8": "background-color: rgb(50, 47, 228);"
   }
 };
