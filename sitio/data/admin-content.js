@@ -72,8 +72,14 @@ window.ADMIN_CONTENT = {
   },
   "photoSettings": {
     "enero": {
-      "width": 441
+      "width": 441,
+      "height": 397,
+      "posX": 500
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1788392958586_qmmn": "",
+    "e1788392957683_lxro": "",
+    "e1788392973373_x4mi": ""
+  }
 };
