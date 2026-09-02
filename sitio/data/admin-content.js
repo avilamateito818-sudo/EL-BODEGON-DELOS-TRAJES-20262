@@ -74,7 +74,8 @@ window.ADMIN_CONTENT = {
     "enero": {
       "width": 441,
       "height": 425,
-      "posX": -58
+      "posX": -4,
+      "posY": -45
     }
   },
   "editorStyles": {
