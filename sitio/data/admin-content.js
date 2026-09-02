@@ -82,6 +82,6 @@ window.ADMIN_CONTENT = {
     "e1788392958586_qmmn": "",
     "e1788392957683_lxro": "",
     "e1788392973373_x4mi": "",
-    "e1788393411607_xko8": "background-color: rgb(47, 102, 228);"
+    "e1788393411607_xko8": "background-color: rgb(47, 117, 228);"
   }
 };
