@@ -26,6 +26,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(2) > h3:nth-child(2)",
       "html": "El Bodegón de los Trajes Regreso a Clases & Celebración de Reyes Magos   <span>Enero</span> · Tunja"
+    },
+    {
+      "sel": "#temporadas > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1) > span:nth-child(1)",
+      "html": "Alquiler de Vestidos: \"Temporada de Bodas y Grados de Inicio de Año\""
     }
   ],
   "images": [
