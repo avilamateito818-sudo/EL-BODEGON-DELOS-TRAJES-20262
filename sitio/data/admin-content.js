@@ -79,7 +79,7 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "e1788393506846_85jk": "font-size: 92px; position: absolute; left: 0px; top: -20px;",
+    "e1788393506846_85jk": "font-size: 96px; position: absolute; left: 0px; top: -37px;",
     "e1788392958586_qmmn": "",
     "e1788392957683_lxro": "",
     "e1788392973373_x4mi": "",
