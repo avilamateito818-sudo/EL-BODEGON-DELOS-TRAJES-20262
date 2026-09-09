@@ -34,6 +34,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(2) > span:nth-child(1)",
       "html": "\"Temporada Reina del Carnaval"
+    },
+    {
+      "sel": "#temporadas > div:nth-child(3) > article:nth-child(1) > div:nth-child(2) > span:nth-child(1)",
+      "html": "Temporada de Enero"
     }
   ],
   "images": [
