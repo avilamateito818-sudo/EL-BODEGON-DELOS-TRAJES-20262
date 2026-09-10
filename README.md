@@ -1,10 +1,10 @@
 # El Bodegón de los Trajes
 
-Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado y asistentes (bot de ayuda al cliente y asistente del administrador).
+Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado. El contacto con los clientes es por **WhatsApp** y la persistencia de contenido usan **Vercel + GitHub**.
 
 Este repositorio aplica **arquitectura limpia (Clean Architecture)**, principios **SOLID**, convención de ramas **Git Flow** y despliegue contenerizado con **Docker**.
 
-> ⚠️ **Importante sobre seguridad:** los asistentes (chat del cliente y asistente del administrador) **no almacenan ni exponen contraseñas, usuarios ni datos internos**. El asistente del administrador solo actúa cuando la sesión de administrador ya está activa y reutiliza las herramientas de edición nativas del panel. Nunca se comparten credenciales.
+> ⚠️ **Importante:** el panel de administración **no almacena ni expone contraseñas, usuarios ni datos internos** en el sitio público. La edición solo es posible con sesión de administrador activa. Nunca se comparten credenciales.
 
 ---
 
@@ -18,14 +18,11 @@ el-bodegon-de-los-trajes/
 │   ├── css/                #   Hojas de estilo por responsabilidad
 │   ├── js/
 │   │   ├── app.js          #     Lógica del frontend (nav, pestañas, lightbox…)
-│   │   ├── admin.js        #     Panel de administración (login/edición)
-│   │   ├── admin-ai.js     #     Asistente del administrador (órdenes)
-│   │   └── chat.js         #     Bot de ayuda al cliente
+│   │   └── admin.js        #     Panel de administración (login/edición)
 │   ├── data/admin-content.js  # Contenido administrable persistido
-│   └── email/              #   Config + manejo del formulario de contacto
 ├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, Vercel)
 ├── docker/                 # 🐳 Dockerfile y configuración de Nginx
-├── api/                    # ☁️ Funciones serverless (Vercel): save-content y chat-ask
+├── api/                    # ☁️ Funciones serverless (Vercel): save-content (y endpoints de datos en GitHub)
 ├── scripts/                # 🔧 Utilidades del proyecto (dev, build, docker…)
 ├── .github/workflows/      # ⚙️ (opcional) CI/CD
 ├── docker-compose.yml      # Orquesta el contenedor (sitio estático)
@@ -68,7 +65,7 @@ El contenedor sirve el contenido estático de `sitio/` con Nginx (configuración
 
 ### 3) En producción (Vercel)
 
-El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `api/` para los asistentes y la sincronización del panel). Ver [`docs/VERCEL.md`](docs/VERCEL.md) para importar el proyecto y configurar la variable `GITHUB_TOKEN`.
+El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `api/` para la persistencia y la sincronización del panel con GitHub). Ver [`docs/VERCEL.md`](docs/VERCEL.md) para importar el proyecto y configurar la variable `GITHUB_TOKEN`.
 
 ---
 
@@ -82,7 +79,7 @@ El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `ap
 | Docker / despliegue | [`docs/DOCKER.md`](docs/DOCKER.md) |
 | Estructura de carpetas | [`docs/DIRECTORY_STRUCTURE.md`](docs/DIRECTORY_STRUCTURE.md) |
 | Credenciales de administración | [`docs/ADMIN.md`](docs/ADMIN.md) |
-| Despliegue en Vercel (asistentes + sincronización) | [`docs/VERCEL.md`](docs/VERCEL.md) |
+| Despliegue en Vercel (sincronización con GitHub) | [`docs/VERCEL.md`](docs/VERCEL.md) |
 
 ---
 

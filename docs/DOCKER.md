@@ -73,5 +73,5 @@ Nginx servirá la web en el puerto mapeado (ajustar `ports` en `docker-compose.y
 
 ## Notas
 
-- Esta es una web **estática**; el panel de administración y los asistentes funcionan en el navegador. La **sincronización de contenido** usa un endpoint serverless (Vercel) y GitHub (ver [`ADMIN.md`](ADMIN.md)); no requiere servicios Docker extra.
+- Esta es una web **estática**; el panel de administración funciona en el navegador. La **sincronización de contenido** usa un endpoint serverless (Vercel) y GitHub (ver [`ADMIN.md`](ADMIN.md)); no requiere servicios Docker extra.
 - Para desarrolladores, tambiés se puede servir sin Docker con el servidor estático de Node (ver [`README.md`](../README.md)).

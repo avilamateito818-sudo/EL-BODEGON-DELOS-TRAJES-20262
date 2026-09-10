@@ -1,6 +1,6 @@
-# Panel de administración y asistentes — El Bodegón de los Trajes
+# Panel de administración — El Bodegón de los Trajes
 
-Documentación de la zona de administración del sitio, sus credenciales de referencia y los dos asistentes (bot del cliente y asistente del admin).
+Documentación de la zona de administración del sitio y sus credenciales de referencia. El sitio no incluye asistentes ni formularios: el contacto con los clientes es por **WhatsApp** y la persistencia usa **Vercel + GitHub**.
 
 > ⚠️ **Seguridad:** la información de credenciales de este documento es de referencia local para el desarrollo y **no** debe subirse a repositorios públicos. No administrar aquí claves reales.
 
@@ -33,35 +33,8 @@ El panel **auto-sincroniza** el contenido editado hacia la nube:
 
 ---
 
-## Bot de ayuda al cliente (`js/chat.js` + `css/chat.css`)
-
-- Botón flotante dorado, 9 categorías públicas de consulta.
-- Pide **nombre + WhatsApp** antes de enviar.
-- Envía a `POST /api/chat-ask` (endpoint backend):
-  - Si el backend no está desplegado → respuesta neutra de error (no expone datos de admin).
-  - Sin backend (404) se maneja con gracia.
-- **Sin acceso a datos del panel** (verificado por auditoría; no filtra credenciales).
-- Para activar el envío real, hay que desplegar el endpoint `/api/chat-ask` (Vercel).
-
----
-
-## Asistente del administrador (`js/admin-ai.js` + `css/admin-ai.css`)
-
-- Botón flotante **púrpura**, visible **solo** cuando el modo edición del admin está activo (`body.admin-edit-mode`).
-- Interpreta órdenes por **acción** (foto / título / texto / hito) y **sección** (hero / cabecera / contacto / 12 meses).
-- Dispara la **herramienta de edición nativa** del admin:
-  - Selectores: `.season-title`, `.season-subtitle`, `.season-milestone`, imagen del hero.
-- Abre el modal nativo "Editar texto" / reemplazo de foto.
-- Comportamiento verificado por auditoría:
-  - Oculto sin sesión; visible con sesión.
-  - Abre el modal correcto; **cero fugas de credenciales**; 0 errores de consola.
-- `node --check` superado.
-
----
-
 ## Buenas prácticas de seguridad
 
 - No almacenar contraseñas/claves de API en el código de cliente.
 - Tratar `bodegon_admin_session` y las claves de contenido como sensibles.
 - No incluir estas credenciales en commits; usar `process.env`/secretos serverless en producción.
-- Revisar periódicamente que los asistentes no expongan tokens o datos del panel.

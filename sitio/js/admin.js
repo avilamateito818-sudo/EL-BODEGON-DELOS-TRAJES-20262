@@ -40,8 +40,11 @@
     addTexts: [],
     addTitles: [],
     addPhotos: [],
+    addSections: [],
     deleteCards: [],
     deleteTexts: [],
+    deleteSections: [],
+    hiddenSeasons: [],
     seasonCovers: {},
     photoSettings: {},
     editorStyles: {}
@@ -175,85 +178,20 @@
     }, 2600);
   }
 
-  /* ---------- notificaciones al administrador (por correo) ---------- */
-  /* Envía una alerta al correo del admin (vía Formspree) cuando ocurre algo
-     que requiere su atención: espacio lleno, fallo de sincronización, token
-     faltante, etc. Limita la frecuencia para no inundar el correo. */
+/* ---------- notificaciones al administrador (aviso local) ---------- */
+  /* Antes estas alertas se enviaban por correo; ahora solo se muestran
+     como avisos locales en el panel. Los cambios sí se persisten y
+     sincronizan con GitHub vía la API de Vercel. */
 
-  var NOTIF_STORAGE_KEY = 'bodegon_notif_log';
-  var NOTIF_VERSION = '1';
-  /* Registro en memoria como respaldo: si localStorage está lleno (justo el caso
-     de "espacio lleno") igual podemos limitar la frecuencia sin inundar el correo. */
-  var notifMemLog = {};
+  /* Notificaciones al admin: ya NO se envían por correo ni por formularios
+     externos. Todo se maneja con avisos locales en el
+     panel. El botón "Probar alerta" solo muestra el aviso de forma local. */
 
-  function getNotifConfig() {
-    try { return window.EMAIL_CONFIG && window.EMAIL_CONFIG.formspreeId; }
-    catch (e) { return null; }
-  }
-
-  /* Registra último envio por tipo para limitar frecuencia */
-  function lastNotifTime(type) {
-    if (notifMemLog[type]) return notifMemLog[type];
-    try {
-      var log = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}');
-      return log[type] || 0;
-    } catch (e) { return 0; }
-  }
-  function setNotifTime(type) {
-    notifMemLog[type] = Date.now();
-    try {
-      var log = JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}');
-      log[type] = Date.now();
-      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(log));
-    } catch (e) {}
-  }
-
-  /* Minutos entre alertas del mismo tipo (evita spam de correo) */
-  function notifIntervalMinutes(type) {
-    if (type === 'espacio-lleno') return 10;
-    if (type === 'sin-conexion') return 15;
-    return 5;
-  }
-
-  /* Envía la alerta al admin. Devuelve promesa. */
+  /* Envía la alerta al admin. Sin correo: solo el aviso local. */
   function notifyAdmin(type, titulo, detalle, opts) {
     opts = opts || {};
-    var intervalMs = notifIntervalMinutes(type) * 60 * 1000;
-    var last = lastNotifTime(type);
-
-    /* siempre mostrar el aviso local aunque no se agote la frecuencia */
     try { toast((opts.localMsg || titulo)); } catch (e) {}
-
-    /* si ya se avisó recientemente del mismo tipo, no repetir el correo
-       (excepto si la alerta pide forzarse, como la de prueba manual) */
-    if (!opts.force && (Date.now() - last) < intervalMs) {
-      return Promise.resolve(false);
-    }
-
-    var formspreeId = getNotifConfig();
-    if (!formspreeId) return Promise.resolve(false);
-
-    var endpoint = 'https://formspree.io/f/' + formspreeId;
-    var data = new URLSearchParams();
-    data.append('_subject', '⚠️ [Bodegón] ' + titulo);
-    data.append('_replyto', (window.EMAIL_CONFIG && window.EMAIL_CONFIG.recipient) || '');
-    data.append('tipo', type);
-    data.append('titulo', titulo);
-    data.append('detalle', detalle);
-    data.append('fecha', new Date().toISOString());
-    data.append('dispositivo', navigator.userAgent ? navigator.userAgent.slice(0, 120) : '');
-
-    return fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: data
-    }).then(function (res) {
-      if (res.ok || res.redirected) { setNotifTime(type); return true; }
-      return false;
-    }).catch(function () {
-      /* recién pero sin conexión: se reintentará; no registrar como enviado */
-      return false;
-    });
+    return Promise.resolve(true);
   }
 
   /* ---------- edición de texto ---------- */
@@ -288,6 +226,7 @@
     '.halloween-landing-title',
     '.halloween-landing-sub',
     '.season-tab .tab-label',
+    '.season-tab .tab-desc',
     '.dropdown-grid a',
     '.season-quick-nav a'
   ].join(',');
@@ -558,6 +497,33 @@
     return b;
   }
 
+  /* botón X sobre cada foto para BORRARLA con un solo clic, sin abrir menús */
+  function photoDeleteButton(img) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'admin-ui admin-photobtn admin-photo-delbtn';
+    b.title = 'Quitar foto';
+    b.innerHTML = '&#10005;';
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      if (!window.confirm('¿Quitar esta foto?')) return;
+      deleteEl(img);
+      autoSave();
+      toast('Foto quitada.');
+      var parent = img.parentElement;
+      if (parent) {
+        var cam = parent.querySelector('.admin-photobtn:not(.admin-photo-delbtn)');
+        if (cam) cam.remove();
+        if (!parent.querySelector('img')) {
+          var del = parent.querySelector('.admin-photo-delbtn');
+          if (del) del.remove();
+        }
+      }
+    });
+    return b;
+  }
+
   function ensurePhotoButtons() {
     if (!editMode) return;
     Array.prototype.forEach.call(document.querySelectorAll('img'), function (img) {
@@ -567,6 +533,7 @@
       if (parent.querySelector('.admin-photobtn')) return;
       if (getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
       parent.appendChild(photoChangeButton(img));
+      parent.appendChild(photoDeleteButton(img));
     });
   }
 
@@ -900,6 +867,8 @@
           '<label>Elemento</label>' +
           '<span class="editor-el-tag" id="editor-el-tag">Ninguno</span>' +
         '</div>' +
+        '<div class="editor-section-title">Contenido</div>' +
+        '<textarea class="editor-content" id="editor-content" rows="4" placeholder="Escribe el contenido del elemento..."></textarea>' +
         '<div class="editor-section-title">Posicion</div>' +
         '<div class="editor-pos-grid">' +
           '<button type="button" class="editor-pos-btn" data-pos="left-top" title="Arriba izquierda">&#8598;</button>' +
@@ -997,6 +966,50 @@
     handle.id = 'editor-handle';
     document.body.appendChild(handle);
 
+    /* Barra de iconos de acción rápida sobre el elemento seleccionado:
+       texto, estilos, mover y borrar en un solo clic. */
+    var quickbar = document.createElement('div');
+    quickbar.className = 'admin-ui editor-quickbar';
+    quickbar.style.display = 'none';
+    quickbar.innerHTML =
+      '<button type="button" class="editor-qb editor-qb-text" data-qb="text" title="Cambiar texto">&#9998;</button>' +
+      '<button type="button" class="editor-qb editor-qb-style" data-qb="style" title="Estilos del elemento">&#127912;</button>' +
+      '<button type="button" class="editor-qb editor-qb-drag" data-qb="drag" title="Mover / arrastrar">&#8645;</button>' +
+      '<button type="button" class="editor-qb editor-qb-delete" data-qb="delete" title="Borrar elemento">&#10005;</button>';
+    document.body.appendChild(quickbar);
+
+    quickbar.querySelector('[data-qb="text"]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!selectedEl) return;
+      var el = selectedEl;
+      deselectElement();
+      editorActive = false;
+      if (editBtn) editBtn.classList.remove('is-active');
+      editElement(el);
+    });
+    quickbar.querySelector('[data-qb="style"]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!selectedEl) return;
+      var contentArea = document.getElementById('editor-content');
+      if (contentArea) contentArea.focus();
+    });
+    quickbar.querySelector('[data-qb="drag"]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!selectedEl) return;
+      toggleDragMode();
+    });
+    quickbar.querySelector('[data-qb="delete"]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!selectedEl) return;
+      if (window.confirm('¿Eliminar este elemento?')) {
+        var el = selectedEl;
+        deselectElement();
+        el.remove();
+        autoSave();
+        toast('Elemento eliminado.');
+      }
+    });
+
     /* Boton flotante de editor */
     var editBtn = document.getElementById('edit-float-btn');
     if (editBtn) {
@@ -1016,6 +1029,29 @@
       editorActive = false;
       if (editBtn) editBtn.classList.remove('is-active');
     });
+
+    /* Texto de contenido del elemento */
+    var contentArea = document.getElementById('editor-content');
+    if (contentArea) {
+      contentArea.addEventListener('input', function () {
+        if (!selectedEl) return;
+        if (selectedEl.tagName === 'TEXTAREA' || selectedEl.tagName === 'INPUT') return;
+        var addedHost = selectedEl.closest('[data-admin-id]');
+        var entry = addedHost ? findEntry(content.addCards.concat(content.addTexts, content.addTitles), addedHost.dataset.adminId) : null;
+        var useHtml = /^[Hh][1-6]$/.test(selectedEl.tagName) || selectedEl.tagName === 'P' || selectedEl.tagName === 'SPAN' || selectedEl.tagName === 'LI' || selectedEl.tagName === 'A';
+        var val = contentArea.value;
+        if (useHtml) selectedEl.innerHTML = val; else selectedEl.textContent = val;
+        /* Persistir el texto como parche (tal como hace el editor de doble clic) */
+        if (entry) {
+          if (entry._type === 'card' && selectedEl.tagName === 'H3') entry.title = val;
+          else if (entry._type === 'card' && selectedEl.tagName === 'P') entry.desc = val;
+        } else {
+          saveTextPatch(selectedEl, val);
+        }
+        updateHandle();
+        autoSave();
+      });
+    }
 
     /* Inputs del panel */
     qa('.editor-input, .editor-color, .editor-range, .editor-select', panel).forEach(function (input) {
@@ -1123,7 +1159,8 @@
           e.target.closest('.admin-seasbtn') || e.target.closest('.admin-photobtn') ||
           e.target.closest('.photo-change-btn') || e.target.closest('.admin-photo-controls') ||
           e.target.closest('.admin-login-panel') || e.target.closest('.toast-container') ||
-          e.target.closest('.editor-panel') || e.target.closest('.editor-handle') ||
+          e.target.closest('.editor-panel') || e.target.closest('.editor-handle') || e.target.closest('.editor-quickbar') ||
+          e.target.closest('.admin-ctx-menu') || e.target.closest('.admin-modal') ||
           e.target.closest('button[data-add-section]') || e.target.closest('button[data-delete-section]')) return;
       e.preventDefault();
       e.stopPropagation();
@@ -1133,6 +1170,8 @@
     /* ESC para deseleccionar + Flechas para mover */
     document.addEventListener('keydown', function (e) {
       if (!selectedEl) return;
+      /* No mover mientras se escribe en el panel */
+      if (e.target && e.target.closest && e.target.closest('.editor-panel')) return;
 
       if (e.key === 'Escape' && editorActive) {
         deselectElement();
@@ -1223,6 +1262,8 @@
     el.classList.add('editor-selected');
     var handle = document.getElementById('editor-handle');
     if (handle) handle.style.display = 'block';
+    var qb = document.querySelector('.editor-quickbar');
+    if (qb) qb.style.display = 'flex';
     updateHandle();
     syncPanel();
     document.getElementById('editor-panel').classList.add('is-open');
@@ -1237,6 +1278,8 @@
     if (handle) handle.style.display = 'none';
     var panel = document.getElementById('editor-panel');
     if (panel) panel.classList.remove('is-open');
+    var qb = document.querySelector('.editor-quickbar');
+    if (qb) qb.style.display = 'none';
   }
 
   function updateHandle() {
@@ -1248,6 +1291,11 @@
     handle.style.top = rect.top + window.scrollY - 4 + 'px';
     handle.style.width = rect.width + 8 + 'px';
     handle.style.height = rect.height + 8 + 'px';
+    var qb = document.querySelector('.editor-quickbar');
+    if (qb) {
+      qb.style.left = Math.max(8, (rect.left + window.scrollX + rect.width / 2) - 88) + 'px';
+      qb.style.top = Math.max(8, (rect.top + window.scrollY) - 46) + 'px';
+    }
   }
 
   function syncPanel() {
@@ -1259,6 +1307,22 @@
     var elTag = document.getElementById('editor-el-tag');
     if (elTag) elTag.textContent = tag;
     var panel = document.getElementById('editor-panel');
+    /* Contenido del elemento (solo para etiquetas de texto) */
+    var contentArea = document.getElementById('editor-content');
+    if (contentArea) {
+      var editableTags = ['H1','H2','H3','H4','H5','H6','P','LI','SPAN','A','DIV','SECTION'];
+      if (editableTags.indexOf(selectedEl.tagName) !== -1 && selectedEl.tagName !== 'DIV' &&
+          selectedEl.tagName !== 'SECTION' && contentArea !== document.activeElement) {
+        contentArea.value = selectedEl.innerHTML;
+        contentArea.disabled = false;
+      } else if (selectedEl.tagName === 'DIV' || selectedEl.tagName === 'SECTION') {
+        contentArea.disabled = true;
+        contentArea.placeholder = 'Este contenedor no tiene texto editable.';
+      } else {
+        contentArea.disabled = true;
+        contentArea.placeholder = 'Este elemento no admite texto.';
+      }
+    }
     qa('.editor-input', panel).forEach(function (inp) {
       var prop = inp.dataset.prop;
       var raw = selectedEl.style[prop] || '';
@@ -1442,6 +1506,169 @@
     }
   }
 
+  /* ---------- menú contextual de doble clic ---------- */
+  /* Al hacer DOBLE CLIC sobre cualquier elemento (estando en modo admin)
+     aparece un menú flotante con opciones para cambiar el título/texto,
+     cambiar la foto o borrar el elemento. */
+  var ctxMenuEl = null;
+  var ctxTextEl = null;
+  var ctxTargetEl = null;
+  var ctxClickTimer = null;
+
+  /* Retarda el clic simple de edición para no abrir el modal cuando el usuario
+     va a hacer doble clic (el doble clic cancela este retardo).
+     Con el Editor Visual activo el clic simple lo usa el panel lateral, así
+     que aquí no se abre ningún modal. */
+  function deferEdit(fn) {
+    if (editorActive) return function () {};
+    if (ctxClickTimer) clearTimeout(ctxClickTimer);
+    ctxClickTimer = setTimeout(function () { ctxClickTimer = null; fn(); }, 250);
+    return function cancel() { cancelDeferredEdit(); };
+  }
+  function cancelDeferredEdit() {
+    if (ctxClickTimer) { clearTimeout(ctxClickTimer); ctxClickTimer = null; }
+  }
+
+  function ensureCtxMenu() {
+    if (ctxMenuEl && ctxMenuEl.isConnected) return ctxMenuEl;
+    ctxMenuEl = document.createElement('div');
+    ctxMenuEl.className = 'admin-ctx-menu';
+    ctxMenuEl.style.display = 'none';
+    ctxMenuEl.innerHTML =
+      '<button type="button" class="admin-ctx-menu-item ctx-edit" data-action="text">' +
+        '<span class="ctx-icon">&#9998;</span> Cambiar título / texto</button>' +
+      '<button type="button" class="admin-ctx-menu-item ctx-photo" data-action="photo">' +
+        '<span class="ctx-icon">&#128247;</span> Cambiar foto</button>' +
+      '<div class="admin-ctx-menu-sep"></div>' +
+      '<button type="button" class="admin-ctx-menu-item ctx-delete" data-action="delete">' +
+        '<span class="ctx-icon">&#10005;</span> Borrar</button>' +
+      '<div class="admin-ctx-hint">Toca fuera para cerrar</div>';
+    document.body.appendChild(ctxMenuEl);
+
+    ctxMenuEl.querySelector('[data-action="text"]').addEventListener('click', function () {
+      var el = ctxTextEl;
+      closeCtxMenu();
+      if (!el || el.tagName === 'IMG') return;
+      editText(el);
+    });
+    ctxMenuEl.querySelector('[data-action="photo"]').addEventListener('click', function () {
+      var container = ctxTargetEl;
+      closeCtxMenu();
+      var img = container && container.tagName === 'IMG' ? container : (container ? container.querySelector('img') : null);
+      if (img) editImage(img);
+      else toast('No se encontró una foto en este elemento.');
+    });
+    ctxMenuEl.querySelector('[data-action="delete"]').addEventListener('click', function () {
+      var el = ctxTargetEl;
+      closeCtxMenu();
+      if (!el) return;
+      if (!window.confirm('¿Borrar este elemento?')) return;
+      deleteEl(el);
+      autoSave();
+      toast('Elemento borrado.');
+    });
+    return ctxMenuEl;
+  }
+
+  function showCtxMenu(el, x, y) {
+    if (!editMode) return;
+    var menu = ensureCtxMenu();
+
+    /* Texto bajo el cursor (si es un texto editable) */
+    var textEl = el.closest(TEXT_SEL);
+    if (!textEl && el.tagName !== 'IMG') {
+      var addedHost = el.closest('[data-admin-id]');
+      if (addedHost && el === addedHost) {
+        textEl = addedHost.querySelector('h3, p, li, span') || addedHost;
+      } else {
+        textEl = el;
+      }
+    }
+
+    /* Contenedor sobre el que actúa el borrado (tarjeta o elemento añadido) */
+    var container = el.closest('.card-ghost') || el.closest('[data-admin-id]');
+    if (!container) container = textEl || el;
+
+    /* Si el texto bajo el cursor acabó siendo el contenedor de una tarjeta
+       (p. ej. clic en el cuerpo de la tarjeta, no en su texto),
+       usa su título para "Cambiar título / texto" */
+    if (textEl && textEl === container && container.querySelector) {
+      var fallbackT = container.querySelector('h3, h4, p, li, span');
+      if (fallbackT) textEl = fallbackT;
+    }
+
+    ctxTargetEl = container;
+    ctxTextEl = textEl;
+
+    /* Visibilidad de cada opción según el tipo de elemento */
+    var textOpt = menu.querySelector('[data-action="text"]');
+    var photoOpt = menu.querySelector('[data-action="photo"]');
+    textOpt.style.display = (textEl && textEl.tagName !== 'IMG') ? '' : 'none';
+    photoOpt.style.display = (container.tagName === 'IMG' || (container.querySelector && container.querySelector('img'))) ? '' : 'none';
+
+    /* Limpiar resaltado previo */
+    document.querySelectorAll('[data-ctx-highlight]').forEach(function (h) { h.removeAttribute('data-ctx-highlight'); });
+    container.setAttribute('data-ctx-highlight', '1');
+
+    menu.style.display = 'flex';
+    menu.style.left = '0px';
+    menu.style.top = '0px';
+    menu.className = 'admin-ctx-menu is-open';
+
+    /* Evitar que el menú se salga de la pantalla */
+    var rect = menu.getBoundingClientRect();
+    var mw = rect.width || 200;
+    var mh = rect.height || 130;
+    var px = Math.min(x, window.innerWidth - mw - 8);
+    var py = Math.min(y, window.innerHeight - mh - 8);
+    px = Math.max(8, px);
+    py = Math.max(8, py);
+    menu.style.left = px + 'px';
+    menu.style.top = py + 'px';
+  }
+
+  function closeCtxMenu() {
+    if (ctxMenuEl) ctxMenuEl.classList.remove('is-open');
+    document.querySelectorAll('[data-ctx-highlight]').forEach(function (h) { h.removeAttribute('data-ctx-highlight'); });
+  }
+
+  function wireCtxMenu() {
+    if (document.body.dataset.ctxMenuWired) return;
+    document.body.dataset.ctxMenuWired = '1';
+
+    /* Doble clic: abre el menú sobre cualquier elemento */
+    document.addEventListener('dblclick', function (e) {
+      if (!editMode) return;
+      if (e.target.closest('.admin-ui') || e.target.closest('.admin-ctx-menu') ||
+          e.target.closest('.editor-panel') || e.target.closest('.editor-handle') ||
+          e.target.closest('.editor-quickbar') ||
+          e.target.closest('.admin-modal')) {
+        closeCtxMenu();
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      cancelDeferredEdit();
+      /* Si el Editor Visual esta activo, quitar su seleccion para no
+         interferir con el menu contextual. */
+      if (editorActive) deselectElement();
+      showCtxMenu(e.target, e.clientX, e.clientY);
+    }, true);
+
+    /* Cerrar al hacer clic fuera */
+    document.addEventListener('click', function (e) {
+      if (ctxMenuEl && ctxMenuEl.classList.contains('is-open') &&
+          !e.target.closest('.admin-ctx-menu')) {
+        closeCtxMenu();
+      }
+    });
+
+    /* Cerrar con Esc */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeCtxMenu();
+    });
+  }
+
   /* ---------- modales ---------- */
 
   function openModal(html) {
@@ -1487,6 +1714,13 @@
       var el = q(p);
       if (el) el.style.display = 'none';
     });
+    content.deleteSections.forEach(function (p) {
+      var el = q(p);
+      if (el) el.remove();
+    });
+    (content.hiddenSeasons || []).forEach(function (month) {
+      applyHiddenSeason(month, true);
+    });
     content.addCards.forEach(function (entry) {
       insertCard(entry);
     });
@@ -1498,6 +1732,10 @@
     });
     content.addPhotos.forEach(function (entry) {
       insertPhoto(entry);
+    });
+    content.addSections.forEach(function (entry) {
+      var panel = q(entry.container);
+      if (panel) insertSection(entry, panel);
     });
     applyEditorStyles();
   }
@@ -1538,9 +1776,10 @@
     if (img) {
       img.addEventListener('click', function (e) {
         if (!editMode) return;
+        if (editorActive) return;
         e.stopPropagation();
         e.preventDefault();
-        editImage(img);
+        deferEdit(function () { editImage(img); });
       });
     }
     var h3 = card.querySelector('h3');
@@ -1548,9 +1787,10 @@
     [h3, p].forEach(function (t) {
       if (t) t.addEventListener('click', function (e) {
         if (!editMode) return;
+        if (editorActive) return;
         e.stopPropagation();
         e.preventDefault();
-        editText(t);
+        deferEdit(function () { editText(t); });
       });
     });
   }
@@ -1558,9 +1798,10 @@
   function wireText(p) {
     p.addEventListener('click', function (e) {
       if (!editMode) return;
+      if (editorActive) return;
       e.stopPropagation();
       e.preventDefault();
-      editText(p);
+      deferEdit(function () { editText(p); });
     });
   }
 
@@ -1698,9 +1939,73 @@
     setTimeout(function () { userInp.focus(); }, 60);
   }
 
+  function setMarqueePaused(paused) {
+    qa('.season-marquee-track').forEach(function (track) {
+      if (paused) {
+        track.dataset._playing = track.style.animationPlayState || '';
+        track.style.animation = 'none';
+        track.dataset._paused = '1';
+      } else {
+        track.style.animation = '';
+        track.style.transform = '';
+        if (track.dataset._playing) track.style.animationPlayState = track.dataset._playing;
+        delete track.dataset._playing;
+        delete track.dataset._paused;
+      }
+    });
+    if (paused) centerMarqueeOnActive();
+  }
+
+  function centerMarqueeOnActive() {
+    qa('.season-marquee-track').forEach(function (track) {
+      var active = Array.prototype.filter.call(
+        qa('.season-tabs[role="tablist"] .season-tab'),
+        function (t) { return t.classList.contains('is-active'); }
+      )[0] || qa('.season-tabs[role="tablist"] .season-tab')[0];
+      if (!active) return;
+      centerTabInTrack(track, active);
+    });
+  }
+
+  function centerTabInTrack(track, tab) {
+    var marquee = track.parentElement;
+    if (!marquee) return;
+    var mw = marquee.getBoundingClientRect().width;
+    var rect = tab.getBoundingClientRect();
+    var mLeft = marquee.getBoundingClientRect().left;
+    var tabLeftRel = rect.left - mLeft;
+    var currentX = getTrackX(track);
+    var target = currentX - (tabLeftRel + rect.width / 2 - mw / 2);
+    track.style.transform = 'translateX(' + target + 'px)';
+  }
+
+  function getTrackX(track) {
+    if (track.style.transform) {
+      var m = track.style.transform.match(/translateX\(([-\d.]+)px\)/);
+      if (m) return parseFloat(m[1]);
+    }
+    return 0;
+  }
+
+  window.__centerMarqueeOn = function (month) {
+    if (!editMode) return;
+    var tab = Array.prototype.filter.call(qa('.season-tab'), function (t) {
+      return t.dataset.month === month && !t.classList.contains('season-tab-clone');
+    })[0] || qa('.season-tab[data-month="' + month + '"]')[0];
+    if (!tab) return;
+    qa('.season-marquee-track').forEach(function (track) {
+      centerTabInTrack(track, tab);
+    });
+  };
+
   function enableEditMode() {
     editMode = true;
     document.body.classList.add('admin-edit-mode');
+    setMarqueePaused(true);
+    var activeMonth = (document.getElementById('temporadas') || {}).dataset;
+    if (typeof revealContent === 'function' && activeMonth && activeMonth.season) {
+      revealContent(activeMonth.season);
+    }
     ensureToolbar();
     ensureLogoutFab();
     ensureSaveFab();
@@ -1711,13 +2016,21 @@
     wireSeasonPhotoButtons();
     wirePhotoControls();
     wireVisualEditor();
+    wireCtxMenu();
     ensureGridOverlay();
     if (gridEnabled()) document.getElementById('admin-grid-overlay').classList.add('is-visible');
   }
 
   function disableEditMode() {
     editMode = false;
+    closeCtxMenu();
     document.body.classList.remove('admin-edit-mode');
+    setMarqueePaused(false);
+    if (typeof resetSeasonGates === 'function' && typeof showLanding === 'function') {
+      resetSeasonGates();
+      var activeMonth = (document.getElementById('temporadas') || {}).dataset;
+      showLanding(activeMonth && activeMonth.season ? activeMonth.season : 'enero');
+    }
     var tb = document.querySelector('.admin-toolbar');
     if (tb) tb.remove();
     var lo = document.querySelector('.admin-logout-fab');
@@ -1746,7 +2059,7 @@
       '<button type="button" class="admin-btn admin-btn-help" data-guide="help" title="Abrir la guía de uso">Ayuda ?</button>' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="save">Guardar</button>' +
       '<button type="button" class="admin-btn admin-btn-sync" data-role="sync">Sincronizar ahora</button>' +
-      '<button type="button" class="admin-btn admin-btn-notif" data-role="notify" title="Enviar una alerta de prueba al correo del administrador">Probar alerta</button>' +
+      '<button type="button" class="admin-btn admin-btn-notif" data-role="notify" title="Mostrar un aviso de prueba local (ya no se envía por correo)">Probar alerta</button>' +
       '<button type="button" class="admin-btn admin-btn-backup" data-role="backup" title="Ver y restaurar copias de seguridad automáticas">Respaldos</button>' +
       '<button type="button" class="admin-btn admin-btn-export" data-role="export">Descargar cambios</button>' +
       '<button type="button" class="admin-btn" data-role="verify">Verificar</button>' +
@@ -1755,12 +2068,7 @@
     if (guidesEnabled()) tb.querySelector('[data-guide="guides"]').classList.add('is-on');
 
     var saveBtn = tb.querySelector('[data-role="save"]');
-    var saveTimer = setInterval(function () {
-      if (!tb.isConnected) { clearInterval(saveTimer); return; }
-      var activePanel = document.querySelector('.season-panel.is-active');
-      var isEnero = activePanel && activePanel.dataset && activePanel.dataset.panel === 'enero';
-      saveBtn.style.display = isEnero ? '' : 'none';
-    }, 800);
+    saveBtn.style.display = '';
 
     saveBtn.addEventListener('click', function () {
       autoSave();
@@ -1769,9 +2077,9 @@
     tb.querySelector('[data-role="sync"]').addEventListener('click', forceSyncNow);
     tb.querySelector('[data-role="notify"]').addEventListener('click', function () {
       notifyAdmin('prueba', '✅ Alerta de prueba del panel',
-        'Esta es una alerta de prueba. Si la recibiste por correo, las notificaciones ' +
-        'al administrador están funcionando correctamente.', { force: true });
-      toast('Alerta de prueba enviada al correo.');
+        'Esta es una alerta de prueba. Ahora las notificaciones se muestran solo ' +
+        'dentro del panel (ya no se envían por correo).', { force: true });
+      toast('Alerta de prueba mostrada en el panel.');
     });
     tb.querySelector('[data-role="backup"]').addEventListener('click', function () {
       backupNow('manual');
@@ -1927,6 +2235,224 @@
     /* Botones adicionales de tipo de contenido */
     ensureAddTitleButtons();
     ensureAddPhotoButtons();
+    /* Secciones: añadir y borrar dentro de cada temporada */
+    wireSectionButtons();
+    /* Temporadas: ocultar / restaurar */
+    ensureSeasonManagement();
+  }
+
+  /* ---------- sectiones (añadir / borrar) ---------- */
+
+  function wireSectionButtons() {
+    qa('.season-panel').forEach(function (p) {
+      if (p.querySelector('.admin-section-bar') || p.querySelector('.admin-btn-addsection')) return;
+      var bar = document.createElement('div');
+      bar.className = 'admin-ui admin-section-bar';
+      var addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'admin-btn admin-btn-addsection';
+      addBtn.dataset.addSection = p.dataset.panel || '';
+      addBtn.innerHTML = '&#10133; Añadir sección';
+      addBtn.title = 'Insertar una sección de contenido editable en esta temporada';
+      addBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        addSection(p);
+      });
+      bar.appendChild(addBtn);
+      p.appendChild(bar);
+    });
+
+    /* Botón borrar sección en la cabecera de cada sección de temporada */
+    qa('.season-catalog, .season-subsection').forEach(function (sec) {
+      if (sec.querySelector('.admin-delsec')) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'admin-ui admin-delsec';
+      btn.dataset.deleteSection = '';
+      btn.title = 'Borrar esta sección';
+      btn.innerHTML = '&#10005;';
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (window.confirm('¿Borrar esta sección?')) {
+          var path = cssPath(sec);
+          removeSectionRecord(sec);
+          content.deleteSections.push(path);
+          sec.remove();
+          autoSave();
+          toast('Sección borrada.');
+        }
+      });
+      sec.appendChild(btn);
+    });
+  }
+
+  function removeSectionRecord(sec) {
+    var addedId = sec && sec.getAttribute('data-admin-id');
+    if (addedId) {
+      content.addSections = content.addSections.filter(function (s) { return s.id !== addedId; });
+    }
+  }
+
+  function addSection(panel) {
+    var count = (content.addSections || []).length + 1;
+    var box = openModal(
+      '<h3>Añadir sección nueva</h3>' +
+      '<label class="admin-field">Texto corto (etiqueta sobre el título)</label>' +
+      '<input type="text" class="admin-input" data-role="tag" placeholder="Ej. Catálogo del Mes">' +
+      '<label class="admin-field">Título de la sección</label>' +
+      '<input type="text" class="admin-input" data-role="title" placeholder="Ej. Colección de Verano">' +
+      '<label class="admin-field">Descripción</label>' +
+      '<textarea class="admin-textarea" rows="3" data-role="desc" placeholder="Escribe un párrafo de presentación..."></textarea>' +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn admin-btn-primary" data-role="ok">Añadir</button>' +
+      '<button type="button" class="admin-btn" data-role="cancel">Cancelar</button>' +
+      '</div>'
+    );
+    box.querySelector('[data-role="ok"]').addEventListener('click', function () {
+      var tag = box.querySelector('[data-role="tag"]').value.trim();
+      var title = box.querySelector('[data-role="title"]').value.trim();
+      var desc = box.querySelector('[data-role="desc"]').value.trim();
+      if (!title) { toast('El título es obligatorio.'); return; }
+      var id = 'sec_' + Date.now().toString(36);
+      var entry = {
+        id: id,
+        _type: 'section',
+        container: cssPath(panel),
+        tag: tag,
+        title: title,
+        desc: desc,
+        order: count
+      };
+      content.addSections.push(entry);
+      insertSection(entry, panel);
+      closeModal(box);
+      autoSave();
+      toast('Sección añadida.');
+    });
+  }
+
+  function insertSection(entry, panel) {
+    if (document.querySelector('[data-admin-id="' + entry.id + '"]')) return;
+    var sec = document.createElement('section');
+    sec.className = 'season-catalog';
+    sec.id = entry.id;
+    sec.setAttribute('data-admin-id', entry.id);
+    sec.setAttribute('data-addsec-order', entry.order);
+    var inner = '';
+    if (entry.tag) inner += '<span class="season-catalog-tag">' + entry.tag + '</span>';
+    inner += '<h4>' + entry.title + '</h4>';
+    if (entry.desc) inner += '<p class="season-subtitle">' + entry.desc + '</p>';
+    sec.innerHTML = inner;
+    var host = panel && panel.querySelector('.season-sub-sections, .season-catalog') ? panel.querySelector('.season-sub-sections') : panel;
+    if (!host) host = panel;
+
+    /* re-anclar botones administrativos existentes antes de insertar */
+    qa('.admin-section-bar', panel).forEach(function (b) { b.remove(); });
+    qa('.admin-delsec', sec).forEach(function () {});
+
+    host.appendChild(sec);
+
+    /* boton borrar sobre la nueva seccion */
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'admin-ui admin-delsec';
+    del.title = 'Borrar esta sección';
+    del.innerHTML = '&#10005;';
+    del.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      if (window.confirm('¿Borrar esta sección?')) {
+        removeSectionRecord(sec);
+        content.deleteSections.push(cssPath(sec));
+        sec.remove();
+        autoSave();
+        toast('Sección borrada.');
+      }
+    });
+    sec.appendChild(del);
+
+    /* re-añadir el boton de texto para editar contenido */
+    var addText = addTextButton(sec);
+    sec.appendChild(addText);
+
+    wireSectionButtons();
+  }
+
+  /* ---------- ocultar / restaurar temporadas ---------- */
+
+  function setHiddenState(month, hidden) {
+    var idx = (content.hiddenSeasons || []).indexOf(month);
+    if (hidden && idx === -1) content.hiddenSeasons.push(month);
+    if (!hidden && idx !== -1) content.hiddenSeasons.splice(idx, 1);
+  }
+
+  function applyHiddenSeason(month, hidden, silent) {
+    qa('.season-tab[data-month="' + month + '"]').forEach(function (t) {
+      t.style.display = hidden ? 'none' : '';
+    });
+    var panel = q('.season-panel[data-panel="' + month + '"]');
+    if (panel) panel.style.display = hidden ? 'none' : '';
+    if (hidden && panel && panel.classList.contains('is-active')) {
+      var firstTab = qa('.season-tab[data-month]:not(.season-tab-clone)').filter(function (t) {
+        return t.style.display !== 'none';
+      })[0];
+      if (firstTab) firstTab.click();
+    }
+    if (silent !== true) {
+      autoSave();
+      toast(hidden ? 'Temporada oculta.' : 'Temporada restaurada.');
+    }
+  }
+
+  function toggleSeasonVisibility(month, hidden) {
+    setHiddenState(month, hidden);
+    applyHiddenSeason(month, hidden);
+    rebuildSeasonVisibilityControls();
+  }
+
+  function rebuildSeasonVisibilityControls() {
+    var host = q('.season-management');
+    if (!host) return;
+    host.innerHTML = '';
+    qa('.season-panel[data-panel]').forEach(function (panel) {
+      var month = panel.dataset.panel;
+      var label = panel.querySelector('.season-title, .season-blank-title');
+      var name = label ? (label.textContent || '').trim() : month;
+      var hidden = (content.hiddenSeasons || []).indexOf(month) !== -1;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'admin-ui admin-btn admin-season-toggle' + (hidden ? ' is-hidden' : '');
+      btn.dataset.month = month;
+      btn.textContent = (hidden ? 'Mostrar · ' : 'Ocultar · ') + (name || month);
+      btn.addEventListener('click', function () {
+        var nowHidden = (content.hiddenSeasons || []).indexOf(month) !== -1;
+        toggleSeasonVisibility(month, !nowHidden);
+      });
+      host.appendChild(btn);
+    });
+  }
+
+  function ensureSeasonManagement() {
+    if (q('.season-management')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'admin-ui season-management';
+    wrap.innerHTML = '<div class="season-management-head">Gestionar temporadas</div>';
+    var grid = document.createElement('div');
+    grid.className = 'season-management-grid';
+    wrap.appendChild(grid);
+    var anchor = q('#temporadas') || q('.season-marquee') || q('.season-panel.is-active');
+    if (anchor) {
+      if (anchor === q('.season-marquee') || anchor === q('.season-panel.is-active')) {
+        anchor.parentNode.insertBefore(wrap, anchor);
+      } else {
+        anchor.insertBefore(wrap, anchor.firstChild);
+      }
+    } else {
+      document.body.appendChild(wrap);
+    }
+    rebuildSeasonVisibilityControls();
   }
 
   /* ---------- añadir título ---------- */
@@ -1988,9 +2514,10 @@
   function wireTitle(h) {
     h.addEventListener('click', function (e) {
       if (!editMode) return;
+      if (editorActive) return;
       e.stopPropagation();
       e.preventDefault();
-      editText(h);
+      deferEdit(function () { editText(h); });
     });
   }
 
@@ -2056,9 +2583,10 @@
       img.dataset.adminWiredPhoto = '1';
       img.addEventListener('click', function (e) {
         if (!editMode) return;
+        if (editorActive) return;
         e.stopPropagation();
         e.preventDefault();
-        editImage(img);
+        deferEdit(function () { editImage(img); });
       });
     });
   }
@@ -2079,17 +2607,19 @@
       var p = card.querySelector('p');
       if (img) img.addEventListener('click', function (e) {
         if (!editMode) return;
+        if (editorActive) return;
         e.stopPropagation();
         e.preventDefault();
-        editImage(img);
+        deferEdit(function () { editImage(img); });
       });
       [h3, p].forEach(function (t) {
         if (!t) return;
         t.addEventListener('click', function (e) {
           if (!editMode) return;
+          if (editorActive) return;
           e.stopPropagation();
           e.preventDefault();
-          editText(t);
+          deferEdit(function () { editText(t); });
         });
       });
     });
@@ -2102,9 +2632,10 @@
       el.dataset.adminWired = '1';
       el.addEventListener('click', function (e) {
         if (!editMode) return;
+        if (editorActive) return;
         e.stopPropagation();
         e.preventDefault();
-        editText(el);
+        deferEdit(function () { editText(el); });
       });
     });
   }
@@ -2358,19 +2889,27 @@
     })
       .then(function (res) {
         if (timeoutId) clearTimeout(timeoutId);
-        return res.json().then(function (j) { return { ok: res.ok, json: j }; });
+        /* Respuesta robusta: no todos los backends devuelven JSON (p. ej. un
+           404 "Not found" o HTML). Evita el error de parseo que antes generaba
+           advertencias confusas en consola y un reintento mal contabilizado. */
+        return res.text().then(function (t) {
+          var j = null;
+          try { j = t ? JSON.parse(t) : null; } catch (err) { j = null; }
+          return { ok: res.ok, json: j, raw: t };
+        });
       })
       .then(function (r) {
         cloudSyncing = false;
         if (timeoutId) clearTimeout(timeoutId);
-        if (r.ok && r.json.ok) {
+        if (r.ok && r.json && r.json.ok) {
           clearPendingSync();
           syncBadge.innerHTML = '<span class="admin-cloud-icon">✓</span> Sincronizado con GitHub';
           syncBadge.classList.add('is-ok');
           cloudSyncRetries = 0;
           setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-ok'); }, 3000);
         } else {
-          throw new Error(r.json.error || 'Error del servidor');
+          var serverErr = (r.json && r.json.error) || (r.raw ? r.raw.slice(0, 120) : 'Error del servidor');
+          throw new Error(serverErr);
         }
       })
       .catch(function (err) {
@@ -2424,7 +2963,7 @@
     syncBadge.classList.add('is-error');
     syncBadge.classList.remove('is-ok');
     setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 8000);
-    /* Si hay cambios sin subir (pendientes), avisar al admin por correo porque
+    /* Si hay cambios sin subir (pendientes), avisar al admin (aviso local) porque
        el dispositivo quedó sin conexión y el panel no está sincronizando. */
     if (hasPendingSync()) {
       notifyAdmin('sin-conexion', '⚠️ Sin conexión: hay cambios sin subir',
@@ -2567,8 +3106,13 @@
       addPhotos: content.addPhotos.map(function (p) {
         return { id: p.id, container: p.container, src: p.src };
       }),
+      addSections: content.addSections.map(function (s) {
+        return { id: s.id, container: s.container, tag: s.tag, title: s.title, desc: s.desc, order: s.order };
+      }),
       deleteCards: content.deleteCards,
       deleteTexts: content.deleteTexts,
+      deleteSections: content.deleteSections,
+      hiddenSeasons: content.hiddenSeasons,
       seasonCovers: content.seasonCovers || {},
       photoSettings: content.photoSettings || {},
       editorStyles: editorStyles
@@ -2641,8 +3185,11 @@
     content.addTexts = (obj.addTexts || []).map(function (t) { t._type = 'text'; return t; });
     content.addTitles = (obj.addTitles || []).map(function (t) { t._type = 'title'; return t; });
     content.addPhotos = (obj.addPhotos || []).map(function (p) { p._type = 'photo'; return p; });
+    content.addSections = (obj.addSections || []).map(function (s) { s._type = 'section'; return s; });
     content.deleteCards = obj.deleteCards || [];
     content.deleteTexts = obj.deleteTexts || [];
+    content.deleteSections = obj.deleteSections || [];
+    content.hiddenSeasons = obj.hiddenSeasons || [];
     if (obj.passwordHash) content.passwordHash = obj.passwordHash;
     if (obj.usernameHash) content.usernameHash = obj.usernameHash;
     content.seasonCovers = obj.seasonCovers || {};
@@ -2855,9 +3402,10 @@
       var img = e.target.closest ? e.target.closest('img') : null;
       if (!img || !editMode) return;
       if (img.closest('.admin-ui')) return;
+      if (editorActive) return;
       e.stopPropagation();
       e.preventDefault();
-      editImage(img);
+      deferEdit(function () { editImage(img); });
     }, true);
 
     setTimeout(retryPendingSyncs, 1000);
@@ -2871,8 +3419,11 @@
     if (override.addTexts !== undefined) result.addTexts = override.addTexts;
     if (override.addTitles !== undefined) result.addTitles = override.addTitles;
     if (override.addPhotos !== undefined) result.addPhotos = override.addPhotos;
+    if (override.addSections !== undefined) result.addSections = override.addSections;
     if (override.deleteCards !== undefined) result.deleteCards = override.deleteCards;
     if (override.deleteTexts !== undefined) result.deleteTexts = override.deleteTexts;
+    if (override.deleteSections !== undefined) result.deleteSections = override.deleteSections;
+    if (override.hiddenSeasons !== undefined) result.hiddenSeasons = override.hiddenSeasons;
     if (override.seasonCovers !== undefined) result.seasonCovers = override.seasonCovers;
     if (override.photoSettings !== undefined) result.photoSettings = override.photoSettings;
     if (override.editorStyles !== undefined) result.editorStyles = override.editorStyles;
@@ -2882,8 +3433,7 @@
   }
 
   /* ==========================================================
-     API pública y mínima para el Asistente del Administrador
-     (js/admin-ai.js). Solo expone operaciones de edición visual;
+     API pública y mínima de edición visual del panel.
      NUNCA expone contraseñas, hashes, tokens ni configuración
      interna del panel.
      ========================================================== */

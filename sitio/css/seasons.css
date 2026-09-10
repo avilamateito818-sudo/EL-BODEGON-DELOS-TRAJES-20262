@@ -1626,8 +1626,17 @@
 .season-marquee-track {
   display: flex;
   width: max-content;
-  animation: marqueeScroll 45s linear infinite;
+  animation: marqueeScroll 22s linear infinite;
   will-change: transform;
+  cursor: grab;
+}
+.season-marquee-track.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.season-marquee-track.is-dragging * {
+  pointer-events: none;
 }
 
 /* Pausa al pasar el ratón, enfocar o tocar la cinta */
@@ -1658,6 +1667,40 @@
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* Flechas de navegación de la cinta */
+.season-marquee-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(10, 5, 18, 0.55);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.season-marquee-prev { left: 0.5rem; }
+.season-marquee-next { right: 0.5rem; }
+.season-marquee-arrow:hover {
+  background: rgba(160, 107, 255, 0.45);
+  border-color: #c9a8ff;
+}
+.season-marquee-arrow:active {
+  transform: translateY(-50%) scale(0.92);
 }
 
 .season-tab {

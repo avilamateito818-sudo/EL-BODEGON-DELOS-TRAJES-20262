@@ -10,7 +10,7 @@ Este documento explica cómo se aplican (y cómo se **deberían** aplicar) los p
 
 > **Una clase/módulo/función debe tener una sola razón para cambiar.**
 
-**Estado actual (cumple parcialmente):** los archivos JS se organizan por área (app/nav, admin, chat, admin-ai), lo cual es un buen primer nivel. Sin embargo, `js/app.js` y `js/admin.js` concentran **muchas** responsabilidades (navegación, pestañas, lightbox, guardado en nube, sesión, editor visual…).
+**Estado actual (cumple parcialmente):** los archivos JS se organizan por área (`app.js` para la presentación, `admin.js` para el panel), lo cual es un buen primer nivel. Sin embargo, `js/app.js` y `js/admin.js` concentran **muchas** responsabilidades (navegación, pestañas, lightbox, guardado en nube, sesión, editor visual…).
 
 **Objetivo:** dividir en módulos con una sola responsabilidad:
 
@@ -18,9 +18,8 @@ Este documento explica cómo se aplican (y cómo se **deberían** aplicar) los p
 |------------------|-----------------|
 | `core/temporadas.js` | Datos y reglas de las 12 temporadas |
 | `core/catalogo.js` | Categorías y prendas del negocio |
-| `core/disponibilidad.js` | Consulta de disponibilidad (bot del cliente) |
+| `core/disponibilidad.js` | Consulta de disponibilidad y contacto (cliente) |
 | `core/sesion.js` | Gestión de sesión del administrador |
-| `services/formspree.js` | Envío del formulario de contacto |
 | `services/sync.js` | Sincronización con Vercel/GitHub |
 | `services/storage.js` | Persistencia local (localStorage / admin-content) |
 | `ui/marquee.js` | Cinta de temporadas |
@@ -33,7 +32,7 @@ Este documento explica cómo se aplican (y cómo se **deberían** aplicar) los p
 
 > **Abierto a extensión, cerrado a modificación.** Debe ser posible añadir nuevas funciones sin modificar el código existente que ya funciona.
 
-**Estado actual:** al añadir el **bot del cliente** (`chat.js`) y el **asistente del admin** (`admin-ai.js`) **sin modificar** `app.js`/`admin.js`, el proyecto ya demuestra la **O** en la práctica: se **extendieron** las capacidades del sitio añadiendo módulos nuevos (archivos nuevos + su `<script>`) en lugar de reescribir la lógica existente.
+**Estado actual:** el proyecto ya demostró la **O** en la práctica: el **panel de administración** y la **sincronización con GitHub** se añadieron como módulos nuevos (`js/admin.js` + `api/save-content.js`) **sin modificar** la presentación existente (`app.js`), conectándolos con su propio `<script>` en vez de reescribir la lógica que ya funcionaba.
 
 **Objetivo:** exponer "puertos" (funciones/contratos) estables (p. ej. `renderTemporada(month)`, `guardarContenido(data)`), de modo que nuevas funciones se conecten a través de ellos sin tocar las implementaciones existentes.
 
@@ -65,7 +64,7 @@ const editorContenido = { editarTexto(el), reemplazarFoto(img) };
 const sincronizador = { guardarLocal(data), sincronizarNube(data) };
 ```
 
-Los **asistentes** (`chat.js`, `admin-ai.js`) ya siguen esto: dependen de una interfaz mínima (la herramienta de edición nativa / el endpoint de disponibilidad) y no del objeto admin completo.
+El **panel de administración** (`admin.js`) ya sigue esto: expone una API mínima (p. ej. `toolApi`, `PX_PROPS`) para disparar la herramienta de edición sin depender del objeto admin completo, y el resto de la app consume solo esas pocas funciones concretas.
 
 ---
 
@@ -73,9 +72,9 @@ Los **asistentes** (`chat.js`, `admin-ai.js`) ya siguen esto: dependen de una in
 
 > **Depender de abstracciones, no de concreciones. Las clases de alto nivel no deben depender de las de bajo nivel.**
 
-**Estado actual (cumple en el diseño del asistente):**
-- El **asistente del admin** (`admin-ai.js`) no conoce los detalles internos de `admin.js` (que están en un closure privado). Depende de una **abstracción**: *"si hay sesión activa, hago clic en el elemento editable y el panel abre su herramienta"*. El panel (implementación concreta de bajo nivel) es **inyectado** por el navegador/modo admin, no construido por el asistente. Esto respeta la **D**.
-- El **bot del cliente** (`chat.js`) depende de una abstracción de red (`fetch` a `/api/chat-ask`) y no de un servicio concreto; si falla, degrada con gracia.
+**Estado actual (cumple en el diseño del panel):**
+- El **panel** (`admin.js`) no conoce los detalles internos del backend: depende de una abstracción de red (**`fetch` a `/api/save-content`**). El endpoint concreto (Vercel → GitHub) es **inyectado** por el despliegue, no construido por el panel. Esto respeta la **D**.
+- Al fallar la red, el panel **degrada con gracia**: encola los cambios en localStorage (`bodegon_pending_sync`) y los reintenta al reconectar, sin romper la edición.
 
 **Objetivo:** en refactor futuro, los casos de uso recibirían sus dependencias (repositorio de datos, servicio de envío) **por parámetro** (inyección de dependencias) en lugar de crearlas internamente, facilitando pruebas (se pueden inyectar versiones "falsas"/mock).
 
@@ -86,8 +85,6 @@ Los **asistentes** (`chat.js`, `admin-ai.js`) ya siguen esto: dependen de una in
 | Módulo | Responsabilidad (S) | Abierto/Cerrado (O) | LSP (L) | Interfaces (I) | Inversión (D) |
 |--------|--------------------|--------------------|---------|-----------------|----------------|
 | `app.js` | Navegación + temporadas + lightbox | Extensible vía `<script>`s nuevos | Trata 12 temporadas uniformes | — | — |
-| `admin.js` | Editor + sesión + sync | Cerrado; asistentes lo usan vía clic | — | Expone modal nativo | El detalle del DOM es interno (closure) |
-| `chat.js` | Consulta de disponibilidad (cliente) | Nuevo, sin tocar lo existente | — | Depende de `fetch` a endpoint | Degrada con gracia ante fallo |
-| `admin-ai.js` | Asistente de órdenes (admin) | Nuevo, sin tocar `admin.js` | — | Interfaz mínima | Usa la herramienta nativa vía sesión activa |
+| `admin.js` | Editor + sesión + sync | Cerrado por dentro; se integra sin tocar `app.js` | — | Expone `toolApi` mínima | Depende de `fetch` a API; degrada con gracia |
 
-> **Conclusión:** el sitio cumple bien **O** y **D** en los módulos recientes, cumple **L** en el manejo uniforme de temporadas, y es donde más conviene evolucionar en **S** e **I** (separar el JS grande en módulos cohesivos). Ver el "Objetivo" en [`ARCHITECTURE.md`](ARCHITECTURE.md).
+> **Conclusión:** el sitio cumple bien **O** y **D** en la integración del panel, cumple **L** en el manejo uniforme de temporadas, y es donde más conviene evolucionar en **S** e **I** (separar el JS grande en módulos cohesivos). Ver el "Objetivo" en [`ARCHITECTURE.md`](ARCHITECTURE.md).

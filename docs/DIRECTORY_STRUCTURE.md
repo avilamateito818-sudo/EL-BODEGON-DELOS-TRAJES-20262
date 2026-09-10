@@ -16,7 +16,7 @@ el bodeogn de los trajes20262/
 │   ├── GIT_FLOW.md            #   Convención de ramas Git Flow
 │   ├── DOCKER.md              #   Cómo desplegar con Docker/Nginx
 │   ├── DIRECTORY_STRUCTURE.md #   Este documento
-│   └── ADMIN.md               #   Panel de administración y asistentes
+│   └── ADMIN.md               #   Panel de administración y sincronización
 │
 ├── docker/                    # # CONTENEDOR (sirve el sitio de forma estática)
 │   ├── Dockerfile             #   Imagen Nginx con sitio/ como raíz
@@ -33,10 +33,9 @@ el bodeogn de los trajes20262/
 └── sitio/                     # # EL SITIO FUNCIONAL (no modificar el código)
     ├── index.html             #   Página única (SPA estática)
     ├── assets/img/            #   Fotografías del catálogo
-    ├── css/                   #   Estilos (app, admin, chat, seasons, admin-ai…)
-    ├── data/                  #   Datos (temporadas, inventario…)
-    ├── email/                 #   Plantillas / adaptadores de correo
-    └── js/                    #   Lógica (app, admin, client helper, assistant…)
+    ├── css/                   #   Estilos (app, admin, seasons, contact, responsive…)
+    ├── data/                  #   Datos y mensajes (temporadas, consultas…)
+    └── js/                    #   Lógica (app, admin, chat, contact, assistant…)
 ```
 
 ---

@@ -5,7 +5,7 @@
       else header.classList.remove('scrolled');
     }
 
-    // Formulario de contacto manejado por email/form-handler.js
+    // Contacto por WhatsApp (el sitio no tiene formulario ni correo).
 
     // Season Tabs
     const seasonSection = document.getElementById('temporadas');
@@ -88,6 +88,10 @@
     }
 
     function showLanding(month) {
+      if (document.body.classList.contains('admin-edit-mode')) {
+        revealContent(month);
+        return;
+      }
       const landing = getLanding(month);
       const content = getContent(month);
       if (landing) landing.classList.add('is-visible');
@@ -105,7 +109,8 @@
     }
 
     document.querySelectorAll('.season-tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener('click', (e) => {
+        if (document.body.classList.contains('admin-edit-mode') && e.target.closest('.tab-desc')) return;
         document.querySelectorAll('.season-tab').forEach((t) => {
           t.classList.remove('is-active');
           t.setAttribute('aria-selected', 'false');
@@ -119,12 +124,186 @@
         if (seasonSection) seasonSection.dataset.season = tab.dataset.month;
         resetSeasonGates();
         showLanding(tab.dataset.month);
+        if (window.__centerMarqueeOn) window.__centerMarqueeOn(tab.dataset.month);
       });
     });
 
     // Estado inicial: enero
     resetSeasonGates();
     showLanding('enero');
+
+    // Flechas de la cinta transportadora
+    const seasonTabsAll = () => Array.from(document.querySelectorAll('.season-tabs[role="tablist"] .season-tab'));
+    const activeMonth = () => {
+      const activeTab = seasonTabsAll().find((t) => t.classList.contains('is-active'));
+      return activeTab ? activeTab.dataset.month : 'enero';
+    };
+    const visibleMonths = () => seasonTabsAll()
+      .filter((t) => t.style.display !== 'none')
+      .map((t) => t.dataset.month);
+
+    const moveSeason = (dir) => {
+      const list = visibleMonths();
+      if (!list.length) return;
+      const cur = activeMonth();
+      const idx = list.indexOf(cur);
+      let next;
+      if (dir === 'next') {
+        next = list[(idx + 1) % list.length];
+      } else {
+        next = list[(idx - 1 + list.length) % list.length];
+      }
+      if (next && next !== cur) {
+        const tab = document.querySelector('.season-tabs[role="tablist"] .season-tab[data-month="' + next + '"]');
+        if (tab) tab.click();
+      }
+    };
+
+    document.querySelectorAll('.season-marquee-prev').forEach((b) => {
+      b.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        moveSeason('prev');
+      });
+    });
+    document.querySelectorAll('.season-marquee-next').forEach((b) => {
+      b.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        moveSeason('next');
+      });
+    });
+
+    // Drag/swipe en la cinta: arrastrar con ratón o dedo para desplazar
+    (function initMarqueeDrag() {
+      var marquees = document.querySelectorAll('.season-marquee');
+      marquees.forEach(function (marquee) {
+        var track = marquee.querySelector('.season-marquee-track');
+        if (!track) return;
+
+        var dragging = false, startX = 0, startY = 0, startTx = 0;
+        var lastX = 0, lastTime = 0;
+        var velocity = 0, momentumRaf = null;
+
+        function getTranslateX() {
+          var cs = getComputedStyle(track);
+          var m = cs.transform && cs.transform.match(/matrix\(.*?,.*?,.*?,.*?,\s*([^,]+)/);
+          return m ? parseFloat(m[1]) : 0;
+        }
+
+        function parsePx(val) {
+          if (typeof val === 'number') return val;
+          var n = parseFloat(val);
+          return isNaN(n) ? 0 : n;
+        }
+
+        function setTx(x) {
+          track.style.transform = 'translateX(' + x + 'px)';
+        }
+
+        function pauseAnim() {
+          track.dataset._savedAnim = track.style.animation || '';
+          track.style.animation = 'none';
+        }
+
+        function resumeAnimFrom(tx) {
+          /* En modo admin la cinta queda pausada (para editar con doble clic);
+             el arrastre deja el desplazamiento fijo en su sitio, sin reanudar. */
+          if (document.body.classList.contains('admin-edit-mode')) return;
+          track.style.animation = '';
+          void track.offsetWidth;
+          var halfW = track.scrollWidth / 2 || 1;
+          var pct = tx / halfW;
+          var dur = parseFloat(getComputedStyle(track).animationDuration) || 22;
+          var delay = -pct * dur;
+          track.style.animationDelay = delay + 's';
+        }
+
+        function onDown(px, py) {
+          if (momentumRaf) { cancelAnimationFrame(momentumRaf); momentumRaf = null; }
+          dragging = true;
+          startX = px;
+          startY = py;
+          startTx = getTranslateX();
+          lastX = px;
+          lastTime = Date.now();
+          velocity = 0;
+          pauseAnim();
+          track.classList.add('is-dragging');
+        }
+
+        function onMove(px) {
+          if (!dragging) return;
+          var dx = px - startX;
+          setTx(startTx + dx);
+          var now = Date.now();
+          var dt = now - lastTime;
+          if (dt > 0) velocity = (px - lastX) / dt;
+          lastX = px;
+          lastTime = now;
+        }
+
+        function onUp() {
+          if (!dragging) return;
+          dragging = false;
+          track.classList.remove('is-dragging');
+          var tx = getTranslateX();
+
+          // Inertia: desacelerar con la velocidad capturada
+          var vel = velocity * 16;
+          var friction = 0.92;
+          function step() {
+            vel *= friction;
+            tx += vel;
+            setTx(tx);
+            if (Math.abs(vel) > 0.3) {
+              momentumRaf = requestAnimationFrame(step);
+            } else {
+              momentumRaf = null;
+              resumeAnimFrom(tx);
+            }
+          }
+          if (Math.abs(vel) > 1) {
+            momentumRaf = requestAnimationFrame(step);
+          } else {
+            resumeAnimFrom(tx);
+          }
+        }
+
+        // Mouse events
+        marquee.addEventListener('mousedown', function (e) {
+          if (e.button !== 0) return;
+          if (e.target.closest('.season-marquee-arrow')) return;
+          e.preventDefault();
+          onDown(e.clientX, e.clientY);
+        });
+        document.addEventListener('mousemove', function (e) {
+          if (!dragging) return;
+          e.preventDefault();
+          onMove(e.clientX);
+        });
+        document.addEventListener('mouseup', function () {
+          if (dragging) onUp();
+        });
+
+        // Touch events
+        marquee.addEventListener('touchstart', function (e) {
+          if (e.target.closest('.season-marquee-arrow')) return;
+          var t = e.touches[0];
+          onDown(t.clientX, t.clientY);
+        }, { passive: true });
+        marquee.addEventListener('touchmove', function (e) {
+          if (!dragging) return;
+          var t = e.touches[0];
+          var dx = Math.abs(t.clientX - startX);
+          var dy = Math.abs(t.clientY - startY);
+          if (dx > 8 && dx > dy * 1.5) e.preventDefault();
+          onMove(t.clientX);
+        }, { passive: false });
+        marquee.addEventListener('touchend', function () { onUp(); }, { passive: true });
+        marquee.addEventListener('touchcancel', function () { onUp(); }, { passive: true });
+      });
+    })();
 
     // Interactive Menu
     const menuToggle = document.getElementById('menu-toggle');
@@ -285,7 +464,11 @@
     }
 
     document.querySelectorAll('.img-ghost img').forEach((img) => {
-      img.addEventListener('click', () => openLightbox(img.currentSrc || img.src));
+      img.addEventListener('click', (e) => {
+        if (document.body.classList.contains('admin-edit-mode')) return;
+        e.preventDefault();
+        openLightbox(img.currentSrc || img.src);
+      });
     });
 
     lightboxClose.addEventListener('click', closeLightbox);

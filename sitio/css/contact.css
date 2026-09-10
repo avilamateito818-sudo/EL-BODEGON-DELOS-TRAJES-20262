@@ -71,28 +71,6 @@
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
 }
 
-.submit-btn {
-  width: 100%;
-  padding: 1.8rem;
-  background: var(--season-accent);
-  color: #0a0a0a;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.15rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 5px;
-  cursor: pointer;
-  transition: var(--transition-premium);
-  box-shadow: 0 15px 30px var(--season-glow);
-}
-
-.submit-btn:hover {
-  filter: brightness(1.15);
-  box-shadow: 0 20px 40px var(--season-glow);
-  transform: translateY(-5px) scale(1.02);
-}
-
 footer {
   padding: 8rem 10%;
   background: var(--pure-black);
@@ -252,19 +230,6 @@ footer p {
   background: rgba(255, 255, 255, 0.85) !important;
   color: #1a1a1a !important;
   font-weight: 600;
-}
-
-#contacto .submit-btn {
-  background: var(--season-accent) !important;
-  color: #0a0a0a !important;
-  border: none !important;
-  font-weight: 700;
-  box-shadow: 0 0 20px var(--season-glow);
-}
-
-#contacto .submit-btn:hover {
-  filter: brightness(1.15);
-  box-shadow: 0 0 30px var(--season-glow);
 }
 
 #contacto .contact-card {
@@ -476,20 +441,7 @@ footer p {
   box-shadow: 0 0 0 4px var(--season-glow), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Botón principal: dorado de marca, siempre legible y con borde suave */
-#contacto .submit-btn {
-  background: linear-gradient(135deg, #EECB7C 0%, #D6A63A 55%, #B8860B 100%) !important;
-  color: #2A1D05 !important;
-  border: none !important;
-  border-radius: 14px !important;
-  box-shadow: 0 14px 28px rgba(184, 134, 11, 0.35), 0 4px 10px rgba(0, 0, 0, 0.10) !important;
-  opacity: 1 !important;
-}
-#contacto .submit-btn:hover {
-  filter: brightness(1.06);
-  transform: translateY(-3px);
-  box-shadow: 0 18px 36px rgba(184, 134, 11, 0.42), 0 6px 12px rgba(0, 0, 0, 0.12) !important;
-}
+/* El contacto se atiende por WhatsApp: la sección muestra el enlace directo. */
 
 /* Encabezados y textos internos: opacidad plena */
 #contacto .section-head h2,
@@ -575,4 +527,3 @@ footer p {
   #contacto .contact-form-container { padding: 2.2rem !important; }
   #contacto .contact-card { padding: 2.2rem !important; }
 }
-

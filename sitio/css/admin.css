@@ -175,6 +175,39 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
   border-color: #ffd27a;
 }
 
+.admin-section-bar {
+  display: flex; justify-content: center; gap: 0.5rem;
+  padding: 0.7rem; margin-top: 0.5rem;
+}
+.admin-btn-addsection {
+  padding: 0.65rem 1.1rem; border: 3px solid #5cc8ff; border-radius: 12px;
+  background: rgba(92, 200, 255, 0.15); color: #ffffff;
+  font: inherit; font-size: 1rem; font-weight: 800; letter-spacing: 0.03em;
+  cursor: pointer; transition: background .15s ease, border-color .15s ease;
+}
+.admin-btn-addsection:hover {
+  background: rgba(92, 200, 255, 0.3);
+  border-color: #9fddff;
+}
+
+.admin-delsec {
+  position: absolute; top: 0.6rem; right: 0.6rem; z-index: 30;
+  width: 2rem; height: 2rem; padding: 0;
+  border: 2px solid rgba(255, 107, 107, 0.6); border-radius: 50%;
+  background: rgba(120, 20, 20, 0.7); color: #ffffff;
+  font: inherit; font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  transition: transform .15s ease, background .15s ease;
+}
+.admin-delsec:hover {
+  transform: scale(1.12);
+  background: #a02020;
+}
+.season-catalog, .season-subsection {
+  position: relative;
+}
+
 .admin-photorow {
   display: flex; align-items: center; gap: 0.6rem;
   padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,.1);
@@ -201,6 +234,17 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
   transform: scale(1.12);
   background: rgba(90, 50, 160, 0.7);
   box-shadow: 0 3px 10px rgba(0,0,0,.45);
+}
+/* Botón X para quitar una foto directamente (esquina superior derecha) */
+.admin-photobtn.admin-photo-delbtn {
+  left: auto; right: 0.5rem;
+  background: rgba(160, 20, 40, 0.55);
+  border-color: rgba(255, 120, 140, 0.6);
+  color: #fff;
+}
+.admin-photobtn.admin-photo-delbtn:hover {
+  background: rgba(200, 40, 60, 0.85);
+  box-shadow: 0 3px 12px rgba(200, 30, 50, .5);
 }
 
 .admin-added { outline: 1px dashed rgba(160, 107, 255, 0.8); outline-offset: 3px; }
@@ -325,6 +369,48 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
+.editor-quickbar {
+  position: absolute;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  background: #1a0f2e;
+  border: 1px solid rgba(255, 215, 0, 0.55);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+
+.editor-qb {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  background: #2a1a4a;
+  color: #FFD700;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.editor-qb:hover {
+  background: #3a2a6a;
+  transform: scale(1.08);
+}
+
+.editor-qb-delete {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.45);
+}
+
+.editor-qb-delete:hover {
+  background: rgba(255, 107, 107, 0.18);
+}
+
 .editor-selected {
   outline: 2px solid #FFD700 !important;
   outline-offset: 2px;
@@ -332,11 +418,11 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 
 .editor-panel {
   position: fixed;
-  right: -320px;
+  right: -520px;
   top: 50%;
   transform: translateY(-50%);
-  width: 300px;
-  max-height: 80vh;
+  width: 500px;
+  max-height: 96vh;
   background: rgba(10, 5, 20, 0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -403,6 +489,36 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
   font-size: 0.8rem;
   font-weight: 600;
   word-break: break-all;
+}
+
+.editor-content {
+  width: 100%;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 8px;
+  color: #CBD5E1;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 90px;
+  box-sizing: border-box;
+}
+
+.editor-content:focus {
+  outline: none;
+  border-color: #FFD700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.editor-content:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editor-content::placeholder {
+  color: rgba(203, 213, 225, 0.5);
 }
 
 .editor-prop-row {
@@ -551,6 +667,18 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
   border-top: 1px solid rgba(255, 215, 0, 0.2);
 }
 
+.editor-hint {
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+}
+.editor-hint strong { color: #FFD700; }
+
 .editor-btn {
   flex: 1;
   padding: 0.6rem;
@@ -622,6 +750,95 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 .admin-edit-mode .img-ghost img,
 .admin-edit-mode .card-ghost h3,
 .admin-edit-mode .card-ghost p { cursor: pointer; }
+
+/* ===== Menú contextual de doble clic ===== */
+.admin-ctx-menu {
+  position: fixed;
+  z-index: 1050;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  min-width: 180px;
+  background: rgba(15, 8, 28, 0.97);
+  border: 1px solid rgba(160, 107, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(160, 107, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: ctx-menu-in 0.15s ease;
+}
+.admin-ctx-menu.is-open {
+  display: flex;
+}
+@keyframes ctx-menu-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.admin-ctx-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #e0d4f5;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.admin-ctx-menu-item:hover {
+  background: rgba(160, 107, 255, 0.22);
+  color: #fff;
+}
+.admin-ctx-menu-item .ctx-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.admin-ctx-menu-item.ctx-edit {
+  color: #a06bff;
+}
+.admin-ctx-menu-item.ctx-edit:hover {
+  background: rgba(160, 107, 255, 0.2);
+  color: #c9a8ff;
+}
+.admin-ctx-menu-item.ctx-photo {
+  color: #ffb84d;
+}
+.admin-ctx-menu-item.ctx-photo:hover {
+  background: rgba(255, 184, 77, 0.2);
+  color: #ffd27a;
+}
+.admin-ctx-menu-item.ctx-delete {
+  color: #ff6b6b;
+}
+.admin-ctx-menu-item.ctx-delete:hover {
+  background: rgba(255, 50, 50, 0.22);
+  color: #ff9999;
+}
+.admin-ctx-menu-sep {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 2px 8px;
+}
+.admin-ctx-hint {
+  padding: 4px 14px 6px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.admin-edit-mode [data-ctx-highlight] {
+  outline: 2px dashed rgba(160, 107, 255, 0.6) !important;
+  outline-offset: 2px;
+}
 
 .admin-toast {
   position: fixed; left: 50%; bottom: 1.5rem; z-index: 1200;
@@ -821,5 +1038,34 @@ body.admin-edit-mode .admin-save-fab { display: flex !important; }
   0% { transform: scale(0.9); opacity: 1; }
   70% { transform: scale(1.25); opacity: 0; }
   100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* ===== Gestión de temporadas (ocultar / restaurar) ===== */
+.season-management {
+  margin: 1rem auto; padding: 0.9rem 1rem;
+  max-width: 1200px; width: calc(100% - 2rem);
+  background: rgba(20, 10, 34, 0.92);
+  border: 3px solid #ff8a4d; border-radius: 14px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.45);
+}
+.season-management-head {
+  color: #fff; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; font-size: 0.95rem; margin-bottom: 0.6rem;
+}
+.season-management-grid {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+}
+.admin-season-toggle {
+  padding: 0.55rem 0.9rem; border: 2px solid #ff8a4d; border-radius: 10px;
+  background: rgba(255, 138, 77, 0.12); color: #fff; font: inherit;
+  font-size: 0.92rem; font-weight: 700; cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.admin-season-toggle:hover {
+  background: rgba(255, 138, 77, 0.28);
+  border-color: #ffb98a;
+}
+.admin-season-toggle.is-hidden {
+  opacity: 0.55; border-style: dotted;
 }
 

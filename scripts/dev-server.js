@@ -29,8 +29,22 @@ if (!fs.existsSync(root)) {
 
 http
   .createServer((req, res) => {
-    let p = decodeURIComponent(req.url.split('?')[0]);
-    if (p === '/') p = '/index.html';
+    const p = decodeURIComponent(req.url.split('?')[0]);
+
+    /* En local el endpoint de guardado que en Vercel persiste en GitHub
+       responde con éxito (no-op) para que el panel no genere errores 404. */
+    if (req.method === 'POST' && (p === '/api/save-content' || p === '/api/save-content/')) {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: true, local: true }));
+      return;
+    }
+
+    if (p === '/') {
+      const fp = path.join(root, 'index.html');
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      fs.createReadStream(fp).pipe(res);
+      return;
+    }
 
     const fp = path.normalize(path.join(root, p));
     if (!fp.startsWith(root)) {
