@@ -13,7 +13,7 @@ window.ADMIN_CONTENT = {
     },
     {
       "sel": "#sec_mtxdibp0",
-      "html": "VESTIDOSP ELEGANTES PARA DAMA Y CABELLAROVESTIDOSP ELEGANTES PARA DAMA Y CABELLAROTe traemos los mejores vestidos elegante dama y antescaballeo para cualquier edad  tenemos vestidos  para fiesta, matrimonio, bautizos, o ocasiones espaciales si no lo encuentras te lo traemos o te lo harems✕+ Agregar párrafo"
+      "html": "VESTIDOS ELEGANTES PARA DAMA Y CABELLAROVESTIDOSP ELEGANTES PARA DAMA Y CABELLARO\nTe traemos los mejores vestidos elegante dama y caballero.\n\n para cualquier edad  tenemos vestidos  para fiesta, matrimonio, bautizos, o ocasiones espaciales si no lo encuentras te lo traemos o te lo harems✕+ Agregar párrafo"
     }
   ],
   "images": [
