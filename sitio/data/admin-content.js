@@ -43,13 +43,7 @@ window.ADMIN_CONTENT = {
     }
   ],
   "addCards": [],
-  "addTexts": [
-    {
-      "id": "amtxf6ybknsj66",
-      "container": "#batas",
-      "html": "Tenemos los mejores trajes y vestidos para dama y caballero  para niños adolescentes y adultos  si no encuentras el tuyo te lo traemos  para cualquier ocasión"
-    }
-  ],
+  "addTexts": [],
   "addTitles": [
     {
       "id": "amtxf4z17dv0to",
