@@ -94,6 +94,6 @@ window.ADMIN_CONTENT = {
   },
   "editorStyles": {
     "e1789159598589_mwd0": "--d: 360ms;",
-    "e1789159596993_b9rb": "position: absolute; left: 1px; top: 0px;"
+    "e1789159596993_b9rb": "position: absolute; left: 1px; top: 732px;"
   }
 };
