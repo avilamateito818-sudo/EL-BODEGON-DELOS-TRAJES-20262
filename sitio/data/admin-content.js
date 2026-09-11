@@ -87,6 +87,6 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "e1789159377910_m5vg": "position: absolute; left: 0px; top: -354px; width: 467px; height: 589px;"
+    "e1789159377910_m5vg": "position: absolute; left: 0px; top: -354px; width: 490px; height: 618px;"
   }
 };
