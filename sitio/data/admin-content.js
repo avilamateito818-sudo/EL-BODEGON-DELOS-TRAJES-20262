@@ -106,6 +106,6 @@ window.ADMIN_CONTENT = {
     "e1789159718338_th9t": "position: absolute; left: 0px; top: 366px;",
     "e1789159823961_9wuj": "background-color: rgb(72, 72, 101);",
     "e1789159817135_erg3": "color: rgb(255, 215, 0); font-size: 23px; text-shadow: rgba(0, 0, 0, 0.6) 0px 0px 14px;",
-    "e1789159822257_kxc8": "color: rgb(255, 215, 0);"
+    "e1789159822257_kxc8": "color: rgb(255, 215, 0); font-size: 15px;"
   }
 };
