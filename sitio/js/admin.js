@@ -255,7 +255,9 @@
 
   function editText(el) {
     var addedHost = el.closest('[data-admin-id]');
-    var entry = addedHost ? findEntry(content.addCards.concat(content.addTexts, content.addTitles), addedHost.dataset.adminId) : null;
+    var entry = addedHost
+      ? findEntry(content.addCards.concat(content.addTexts, content.addTitles, content.addSections), addedHost.dataset.adminId)
+      : null;
     var isEditableHtml = /^[Hh][1-6]$/.test(el.tagName) || el.tagName === 'P' || el.tagName === 'SPAN' || el.tagName === 'LI' || el.tagName === 'A';
     var initial = isEditableHtml ? el.innerHTML : el.textContent;
     var useHtml = isEditableHtml;
@@ -290,6 +292,11 @@
       if (entry && entry._type === 'card') {
         if (el.matches('h3')) entry.title = stripHtml(val);
         else entry.desc = stripHtml(val);
+      } else if (entry && entry._type === 'section') {
+        if (el.matches('h4')) entry.title = stripHtml(val);
+        else if (el.matches('.season-catalog-tag')) entry.tag = stripHtml(val);
+        else if (el.matches('.season-subtitle')) entry.desc = stripHtml(val);
+        else saveTextPatch(el, useHtml ? val : esc(val));
       } else if (entry && (entry._type === 'text' || entry._type === 'title')) {
         entry.html = val;
       } else {
@@ -1692,35 +1699,6 @@
   /* ---------- aplicar contenido guardado ---------- */
 
   function applyContent() {
-    content.texts.forEach(function (p) {
-      var el = q(p.sel);
-      if (el) {
-        if (/^[Hh][1-6]$/.test(el.tagName) || el.tagName === 'P' || el.tagName === 'SPAN' || el.tagName === 'LI' || el.tagName === 'A') el.innerHTML = p.html;
-        else el.textContent = p.html;
-      }
-    });
-    content.images.forEach(function (im) {
-      var el = q(im.sel);
-      if (el) {
-        if (im.src) el.src = im.src;
-        else el.remove();
-      }
-    });
-    content.deleteCards.forEach(function (p) {
-      var el = q(p);
-      if (el) el.style.display = 'none';
-    });
-    content.deleteTexts.forEach(function (p) {
-      var el = q(p);
-      if (el) el.style.display = 'none';
-    });
-    content.deleteSections.forEach(function (p) {
-      var el = q(p);
-      if (el) el.remove();
-    });
-    (content.hiddenSeasons || []).forEach(function (month) {
-      applyHiddenSeason(month, true);
-    });
     content.addCards.forEach(function (entry) {
       insertCard(entry);
     });
@@ -1737,15 +1715,48 @@
       var panel = q(entry.container);
       if (panel) insertSection(entry, panel);
     });
+    (content.hiddenSeasons || []).forEach(function (month) {
+      applyHiddenSeason(month, true);
+    });
+    content.deleteCards.forEach(function (p) {
+      var el = q(p);
+      if (el) el.style.display = 'none';
+    });
+    content.deleteTexts.forEach(function (p) {
+      var el = q(p);
+      if (el) el.style.display = 'none';
+    });
+    content.deleteSections.forEach(function (p) {
+      var el = q(p);
+      if (el) el.remove();
+    });
+    content.texts.forEach(function (p) {
+      var el = q(p.sel);
+      if (el) {
+        if (/^[Hh][1-6]$/.test(el.tagName) || el.tagName === 'P' || el.tagName === 'SPAN' || el.tagName === 'LI' || el.tagName === 'A') el.innerHTML = p.html;
+        else el.textContent = p.html;
+      }
+    });
+    content.images.forEach(function (im) {
+      var el = q(im.sel);
+      if (el) {
+        if (im.src) el.src = im.src;
+        else el.remove();
+      }
+    });
     applyEditorStyles();
   }
 
   function applyEditorStyles() {
     var es = content.editorStyles || {};
     Object.keys(es).forEach(function (key) {
-      var el = document.querySelector('[data-editor-id="' + key + '"]');
+      var el = null;
+      try {
+        el = document.querySelector('[data-editor-id="' + key + '"]') || q(key);
+      } catch (e) { el = null; }
       if (el && es[key]) {
         el.style.cssText = es[key];
+        if (!el.dataset.editorId) el.dataset.editorId = key;
       }
     });
   }
@@ -3153,7 +3164,8 @@
   function serialize() {
     var editorStyles = {};
     qa('[data-editor-id]').forEach(function (el) {
-      editorStyles[el.dataset.editorId] = el.style.cssText;
+      var path = cssPath(el);
+      if (path) editorStyles[path] = el.style.cssText;
     });
     var out = {
       version: 2,
