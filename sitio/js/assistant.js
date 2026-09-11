@@ -190,24 +190,51 @@
         if (r) {
           addMsg(r.answer, 'bot');
           if (r.waText) linkWa(r.waText);
-          saveConsulta(q);
+          saveConsulta(q, '', '');
         } else {
-          addMsg([
-            'Aún no tengo la respuesta exacta a eso. 🤔',
-            'Pero mi equipo humano te responde súper rápido. Escríbenos por WhatsApp:',
-            '+57 310 770 6615'
-          ].join('\n'), 'bot');
-          linkWa('Hola, tengo una consulta: ' + q);
-          saveConsulta(q);
+          startLead(q);
         }
       });
     }
 
-    function saveConsulta(q) {
+    var leadState = null;
+
+    function isSolicitud(text) {
+      var n = normalize(text);
+      var words = ['quiero', 'necesito', 'solicito', 'solicitud', 'cotiz', 'comprar', 'pedido', 'encargo', 'reserva', 'presupuesto', 'me gustaria', 'me interesa', 'deseo', 'queria', 'quería', 'enviar'];
+      for (var i = 0; i < words.length; i++) {
+        if (n.indexOf(words[i]) !== -1) return true;
+      }
+      return false;
+    }
+
+    function startLead(initialMsg) {
+      leadState = { step: 'nombre', mensaje: initialMsg || '' };
+      addMsg([
+        '¡Perfecto! Te armo el mensaje como un formulario de contacto. ✍️',
+        'Primero, ¿cuál es tu nombre?'
+      ].join('\n'), 'bot');
+    }
+
+    function sendLead() {
+      var nombre = leadState.nombre || 'Visitante';
+      var contacto = leadState.contacto || '';
+      var msg = leadState.mensaje || 'Consulta general';
+      var waText = 'Hola, soy ' + nombre + '. ' + msg + (contacto ? ' Me pueden escribir a: ' + contacto : '');
+      typing(function () {
+        addMsg('¡Listo! Ya quedó armado tu mensaje. 😊', 'bot');
+        linkWa(waText);
+        saveConsulta(msg, nombre, contacto);
+      });
+    }
+
+    function saveConsulta(q, nombre, contacto) {
       try {
         navigator.sendBeacon(API, JSON.stringify({
           categoria: 'consulta libre',
-          consulta: q
+          consulta: q,
+          nombre: nombre || '',
+          whatsapp: contacto || ''
         }));
       } catch (e) {}
       if (q) {
@@ -216,9 +243,9 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
-              nombre: 'Consulta del asistente',
-              contacto: '',
-              mensaje: 'El usuario escribió en el asistente: ' + q,
+              nombre: nombre || 'Consulta del asistente',
+              contacto: contacto || '',
+              mensaje: 'Consulta del asistente: ' + q,
               _subject: 'Consulta desde el asistente del sitio',
               _template: 'table',
               _captcha: 'false'
@@ -232,11 +259,30 @@
       input.value = '';
       if (!text) return;
       var safe = text.replace(/</g, '&lt;');
+      if (leadState) {
+        addMsg(safe, 'user');
+        if (leadState.step === 'nombre') {
+          leadState.nombre = text;
+          leadState.step = 'contacto';
+          typing(function () {
+            addMsg('Gracias, ' + text + '. ¿Cuál es tu WhatsApp o correo para responderte?', 'bot');
+          });
+        } else if (leadState.step === 'contacto') {
+          leadState.contacto = text;
+          sendLead();
+          leadState = null;
+        }
+        return;
+      }
       addMsg(safe, 'user');
-      reply(text);
+      if (isSolicitud(text)) {
+        startLead(text);
+      } else {
+        reply(text);
+      }
     }
 
-    var QUICK = ['Precios 💰', '📍 Ubicación', '⏰ Horario', '📦 Envíos', '🎃 Disfraces', '🏫 Uniformes', '📏 A la medida'];
+    var QUICK = ['📨 Enviar solicitud', 'Precios 💰', '📍 Ubicación', '⏰ Horario', '📦 Envíos', '🎃 Disfraces', '🏫 Uniformes'];
 
     function renderQuick() {
       if (quick.dataset.done) return;
@@ -246,7 +292,12 @@
         b.type = 'button';
         b.textContent = label;
         b.addEventListener('click', function () {
-          ask(label.replace(/^[^\p{L}\p{N}]+/u, ''));
+          if (label.indexOf('📨') === 0) {
+            input.value = '';
+            startLead('');
+          } else {
+            ask(label.replace(/^[^\p{L}\p{N}]+/u, ''));
+          }
         });
         quick.appendChild(b);
       });
