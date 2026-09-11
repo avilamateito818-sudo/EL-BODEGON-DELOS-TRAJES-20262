@@ -93,6 +93,7 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "e1789159718338_th9t": "position: absolute; left: 0px; top: 366px;"
+    "e1789159718338_th9t": "position: absolute; left: 0px; top: 366px;",
+    "e1789159727398_zxyy": "position: absolute; left: 1px; top: -709px;"
   }
 };
