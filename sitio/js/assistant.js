@@ -280,7 +280,7 @@
           leadState.nombre = val;
           leadState.step = 'contacto';
           typing(function () {
-            addMsg('Gracias, ' + val + '. ¿Cuál es tu WhatsApp o correo para responderte?', 'bot');
+            addMsg('Gracias, ' + val + '. ¿Cuál es tu correo electrónico para enviarte la respuesta? (también puedes escribir tu WhatsApp)', 'bot');
           });
         } else if (leadState.step === 'contacto') {
           leadState.contacto = val;
