@@ -26,6 +26,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#sec_mtxeydno > p:nth-child(3)",
       "html": "TENEMOS PARA DAMA Y CABALLERO  MATRIMONIOS, FIESTAS   GADOS BAUTIZOS PRIMERAS COMUNIONES"
+    },
+    {
+      "sel": "#sec_mtxfk3ot > p:nth-child(2)",
+      "html": "MATRIMONIOS, FIESTAS, COMUNIONES, OCACIONES ESPCIALES"
     }
   ],
   "images": [
