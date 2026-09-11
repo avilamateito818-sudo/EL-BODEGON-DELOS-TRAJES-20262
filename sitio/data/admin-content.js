@@ -44,7 +44,13 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [],
+  "addTitles": [
+    {
+      "id": "amtxffestkxmep",
+      "container": "#batas",
+      "html": "VESITDOS ELEGANTES"
+    }
+  ],
   "addPhotos": [
     {
       "id": "amtxfamb8vc9r1",
@@ -86,5 +92,7 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1789159596993_b9rb": ""
+  }
 };
