@@ -68,5 +68,11 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1789158657431_r3az": "animation: auto ease 0s 1 normal none running none; transform: translateX(576px);",
+    "e1789158633557_drn4": "",
+    "e1789158654678_565t": "",
+    "e1789158699756_b26e": "--d: 360ms; width: 1231px; height: 502px;",
+    "e1789158610539_okis": ""
+  }
 };
