@@ -192,12 +192,12 @@
           if (r.waText) linkWa(r.waText);
           saveConsulta(q, '', '');
         } else {
-          startLead(q);
+          leadForm(q);
         }
       });
     }
 
-    var leadState = null;
+    var leadOpen = false;
 
     function isSolicitud(text) {
       var n = normalize(text);
@@ -208,38 +208,49 @@
       return false;
     }
 
-    function startLead(initialMsg) {
-      leadState = { step: 'nombre', mensaje: (initialMsg || '').trim() };
-      if (leadState.mensaje) {
-        addMsg([
-          'Entiendo: "' + leadState.mensaje + '"',
-          'Te armo el mensaje como un formulario de contacto. ✍️',
-          'Primero, ¿cuál es tu nombre?'
-        ].join('\n'), 'bot');
-      } else {
-        addMsg([
-          '¡Perfecto! Te armo el mensaje como un formulario de contacto. ✍️',
-          'Primero, ¿cuál es tu nombre?'
-        ].join('\n'), 'bot');
-      }
-    }
+    function leadForm(initialMsg) {
+      if (leadOpen) { input.focus(); return; }
+      leadOpen = true;
+      var userMsg = (initialMsg || '').trim();
+      if (userMsg) addMsg('✍️ <strong>Formulario de contacto</strong> — estoy armando tu mensaje. Llena los campos y presiona <strong>Enviar</strong>.', 'bot');
 
-    function sendLead() {
-      var nombre = (leadState.nombre || '').trim();
-      var contacto = (leadState.contacto || '').trim();
-      var msg = (leadState.mensaje || '').trim().replace(/[.\s]+$/, '');
-      var waText = 'Hola, soy ' + nombre + '. ' + msg + '.' + (contacto ? ' Me pueden escribir a: ' + contacto : '');
-      typing(function () {
-        addMsg([
-          '¡Listo! Tu solicitud quedó así:',
-          '• Nombre: ' + (nombre || '—'),
-          '• Contacto: ' + (contacto || '—'),
-          '• Mensaje: ' + (msg || '—')
+      var wrap = document.createElement('div');
+      wrap.className = 'assistant-msg bot lead-card';
+      wrap.innerHTML =
+        '<div class="lead-card-inner">' +
+        '<div class="lead-card-title">📨 Formulario de contacto</div>' +
+        '<p class="lead-card-sub">Tu mensaje se envía a ' + EMAIL + '</p>' +
+        (userMsg ? '<div class="lead-prefill">Tema: ' + userMsg.replace(/</g, '&lt;') + '</div>' : '') +
+        '<form class="lead-form" id="lead-form">' +
+        '<label>Nombre *<input type="text" name="nombre" required placeholder="Tu nombre completo"></label>' +
+        '<label>Correo o WhatsApp *<input type="text" name="contacto" required placeholder="tucorreo@mail.com o +57 300 000 0000"></label>' +
+        '<label>Mensaje *<textarea name="mensaje" required rows="3" placeholder="¿Qué necesitas? (referencia, talla, fecha, cantidad…)"></textarea></label>' +
+        '<button type="submit" class="lead-submit">Enviar mensaje →</button>' +
+        '</form>' +
+        '</div>';
+      messages.appendChild(wrap);
+      messages.scrollTop = messages.scrollHeight;
+
+      wrap.querySelector('.lead-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var f = wrap.querySelector('.lead-form');
+        var nombre = f.nombre.value.trim();
+        var contacto = f.contacto.value.trim();
+        var mensaje = f.mensaje.value.trim();
+        var base = f.mensaje.value.trim() + (initialMsg ? ('\nTema: ' + initialMsg.trim()) : '');
+
+        var waText = 'Hola, soy ' + nombre + '. ' + mensaje + (contacto ? ' Me pueden escribir a: ' + contacto : '');
+        var conf = addMsg([
+          '✅ ¡Listo, ' + nombre + '!',
+          '• Contacto: ' + contacto,
+          '• Mensaje: ' + mensaje
         ].join('\n'), 'bot');
         linkWa(waText);
-        saveConsulta(msg, nombre, contacto);
-        leadState = null;
+        saveConsulta(base, nombre, contacto);
+        leadOpen = false;
       });
+
+      setTimeout(function () { input.focus(); }, 100);
     }
 
     function saveConsulta(q, nombre, contacto) {
@@ -273,34 +284,9 @@
       input.value = '';
       if (!text) return;
       var safe = text.replace(/</g, '&lt;');
-      if (leadState) {
-        addMsg(safe, 'user');
-        var val = text.trim();
-        if (leadState.step === 'nombre') {
-          leadState.nombre = val;
-          leadState.step = 'contacto';
-          typing(function () {
-            addMsg('Gracias, ' + val + '. ¿Cuál es tu correo electrónico para enviarte la respuesta? (también puedes escribir tu WhatsApp)', 'bot');
-          });
-        } else if (leadState.step === 'contacto') {
-          leadState.contacto = val;
-          if (leadState.mensaje) {
-            sendLead();
-          } else {
-            leadState.step = 'mensaje';
-            typing(function () {
-              addMsg('¿Qué nos cuentas? Escribe el mensaje que quieres enviar. ✍️', 'bot');
-            });
-          }
-        } else if (leadState.step === 'mensaje') {
-          leadState.mensaje = val;
-          sendLead();
-        }
-        return;
-      }
       addMsg(safe, 'user');
       if (isSolicitud(text)) {
-        startLead(text);
+        leadForm(text);
       } else {
         reply(text);
       }
@@ -318,7 +304,8 @@
         b.addEventListener('click', function () {
           if (label.indexOf('📨') === 0) {
             input.value = '';
-            startLead('');
+            addMsg('📨', 'user');
+            leadForm('');
           } else {
             ask(label.replace(/^[^\p{L}\p{N}]+/u, ''));
           }
