@@ -1189,6 +1189,18 @@
         </div>
       </div>
       <div class="contact-form-container">
+        <h3>Envíanos tu solicitud</h3>
+        <form id="contact-form" class="contact-form" novalidate>
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label for="contact-name">Tu nombre</label>
+          <input id="contact-name" name="nombre" type="text" placeholder="Nombre y apellido" required>
+          <label for="contact-whatsapp">WhatsApp o correo</label>
+          <input id="contact-whatsapp" name="contacto" type="text" placeholder="Número o correo para responderte" required>
+          <label for="contact-msg">Mensaje</label>
+          <textarea id="contact-msg" name="mensaje" rows="5" placeholder="¿Qué traje o diseño necesitas?" required></textarea>
+          <button type="submit" class="season-cta contact-submit">Enviar</button>
+          <p id="contact-status" class="contact-status" hidden></p>
+        </form>
         <p class="contact-alt">¿Prefieres WhatsApp? <a href="https://wa.me/573107706615?text=Hola%2C%20quiero%20comunicarme." target="_blank" rel="noopener">Escríbenos aquí</a></p>
         <p class="contact-save">Para guardar nuestro contacto en tu celular, guárdalo como <strong>El Bodegón de los Trajes</strong> con el número <strong>+57 310 770 6615</strong>.</p>
       </div>
@@ -1228,6 +1240,51 @@
   <script src="js/app.js"></script>
   <script src="data/admin-content.js"></script>
   <script src="js/admin.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('contact-form');
+      if (!form) return;
+      var status = document.getElementById('contact-status');
+      var handle = function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('.contact-submit');
+        var honey = form.querySelector('[name="_honey"]');
+        if (honey && honey.value) return;
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+        var data = {};
+        ['nombre', 'contacto', 'mensaje'].forEach(function (k) {
+          var f = form.querySelector('[name="' + k + '"]');
+          if (f) data[k] = f.value;
+        });
+        data._subject = 'Nuevo mensaje desde El Bodegón de los Trajes';
+        data._template = 'table';
+        data._captcha = 'false';
+        status.hidden = true;
+        fetch('https://formsubmit.co/ajax/elbodegondelostrajes@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(function (r) { return r.json(); }).then(function (res) {
+          var ok = res && res.success && String(res.success).toLowerCase() === 'true';
+          status.textContent = ok
+            ? '¡Mensaje enviado! Te responderemos pronto.'
+            : 'No se pudo enviar. Pruébalo de nuevo o escríbenos por WhatsApp.';
+          status.className = 'contact-status ' + (ok ? 'ok' : 'err');
+          status.hidden = false;
+          if (ok) form.reset();
+        }).catch(function () {
+          status.textContent = 'No se pudo enviar. Pruébalo de nuevo o escríbenos por WhatsApp.';
+          status.className = 'contact-status err';
+          status.hidden = false;
+        }).finally(function () {
+          btn.disabled = false;
+          btn.textContent = 'Enviar';
+        });
+      };
+      form.addEventListener('submit', handle);
+    })();
+  </script>
   <a class="whatsapp-float" href="https://wa.me/573107706615?text=Hola%2C%20quiero%20comunicarme." aria-label="Escríbenos por WhatsApp" title="Escríbenos por WhatsApp">
     <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
   </a>

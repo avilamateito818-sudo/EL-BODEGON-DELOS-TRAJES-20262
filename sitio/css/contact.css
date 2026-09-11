@@ -407,6 +407,80 @@ footer p {
   padding: 4rem !important;
 }
 
+.contact-form {
+  margin-bottom: 2rem;
+}
+
+#contacto .contact-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.85rem;
+}
+
+#contacto .contact-form input,
+#contacto .contact-form textarea {
+  width: 100%;
+  padding: 1.8rem;
+  font-size: 1.1rem;
+  border: 1px solid var(--season-accent-soft);
+  border-bottom: 2px solid var(--season-accent);
+  border-radius: 14px;
+  color: #241A08;
+  background: #FFFFFF;
+  font-weight: 600;
+  margin-bottom: 1.6rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: var(--transition-premium);
+  font-family: 'Quicksand', sans-serif;
+}
+
+#contacto .contact-form .contact-submit {
+  display: block;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #d4af37, #b8942a);
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.4);
+}
+
+#contacto .contact-form .contact-submit:hover {
+  background: linear-gradient(135deg, #b8942a, #d4af37);
+}
+
+#contacto .contact-form .contact-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+#contacto .contact-form .contact-status {
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-align: center;
+}
+
+#contacto .contact-form .contact-status.ok {
+  background: rgba(27, 94, 32, 0.12);
+  color: #1b5e20 !important;
+  border: 1px solid rgba(27, 94, 32, 0.3);
+}
+
+#contacto .contact-form .contact-status.err {
+  background: rgba(159, 34, 46, 0.1);
+  color: #9f222e !important;
+  border: 1px solid rgba(159, 34, 46, 0.3);
+}
+
 /* Tarjeta de datos: panel sólido cálido con acento superior suave */
 #contacto .contact-card {
   background: linear-gradient(180deg, #FFFDF7 0%, #FDF7E8 100%) !important;
