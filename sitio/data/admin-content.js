@@ -44,13 +44,7 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [
-    {
-      "id": "amtxf4z17dv0to",
-      "container": "#batas",
-      "html": "TRAJES ELEGANTES PARA DAMA Y CABALLERO"
-    }
-  ],
+  "addTitles": [],
   "addPhotos": [],
   "addSections": [
     {
@@ -68,6 +62,17 @@ window.ADMIN_CONTENT = {
       "title": "VESITIDOS ELEGANTES",
       "desc": "TENEMOS PARA DAM Y CABALLERO  MATRIMONIOS, FIESTAS   GADOS BAUTIZOS PRIMERAS COMUNIONES",
       "order": 2
+    },
+    {
+      "id": "sec_mtxf63z5",
+      "container": "#temporadas > div:nth-child(4) > article:nth-child(1)",
+      "tag": "Colección de Prueba",
+      "title": "Trajes de Halloween",
+      "desc": "Los mejores trajes para esta temporada, disponibles ahora.",
+      "order": 3,
+      "textColor": "#ff9d2e",
+      "fontSize": "38",
+      "fontFamily": "Cinzel Decorative, cursive"
     }
   ],
   "deleteCards": [],
