@@ -209,23 +209,36 @@
     }
 
     function startLead(initialMsg) {
-      leadState = { step: 'nombre', mensaje: initialMsg || '' };
-      addMsg([
-        '¡Perfecto! Te armo el mensaje como un formulario de contacto. ✍️',
-        'Primero, ¿cuál es tu nombre?'
-      ].join('\n'), 'bot');
+      leadState = { step: 'nombre', mensaje: (initialMsg || '').trim() };
+      if (leadState.mensaje) {
+        addMsg([
+          'Entiendo: "' + leadState.mensaje + '"',
+          'Te armo el mensaje como un formulario de contacto. ✍️',
+          'Primero, ¿cuál es tu nombre?'
+        ].join('\n'), 'bot');
+      } else {
+        addMsg([
+          '¡Perfecto! Te armo el mensaje como un formulario de contacto. ✍️',
+          'Primero, ¿cuál es tu nombre?'
+        ].join('\n'), 'bot');
+      }
     }
 
     function sendLead() {
-      var nombre = leadState.nombre || 'Visitante';
-      var contacto = leadState.contacto || '';
-      var msg = leadState.mensaje || 'Consulta general';
-      msg = msg.trim().replace(/[.\s]+$/, '');
+      var nombre = (leadState.nombre || '').trim();
+      var contacto = (leadState.contacto || '').trim();
+      var msg = (leadState.mensaje || '').trim().replace(/[.\s]+$/, '');
       var waText = 'Hola, soy ' + nombre + '. ' + msg + '.' + (contacto ? ' Me pueden escribir a: ' + contacto : '');
       typing(function () {
-        addMsg('¡Listo! Ya quedó armado tu mensaje. 😊', 'bot');
+        addMsg([
+          '¡Listo! Tu solicitud quedó así:',
+          '• Nombre: ' + (nombre || '—'),
+          '• Contacto: ' + (contacto || '—'),
+          '• Mensaje: ' + (msg || '—')
+        ].join('\n'), 'bot');
         linkWa(waText);
         saveConsulta(msg, nombre, contacto);
+        leadState = null;
       });
     }
 
@@ -262,16 +275,26 @@
       var safe = text.replace(/</g, '&lt;');
       if (leadState) {
         addMsg(safe, 'user');
+        var val = text.trim();
         if (leadState.step === 'nombre') {
-          leadState.nombre = text;
+          leadState.nombre = val;
           leadState.step = 'contacto';
           typing(function () {
-            addMsg('Gracias, ' + text + '. ¿Cuál es tu WhatsApp o correo para responderte?', 'bot');
+            addMsg('Gracias, ' + val + '. ¿Cuál es tu WhatsApp o correo para responderte?', 'bot');
           });
         } else if (leadState.step === 'contacto') {
-          leadState.contacto = text;
+          leadState.contacto = val;
+          if (leadState.mensaje) {
+            sendLead();
+          } else {
+            leadState.step = 'mensaje';
+            typing(function () {
+              addMsg('¿Qué nos cuentas? Escribe el mensaje que quieres enviar. ✍️', 'bot');
+            });
+          }
+        } else if (leadState.step === 'mensaje') {
+          leadState.mensaje = val;
           sendLead();
-          leadState = null;
         }
         return;
       }
