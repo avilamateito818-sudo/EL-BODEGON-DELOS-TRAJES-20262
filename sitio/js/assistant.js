@@ -239,15 +239,17 @@
         var mensaje = f.mensaje.value.trim();
         var base = f.mensaje.value.trim() + (initialMsg ? ('\nTema: ' + initialMsg.trim()) : '');
 
-        var waText = 'Hola, soy ' + nombre + '. ' + mensaje + (contacto ? ' Me pueden escribir a: ' + contacto : '');
+        var waText = 'Hola, soy ' + nombre + '. ' + mensaje.replace(/[.\s]+$/, '') + '.' + (contacto ? ' Me pueden escribir a: ' + contacto : '');
+        leadOpen = false;
+        wrap.classList.add('lead-done');
         var conf = addMsg([
           '✅ ¡Listo, ' + nombre + '!',
+          'Tu mensaje se envió a ' + EMAIL + '.',
           '• Contacto: ' + contacto,
           '• Mensaje: ' + mensaje
         ].join('\n'), 'bot');
         linkWa(waText);
         saveConsulta(base, nombre, contacto);
-        leadOpen = false;
       });
 
       setTimeout(function () { input.focus(); }, 100);

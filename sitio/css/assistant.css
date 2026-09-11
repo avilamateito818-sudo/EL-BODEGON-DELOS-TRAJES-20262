@@ -357,6 +357,16 @@
   box-shadow: 0 6px 16px rgba(184, 148, 42, 0.45);
 }
 
+.lead-card.lead-done {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.4);
+}
+
+.lead-card.lead-done .lead-form {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .assistant-float {
     right: 0.8rem;
