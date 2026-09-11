@@ -10,6 +10,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(2) > button:nth-child(11) > span:nth-child(1)",
       "html": "BAILES, CLAUSURAS,  GRADOS "
+    },
+    {
+      "sel": "#sec_mtxdibp0",
+      "html": "VESTIDOSP ELEGANTES PARA DAMA Y CABELLAROVESTIDOSP ELEGANTES PARA DAMA Y CABELLAROTe traemos los mejores vestidos elegante dama y antescaballeo para cualquier edad  tenemos vestidos  para fiesta, matrimonio, bautizos, o ocasiones espaciales si no lo encuentras te lo traemos o te lo harems✕+ Agregar párrafo"
     }
   ],
   "images": [
@@ -56,5 +60,7 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1789156384526_1e60": ""
+  }
 };
