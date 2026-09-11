@@ -50,6 +50,14 @@ window.ADMIN_CONTENT = {
       "title": "VESTIDOSP ELEGANTES PARA DAMA Y CABELLARO",
       "desc": "Te traemos los mejores vestidos elegante dama y antescaballeo para cualquier edad  tenemos vestidos  para fiesta, matrimonio, bautizos, o ocasiones espaciales si no lo encuentras te lo traemos o te lo harems",
       "order": 1
+    },
+    {
+      "id": "sec_mtxeydno",
+      "container": "#temporadas > div:nth-child(4) > article:nth-child(1)",
+      "tag": "VESTIDOS ELEGANTES",
+      "title": "VESITIDOS ELEGANTES",
+      "desc": "TENEMOS PARA DAM Y CABALLERO  MATRIMONIOS, FIESTAS   GADOS BAUTIZOS PRIMERAS COMUNIONES",
+      "order": 2
     }
   ],
   "deleteCards": [],
