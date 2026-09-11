@@ -74,6 +74,16 @@ window.ADMIN_CONTENT = {
       "title": "VESITIDOS ELEGANTES",
       "desc": "TENEMOS PARA DAM Y CABALLERO  MATRIMONIOS, FIESTAS   GADOS BAUTIZOS PRIMERAS COMUNIONES",
       "order": 2
+    },
+    {
+      "id": "sec_mtxfk3ot",
+      "container": "#temporadas > div:nth-child(4) > article:nth-child(1)",
+      "tag": "",
+      "title": "VESITIDOS ELEGANTES",
+      "desc": "MATRIMONIOS, FIESTAS, COMUNIONES, OACIONES ESPCIALES",
+      "order": 3,
+      "textColor": "#FFD700",
+      "fontSize": "23"
     }
   ],
   "deleteCards": [],
