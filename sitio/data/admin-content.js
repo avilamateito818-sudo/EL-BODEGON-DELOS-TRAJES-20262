@@ -87,7 +87,7 @@ window.ADMIN_CONTENT = {
     "e1789158699756_b26e": "--d: 360ms; width: 1293px; height: 527px;",
     "e1789158610539_okis": "",
     "e1789158736117_ak6k": "",
-    "e1789158804961_lxlq": "background-color: rgb(103, 122, 152);",
+    "e1789158804961_lxlq": "background-color: rgb(103, 122, 152); width: 1431px; height: 349px;",
     "e1789158894773_i0b5": "",
     "e1789158897991_5x1q": ""
   }
