@@ -86,5 +86,7 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1789159377910_m5vg": "position: absolute; left: 0px; top: -354px;"
+  }
 };
