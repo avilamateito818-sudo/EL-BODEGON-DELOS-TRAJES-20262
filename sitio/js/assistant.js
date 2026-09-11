@@ -220,7 +220,8 @@
       var nombre = leadState.nombre || 'Visitante';
       var contacto = leadState.contacto || '';
       var msg = leadState.mensaje || 'Consulta general';
-      var waText = 'Hola, soy ' + nombre + '. ' + msg + (contacto ? ' Me pueden escribir a: ' + contacto : '');
+      msg = msg.trim().replace(/[.\s]+$/, '');
+      var waText = 'Hola, soy ' + nombre + '. ' + msg + '.' + (contacto ? ' Me pueden escribir a: ' + contacto : '');
       typing(function () {
         addMsg('¡Listo! Ya quedó armado tu mensaje. 😊', 'bot');
         linkWa(waText);
