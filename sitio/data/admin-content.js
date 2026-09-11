@@ -102,8 +102,8 @@ window.ADMIN_CONTENT = {
   },
   "photoSettings": {
     "enero": {
-      "width": 361,
-      "height": 300
+      "width": 381,
+      "height": 320
     }
   },
   "editorStyles": {
