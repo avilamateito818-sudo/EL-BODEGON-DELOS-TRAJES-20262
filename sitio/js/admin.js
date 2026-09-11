@@ -2297,6 +2297,18 @@
 
   function addSection(panel) {
     var count = (content.addSections || []).length + 1;
+    var fontOptions = [
+      ['', '— Por defecto —'],
+      ['Quicksand, sans-serif', 'Quicksand'],
+      ['Cinzel Decorative, cursive', 'Cinzel Decorative'],
+      ['Arial, sans-serif', 'Arial'],
+      ['Georgia, serif', 'Georgia'],
+      ['Times New Roman, serif', 'Times New Roman'],
+      ['Verdana, sans-serif', 'Verdana']
+    ];
+    var fontsHtml = fontOptions.map(function (f) {
+      return '<option value="' + f[0] + '">' + f[1] + '</option>';
+    }).join('');
     var box = openModal(
       '<h3>Añadir sección nueva</h3>' +
       '<label class="admin-field">Texto corto (etiqueta sobre el título)</label>' +
@@ -2305,16 +2317,53 @@
       '<input type="text" class="admin-input" data-role="title" placeholder="Ej. Colección de Verano">' +
       '<label class="admin-field">Descripción</label>' +
       '<textarea class="admin-textarea" rows="3" data-role="desc" placeholder="Escribe un párrafo de presentación..."></textarea>' +
+      '<div class="admin-sec-style">' +
+      '<label class="admin-field">Color de la letra</label>' +
+      '<div class="admin-palette" data-role="palette">' +
+      '<button type="button" class="admin-swatch is-active" data-color="#ffffff" style="background:#ffffff" title="Blanco"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#FFD700" style="background:#FFD700" title="Dorado"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#ff9d2e" style="background:#ff9d2e" title="Naranja"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#ff4d4d" style="background:#ff4d4d" title="Rojo"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#7cf29c" style="background:#7cf29c" title="Verde"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#5ee7ff" style="background:#5ee7ff" title="Celeste"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#b98cff" style="background:#b98cff" title="Morado"></button>' +
+      '<button type="button" class="admin-swatch" data-color="#ff7bb0" style="background:#ff7bb0" title="Rosa"></button>' +
+      '<input type="color" class="admin-input admin-swatch-custom" data-role="color-custom" value="#ffffff" title="Color personalizado">' +
+      '</div>' +
+      '<div class="admin-sec-style-row">' +
+      '<label class="admin-field">Tamaño de letra</label>' +
+      '<input type="number" class="admin-input admin-sec-fontsize" data-role="fontsize" min="10" max="80" value="26"> px' +
+      '</div>' +
+      '<div class="admin-sec-style-row">' +
+      '<label class="admin-field">Tipo de letra</label>' +
+      '<select class="admin-input" data-role="fontfamily">' + fontsHtml + '</select>' +
+      '</div>' +
+      '</div>' +
       '<div class="admin-modal-actions">' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="ok">Añadir</button>' +
       '<button type="button" class="admin-btn" data-role="cancel">Cancelar</button>' +
       '</div>'
     );
+
+    var colorInput = box.querySelector('[data-role="color-custom"]');
+    function pickColor(color) {
+      box.querySelectorAll('.admin-swatch').forEach(function (s) {
+        s.classList.toggle('is-active', s.getAttribute('data-color') === color);
+      });
+    }
+    box.querySelectorAll('.admin-swatch').forEach(function (s) {
+      s.addEventListener('click', function () { pickColor(s.getAttribute('data-color')); });
+    });
+    colorInput.addEventListener('input', function () { pickColor(colorInput.value); });
+    pickColor(colorInput.value);
+
     box.querySelector('[data-role="ok"]').addEventListener('click', function () {
       var tag = box.querySelector('[data-role="tag"]').value.trim();
       var title = box.querySelector('[data-role="title"]').value.trim();
       var desc = box.querySelector('[data-role="desc"]').value.trim();
       if (!title) { toast('El título es obligatorio.'); return; }
+      var active = box.querySelector('.admin-swatch.is-active');
+      var color = active ? active.getAttribute('data-color') : colorInput.value;
       var id = 'sec_' + Date.now().toString(36);
       var entry = {
         id: id,
@@ -2323,7 +2372,10 @@
         tag: tag,
         title: title,
         desc: desc,
-        order: count
+        order: count,
+        textColor: color,
+        fontSize: box.querySelector('[data-role="fontsize"]').value,
+        fontFamily: box.querySelector('[data-role="fontfamily"]').value
       };
       content.addSections.push(entry);
       insertSection(entry, panel);
@@ -2345,6 +2397,21 @@
     inner += '<h4>' + entry.title + '</h4>';
     if (entry.desc) inner += '<p class="season-subtitle">' + entry.desc + '</p>';
     sec.innerHTML = inner;
+
+    if (entry.textColor || entry.fontSize || entry.fontFamily) {
+      var h4 = sec.querySelector('h4');
+      var tag = sec.querySelector('.season-catalog-tag');
+      var sub = sec.querySelector('.season-subtitle');
+      [h4, tag, sub].forEach(function (t) {
+        if (!t) return;
+        if (entry.textColor) t.style.color = entry.textColor;
+        if (entry.fontFamily) t.style.fontFamily = entry.fontFamily;
+      });
+      if (entry.fontSize && h4) {
+        h4.style.fontSize = entry.fontSize + 'px';
+        h4.style.textShadow = '0 0 14px rgba(0,0,0,0.6)';
+      }
+    }
     var host = panel && panel.querySelector('.season-sub-sections, .season-catalog') ? panel.querySelector('.season-sub-sections') : panel;
     if (!host) host = panel;
 
@@ -3107,7 +3174,11 @@
         return { id: p.id, container: p.container, src: p.src };
       }),
       addSections: content.addSections.map(function (s) {
-        return { id: s.id, container: s.container, tag: s.tag, title: s.title, desc: s.desc, order: s.order };
+        var keep = { id: s.id, container: s.container, tag: s.tag, title: s.title, desc: s.desc, order: s.order };
+        if (s.textColor) keep.textColor = s.textColor;
+        if (s.fontSize) keep.fontSize = s.fontSize;
+        if (s.fontFamily) keep.fontFamily = s.fontFamily;
+        return keep;
       }),
       deleteCards: content.deleteCards,
       deleteTexts: content.deleteTexts,

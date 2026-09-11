@@ -82,6 +82,25 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 }
 .admin-modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.1rem; }
 
+.admin-sec-style { margin-top: 1rem; border-top: 1px dashed rgba(255,255,255,.18); padding-top: 0.6rem; }
+.admin-sec-style-row { margin-top: 0.9rem; }
+.admin-sec-fontsize { width: 120px; }
+.admin-palette { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.admin-swatch {
+  width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25);
+  cursor: pointer; padding: 0; transition: transform .12s ease, box-shadow .12s ease;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.15);
+}
+.admin-swatch:hover { transform: scale(1.12); }
+.admin-swatch.is-active {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #a06bff;
+  transform: scale(1.08);
+}
+.admin-swatch-custom {
+  width: 34px; height: 34px; padding: 0; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25); cursor: pointer;
+}
+
 .admin-backup-hint { margin: 0 0 0.8rem; font-size: 0.8rem; color: #c9b8e6; }
 .admin-backup-list { display: flex; flex-direction: column; gap: 0.45rem; max-height: 44vh; overflow: auto; }
 .admin-backup-row {
