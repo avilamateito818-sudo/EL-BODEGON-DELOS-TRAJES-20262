@@ -83,6 +83,6 @@ window.ADMIN_CONTENT = {
     "e1789158699756_b26e": "--d: 360ms; width: 1293px; height: 527px;",
     "e1789158610539_okis": "",
     "e1789158736117_ak6k": "",
-    "e1789158804961_lxlq": "background-color: rgb(195, 50, 50);"
+    "e1789158804961_lxlq": "background-color: rgb(238, 238, 238);"
   }
 };
