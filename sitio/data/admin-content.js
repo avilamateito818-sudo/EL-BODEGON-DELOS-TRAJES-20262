@@ -44,13 +44,7 @@ window.ADMIN_CONTENT = {
   ],
   "addCards": [],
   "addTexts": [],
-  "addTitles": [
-    {
-      "id": "amtxf4z17dv0to",
-      "container": "#batas",
-      "html": "TRAJES ELEGANTES PARA DAMA Y CABALLERO"
-    }
-  ],
+  "addTitles": [],
   "addPhotos": [],
   "addSections": [
     {
