@@ -57,13 +57,7 @@ window.ADMIN_CONTENT = {
       "html": "TRAJES ELEGANTES PARA DAMA Y CABALLERO"
     }
   ],
-  "addPhotos": [
-    {
-      "id": "amtxf9m2g73mc7",
-      "container": "#batas",
-      "src": "https://www.magnific.com/es/vector-premium/pareja-vestidos-formales-nocturnos-hombre-mujer-juntos-aislados-fondo-blanco-vector-plano_137842557.htm"
-    }
-  ],
+  "addPhotos": [],
   "addSections": [
     {
       "id": "sec_mtxdibp0",
