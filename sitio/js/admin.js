@@ -1409,6 +1409,7 @@
   }
 
   function insertCard(entry) {
+    if (document.querySelector('[data-admin-id="' + entry.id + '"]')) return;
     var host = q(entry.container) || (entry.container && document.body);
     if (!host) return;
     var grid = host.classList.contains('grid-haunted') ? host : host.querySelector('.grid-haunted');
@@ -1462,6 +1463,7 @@
   }
 
   function insertText(entry) {
+    if (document.querySelector('[data-admin-id="' + entry.id + '"]')) return;
     var host = q(entry.container);
     if (!host) return;
     var p = document.createElement('p');
@@ -2572,6 +2574,7 @@
   }
 
   function insertTitle(entry) {
+    if (document.querySelector('[data-admin-id="' + entry.id + '"]')) return;
     var host = q(entry.container);
     if (!host) return;
     var h = document.createElement('h3');
@@ -2643,6 +2646,7 @@
   }
 
   function insertPhoto(entry) {
+    if (document.querySelector('[data-admin-id="' + entry.id + '"]')) return;
     var host = q(entry.container);
     if (!host) return;
     var img = document.createElement('img');
