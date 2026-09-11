@@ -86,5 +86,8 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "e1789159494548_ccr5": "width: 1380px; height: 3788px;",
+    "e1789159485116_pcy9": ""
+  }
 };
