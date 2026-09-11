@@ -18,6 +18,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#temporadas > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1) > span:nth-child(1)",
       "html": "Operación Retorno"
+    },
+    {
+      "sel": "#batas > div:nth-child(2) > h4:nth-child(1)",
+      "html": "BataS"
     }
   ],
   "images": [
@@ -64,10 +68,5 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {
-    "e1789156569885_aw7r": "",
-    "e1789156970475_0uog": "--d: 360ms; width: 1363px; height: 581px;",
-    "e1789156384526_1e60": "background-color: rgb(72, 149, 168); color: rgb(226, 24, 24); opacity: 0.85;",
-    "e1789156825312_n9bu": ""
-  }
+  "editorStyles": {}
 };
