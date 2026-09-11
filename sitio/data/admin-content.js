@@ -106,5 +106,7 @@ window.ADMIN_CONTENT = {
       "height": 340
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "#batas > h3:nth-child(3)": "color: rgb(255, 77, 77);"
+  }
 };
