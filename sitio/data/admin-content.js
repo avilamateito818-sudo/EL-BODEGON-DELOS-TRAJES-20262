@@ -45,7 +45,13 @@ window.ADMIN_CONTENT = {
   "addCards": [],
   "addTexts": [],
   "addTitles": [],
-  "addPhotos": [],
+  "addPhotos": [
+    {
+      "id": "amtxfamb8vc9r1",
+      "container": "#batas",
+      "src": "https://img.magnific.com/vector-premium/pareja-vestidos-formales-nocturnos-hombre-mujer-juntos-aislados-fondo-blanco-vector-plano_1123373-3.jpg"
+    }
+  ],
   "addSections": [
     {
       "id": "sec_mtxdibp0",
