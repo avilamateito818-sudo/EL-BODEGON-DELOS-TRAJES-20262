@@ -225,7 +225,7 @@ body {
   flex-direction: column;
 }
 
-/* Secciones de página: catálogo por edades y sobre nosotros */
+/* Secciones de página */
 .disfraces-section {
   scroll-margin-top: 120px;
 }
@@ -242,11 +242,8 @@ body {
 #inicio { order: 1; }
 #nosotros { order: 2; }
 #temporadas { order: 3; }
-#ninos { order: 4; }
-#jovenes { order: 5; }
-#adultos { order: 6; }
-#contacto { order: 7; }
-footer { order: 8; }
+#contacto { order: 4; }
+footer { order: 5; }
 
 html {
   scroll-padding-top: 120px;

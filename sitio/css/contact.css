@@ -142,18 +142,6 @@ footer p {
   color: var(--halloween-vivid);
 }
 
-.essence-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2.5rem;
-}
-
-.essence-links .season-cta {
-  padding: 0.9rem 1.8rem;
-  font-size: 0.7rem;
-}
-
 /* UTILITY CLASSES */
 .section-ambient-bg {
   background: rgba(255, 140, 0, 0.015);

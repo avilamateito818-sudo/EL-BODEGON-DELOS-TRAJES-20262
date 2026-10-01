@@ -552,15 +552,6 @@ section {
     font-size: 0.92rem;
     line-height: 1.75;
   }
-  .essence-links {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  .essence-links .season-cta {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
 
   footer { padding: 3rem 4%; }
   footer p { font-size: 0.9rem; line-height: 1.8; }
