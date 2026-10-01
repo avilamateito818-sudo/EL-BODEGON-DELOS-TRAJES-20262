@@ -1,14 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>El Bodegón de los Trajes | Disfraces a la medida en Tunja</title>
   <meta name="description" content="El Bodegón de los Trajes: alta costura en disfraces de Halloween, uniformes, batas, trajes de gala y vestidos a la medida en Tunja, Boyacá. Colección exclusiva de terror y elegancia.">
   <meta name="keywords" content="disfraces tunja, halloween tunja, boutique terror, el bodegon de los trajes, disfraces infantiles, disfraces adultos, uniformes escolares, batas de laboratorio">
   <meta name="author" content="El Bodegón de los Trajes">
   <meta name="theme-color" content="#050505">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="El Bodegón">
+  <meta name="format-detection" content="telephone=no">
   <meta property="og:type" content="website">
   <meta property="og:title" content="El Bodegón de los Trajes | Disfraces a la medida en Tunja">
   <meta property="og:description" content="Alta costura en disfraces de Halloween, uniformes y trajes de gala a la medida en Tunja, Boyacá.">
@@ -37,13 +41,13 @@
       <h1>El Bodegón de los Trajes</h1>
     </div>
     <nav id="main-nav" aria-label="Menú principal">
-      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-controls="nav-menu" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
       </button>
       <ul class="nav-menu" id="nav-menu">
-        <li><a href="#nosotros" data-tab="octubre">Sobre Nosotros</a></li>
+        <li><a href="#nosotros">Sobre Nosotros</a></li>
         <li class="has-dropdown">
           <button type="button" class="dropdown-toggle" aria-expanded="false">
             Temporadas <span class="caret">&#9662;</span>
@@ -68,14 +72,16 @@
             Disfraces <span class="caret">&#9662;</span>
           </button>
           <ul class="dropdown">
-            <li><a href="#ninos" data-tab="octubre">Infantil</a></li>
-            <li><a href="#jovenes" data-tab="octubre">Juvenil</a></li>
-            <li><a href="#adultos" data-tab="octubre">Adultos</a></li>
+            <li><a href="#ninos">Infantil</a></li>
+            <li><a href="#jovenes">Juvenil</a></li>
+            <li><a href="#adultos">Adultos</a></li>
           </ul>
         </li>
         <li><a href="#contacto">Contáctanos</a></li>
       </ul>
+      <button class="nav-close" id="nav-close" type="button" aria-label="Cerrar menú">&times;</button>
     </nav>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
   </header>
 
   <section id="inicio" class="hero-horror">
@@ -84,6 +90,35 @@
       <h2>Viste tu imaginación, vive tu historia.</h2>
       <a href="#temporadas" class="btn-haunted">Entra a nuestras temporadas</a>
       <button class="admin-season-photo-btn admin-ui" type="button" data-season-photo="hero" title="Cambiar foto del hero">Cambiar portada</button>
+    </div>
+  </section>
+
+  <!-- SOBRE NOSOTROS SECTION -->
+  <section id="nosotros" class="disfraces-section">
+    <div class="section-head">
+      <span>El Taller de Sombras</span>
+      <h2>Sobre Nosotros</h2>
+    </div>
+    <div class="essence-container">
+      <div class="essence-cover">
+        <img loading="lazy" src="assets/img/horror_bg.png" alt="Portada El Bodegón de los Trajes">
+      </div>
+      <h3 class="essence-heading">Pasión por la creatividad y elegancia</h3>
+      <p class="essence-lead">En lo más profundo de <strong>El Bodegón de los Trajes</strong>,
+        la oscuridad se transforma en arte. Nuestra misión es dominar la línea entre lo aterrador y lo sofisticado,
+        creando disfraces que son verdaderas obras de sastrería.</p>
+      <p class="essence-detail">Ubicados en Tunja, somos
+        artesanos dedicados a la transformación total. No solo vestimos personajes; conjuramos experiencias memorables
+        para aquellos que se atreven a ser diferentes.</p>
+      <p class="essence-cat">Cada pieza se confecciona a la medida para que tu personaje cobre vida:
+        <strong>Infantil</strong> con superhéroes, princesas y personajes de cuento;
+        <strong>Juvenil</strong> con el terror y el cosplay más temido;
+        y <strong>Adultos</strong> con la gala del inframundo.</p>
+      <div class="essence-links">
+        <a class="season-cta" href="#ninos">Ver Colección Infantil</a>
+        <a class="season-cta" href="#jovenes">Ver Colección Juvenil</a>
+        <a class="season-cta" href="#adultos">Ver Colección Adultos</a>
+      </div>
     </div>
   </section>
 
@@ -903,259 +938,32 @@
       </article>
 
       <!-- OCTUBRE -->
-      <article class="season-panel" data-panel="octubre" role="tabpanel">
-        <div class="halloween-landing" id="halloween-landing">
+      <article class="season-panel season-panel-stack" data-panel="octubre" role="tabpanel">
+        <div class="halloween-landing" id="halloween-landing" data-landing="octubre">
           <span class="season-milestone">Temporada de Halloween · Exclusivo</span>
           <h3 class="halloween-landing-title">El Bodegón de los Trajes te trae los mejores disfraces para <span>Halloween</span> · Tunja</h3>
           <p class="halloween-landing-sub">Viste tu imaginación, vive tu historia.</p>
           <button class="btn-haunted" id="entrar-callejon" type="button" data-enter="octubre">Entrar al Callejón</button>
           <button class="admin-season-photo-btn admin-ui" type="button" data-season-photo="octubre" title="Cambiar foto de portada">Cambiar portada</button>
         </div>
-        <div class="halloween-content" id="halloween-content">
+        <div class="halloween-content" id="halloween-content" data-content="octubre">
         <nav class="season-quick-nav month-nav" aria-label="Navegación de octubre">
-          <a href="#nosotros">Sobre Nosotros</a>
           <a href="#catalogo">Catálogo</a>
-          <a href="#edades">Edades</a>
-          <a href="#ninos">Infantil</a>
-          <a href="#jovenes">Juvenil</a>
-          <a href="#adultos">Adultos</a>
           <a href="#contacto-octubre">Contactos</a>
         </nav>
         <div class="season-hero">
           <span class="season-milestone">Hito de Terror · Temporada de Halloween</span>
           <h3 class="season-title">Terror en Tunja, edición exclusiva.</h3>
-          <p class="season-subtitle">Colección exclusiva de disfraces de Halloween en Negro &amp; Naranja: sobre nosotros, el catálogo completo, las colecciones por edades y el contacto. La alta costura del horror que solo El Bodegón de los Trajes conjura.</p>
+          <p class="season-subtitle">Colección exclusiva de disfraces de Halloween en Negro &amp; Naranja, confeccionada a la medida en nuestro taller de Tunja. Elige una categoría en el catálogo de disfraces o escríbenos por WhatsApp.</p>
           <a class="season-cta" href="#catalogo">Explorar el catálogo</a>
         </div>
         <div class="season-sub-sections">
-          <section class="season-catalog" id="nosotros">
-            <span class="season-catalog-tag">El Taller de Sombras</span>
-            <h4>Nuestra Esencia</h4>
-            <div class="essence-cover">
-              <img loading="lazy" src="assets/img/horror_bg.png" alt="Portada El Bodegón de los Trajes">
-            </div>
-            <h3 class="essence-heading">Pasión por la creatividad y elegancia</h3>
-            <p class="essence-lead">En lo más profundo de <strong>El Bodegón de los Trajes</strong>,
-              la oscuridad se transforma en arte. Nuestra misión es dominar la línea entre lo aterrador y lo sofisticado,
-              creando disfraces de Halloween que son verdaderas obras de sastrería.</p>
-            <p class="essence-detail">Ubicados en Tunja, somos
-              artesanos dedicados a la transformación total. No solo vestimos personajes; conjuramos experiencias memorables
-              para aquellos que se atreven a ser diferentes.</p>
-            <p class="essence-cat">Nuestra colección exclusiva de Halloween está organizada en tres categorías a la medida:
-              <strong>Infantil</strong> con superhéroes, princesas y personajes de cuento (Capitana Marvel, Thor, Frozen, Blanca Nieves);
-              <strong>Juvenil</strong> con el terror y el cosplay más temido (Art the Clown, Joker, Pennywise, Deadpool);
-              y <strong>Adultos</strong> con la gala del inframundo (El Sombrerero Loco, Director de Orquesta, Toga académica).
-              Cada pieza se confecciona a la medida para que tu personaje cobre vida en la noche más oscura del año.</p>
-            <div class="essence-links">
-              <a class="season-cta" href="#ninos">Ver Colección Infantil</a>
-              <a class="season-cta" href="#jovenes">Ver Colección Juvenil</a>
-              <a class="season-cta" href="#adultos">Ver Colección Adultos</a>
-            </div>
-          </section>
-
           <section class="season-catalog" id="catalogo">
             <span class="season-catalog-tag">El Catálogo del Horror</span>
             <h4>Catálogo Exclusivo de Halloween</h4>
             <p class="season-subtitle">Explora nuestra colección completa de disfraces confeccionados a la medida: superhéroes, princesas, terror clásico, cosplay y la gala del inframundo. Cada pieza se arma según la foto o el modelo que nos compartas.</p>
             <div class="catalog-note">
               <p><strong>Disfraz a la medida:</strong> toda la colección se confecciona con alta costura. Envíanos la referencia que deseas por WhatsApp y la armamos para ti.</p>
-            </div>
-            <div class="essence-links">
-              <a class="season-cta" href="#ninos">Colección Infantil</a>
-              <a class="season-cta" href="#jovenes">Colección Juvenil</a>
-              <a class="season-cta" href="#adultos">Colección Adultos</a>
-            </div>
-          </section>
-
-          <div class="season-edades" id="edades">
-            <header class="edades-head">
-              <span class="season-catalog-tag">Por Edades</span>
-              <h4>Colecciones por Edad</h4>
-              <p class="season-subtitle">Tres colecciones a la medida para que cada personaje cobre vida según la edad: infantiles, juveniles y adultos.</p>
-            </header>
-            <div class="season-grid">
-              <a class="season-item" href="#ninos">
-                <img src="assets/img/descarg6.jpg" alt="Disfraz infantil de Halloween">
-                <div class="season-item-body">
-                  <h4>Colección Infantil</h4>
-                  <p>Pequeñas pesadillas para los más pequeños.</p>
-                </div>
-              </a>
-              <a class="season-item" href="#jovenes">
-                <img src="assets/img/ima21.jpg" alt="Disfraz juvenil de terror">
-                <div class="season-item-body">
-                  <h4>Colección Juvenil</h4>
-                  <p>Terror &amp; cosplay para los más valientes.</p>
-                </div>
-              </a>
-              <a class="season-item" href="#adultos">
-                <img src="assets/img/descarga5.jpg" alt="Disfraz adulto de gala">
-                <div class="season-item-body">
-                  <h4>Colección Adultos</h4>
-                  <p>Elegancia del inframundo para la gran noche.</p>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <section class="season-catalog" id="ninos">
-            <span class="season-catalog-tag">Pequeñas Pesadillas</span>
-            <h4>Colección Infantil</h4>
-            <div class="grid-haunted">
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/descarg6.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Capitana Marvel</h3>
-                  <p>Valiente guerrera de la noche.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga7.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Thor Odinson</h3>
-                  <p>El poder del rayo en sus manos.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/ima18.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Blanca Nieves</h3>
-                  <p>Cuentos clásicos con un toque místico.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/img19.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Bella</h3>
-                  <p>Encanto real y detallado de gala.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/img20.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Mérida (Valiente)</h3>
-                  <p>Aventura y tradición escocesa.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/er.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Elsa y Ana (Frozen)</h3>
-                  <p>Magia blanca en la oscuridad.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/images 8.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Traje Cuántico (Marvel)</h3>
-                  <p>Especialista en viajes por el tiempo.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/images 9.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Pantera Negra (M'Baku style)</h3>
-                  <p>La fuerza letal de Wakanda.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/imagen 3.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Especialista Médico</h3>
-                  <p>Realismo técnico y fantasía profesional infantil.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/images.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Oficial de Policía</h3>
-                  <p>La ley del silencio y el castigo infantil.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="season-catalog" id="jovenes">
-            <span class="season-catalog-tag">Terror &amp; Cosplay</span>
-            <h4>Colección Juvenil</h4>
-            <div class="grid-haunted">
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/ima21.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Art the Clown</h3>
-                  <p>El terror silente de Terrifier.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/images (12.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>The Joker</h3>
-                  <p>Bromas del más allá y caos total.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/images 10.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Deadpool</h3>
-                  <p>El mercenario bocazas con estilo único.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/jr.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>La Monja (Valak)</h3>
-                  <p>Misterios velados y sombras pesadas.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/jr2.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Pennywise Terror</h3>
-                  <p>Artesanía en el miedo puro.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/img14.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Zenitsu Agatsuma</h3>
-                  <p>El rayo de Demon Slayer con gran detalle.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/img13.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Capitana Marvel</h3>
-                  <p>Poder cósmico en traje de gala.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="season-catalog" id="adultos">
-            <span class="season-catalog-tag">Gala del Inframundo</span>
-            <h4>Colección Adultos</h4>
-            <div class="grid-haunted">
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga5.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>El Sombrerero Loco</h3>
-                  <p>Elegancia caótica del País de las Maravillas.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga4.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Director Orquesta</h3>
-                  <p>Sinfonía oscura en corte clásico.</p>
-                </div>
-              </div>
-              <div class="card-ghost">
-                <div class="img-ghost"><img loading="lazy" src="assets/img/img17.jpg" alt="Costume"></div>
-                <div class="card-body-haunted">
-                  <h3>Graduado / Toga</h3>
-                  <p>Elegancia académica para celebraciones.</p>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -1170,6 +978,179 @@
         </div>
         </div>
       </article>
+    </div>
+  </section>
+
+  <section id="ninos" class="disfraces-section">
+    <div class="section-head">
+      <span>Pequeñas Pesadillas</span>
+      <h2>Colección Infantil</h2>
+    </div>
+    <div class="season-catalog">
+      <div class="grid-haunted">
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/descarg6.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Capitana Marvel</h3>
+            <p>Valiente guerrera de la noche.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/descarga7.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Thor Odinson</h3>
+            <p>El poder del rayo en sus manos.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/ima18.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Blanca Nieves</h3>
+            <p>Cuentos clásicos con un toque místico.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/img19.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Bella</h3>
+            <p>Encanto real y detallado de gala.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/img20.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Mérida (Valiente)</h3>
+            <p>Aventura y tradición escocesa.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/er.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Elsa y Ana (Frozen)</h3>
+            <p>Magia blanca en la oscuridad.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/images 8.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Traje Cuántico (Marvel)</h3>
+            <p>Especialista en viajes por el tiempo.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/images 9.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Pantera Negra (M'Baku style)</h3>
+            <p>La fuerza letal de Wakanda.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/imagen 3.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Especialista Médico</h3>
+            <p>Realismo técnico y fantasía profesional infantil.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/images.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Oficial de Policía</h3>
+            <p>La ley del silencio y el castigo infantil.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="jovenes" class="disfraces-section">
+    <div class="section-head">
+      <span>Terror &amp; Cosplay</span>
+      <h2>Colección Juvenil</h2>
+    </div>
+    <div class="season-catalog">
+      <div class="grid-haunted">
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/ima21.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Art the Clown</h3>
+            <p>El terror silente de Terrifier.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/images (12.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>The Joker</h3>
+            <p>Bromas del más allá y caos total.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/images 10.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Deadpool</h3>
+            <p>El mercenario bocazas con estilo único.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/jr.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>La Monja (Valak)</h3>
+            <p>Misterios velados y sombras pesadas.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/jr2.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Pennywise Terror</h3>
+            <p>Artesanía en el miedo puro.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/img14.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Zenitsu Agatsuma</h3>
+            <p>El rayo de Demon Slayer con gran detalle.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/img13.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Capitana Marvel</h3>
+            <p>Poder cósmico en traje de gala.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="adultos" class="disfraces-section">
+    <div class="section-head">
+      <span>Gala del Inframundo</span>
+      <h2>Colección Adultos</h2>
+    </div>
+    <div class="season-catalog">
+      <div class="grid-haunted">
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/descarga5.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>El Sombrerero Loco</h3>
+            <p>Elegancia caótica del País de las Maravillas.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/descarga4.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Director Orquesta</h3>
+            <p>Sinfonía oscura en corte clásico.</p>
+          </div>
+        </div>
+        <div class="card-ghost">
+          <div class="img-ghost"><img loading="lazy" src="assets/img/img17.jpg" alt="Costume"></div>
+          <div class="card-body-haunted">
+            <h3>Graduado / Toga</h3>
+            <p>Elegancia académica para celebraciones.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1203,7 +1184,7 @@
           <label for="contact-msg">Mensaje</label>
           <textarea id="contact-msg" name="mensaje" rows="5" placeholder="¿Qué traje o diseño necesitas?" required></textarea>
           <button type="submit" class="season-cta contact-submit">Enviar</button>
-          <p id="contact-status" class="contact-status" hidden></p>
+          <p id="contact-status" class="contact-status" role="status" aria-live="polite" hidden></p>
         </form>
         <p class="contact-alt">¿Prefieres WhatsApp? <a href="https://wa.me/573107706615?text=Hola%2C%20quiero%20comunicarme." target="_blank" rel="noopener">Escríbenos aquí</a></p>
         <p class="contact-save">Para guardar nuestro contacto en tu celular, guárdalo como <strong>El Bodegón de los Trajes</strong> con el número <strong>+57 310 770 6615</strong>.</p>
@@ -1224,7 +1205,7 @@
         <ul>
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#temporadas">Temporadas</a></li>
-          <li><a href="#nosotros" data-tab="octubre">Sobre Nosotros</a></li>
+        <li><a href="#nosotros">Sobre Nosotros</a></li>
           <li><a href="#contacto">Contáctanos</a></li>
         </ul>
       </nav>
@@ -1256,13 +1237,29 @@
         var btn = form.querySelector('.contact-submit');
         var honey = form.querySelector('[name="_honey"]');
         if (honey && honey.value) return;
-        btn.disabled = true;
-        btn.textContent = 'Enviando...';
         var data = {};
         ['nombre', 'contacto', 'mensaje'].forEach(function (k) {
           var f = form.querySelector('[name="' + k + '"]');
-          if (f) data[k] = f.value;
+          data[k] = f ? f.value.trim() : '';
         });
+        /* El formulario lleva novalidate, asi que la validacion se hace aqui.
+           Sin esto se enviaba la peticion igual y el visitante se quedaba sin
+           saber que faltaban datos. */
+        var faltan = [];
+        if (!data.nombre) faltan.push('tu nombre');
+        if (!data.mensaje) faltan.push('el mensaje');
+        if (!data.contacto) faltan.push('un WhatsApp o correo');
+        else if (!/@/.test(data.contacto) && !/\d/.test(data.contacto)) faltan.push('un WhatsApp o correo válido');
+        if (faltan.length) {
+          status.textContent = 'Completa ' + faltan.join(', ') + ' para enviar tu solicitud.';
+          status.className = 'contact-status err';
+          status.hidden = false;
+          var primero = faltan[0] === 'tu nombre' ? form.nombre : (faltan[0] === 'el mensaje' ? form.mensaje : form.contacto);
+          if (primero) primero.focus();
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
         data._subject = 'Nuevo mensaje desde El Bodegón de los Trajes';
         data._template = 'table';
         data._captcha = 'false';

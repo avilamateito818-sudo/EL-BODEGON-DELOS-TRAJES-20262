@@ -598,6 +598,13 @@ footer p {
 
 /* Responsivo: relleno cómodo en pantallas pequeñas */
 @media (max-width: 768px) {
-  #contacto .contact-form-container { padding: 2.2rem !important; }
-  #contacto .contact-card { padding: 2.2rem !important; }
+  #contacto .contact-form-container { padding: 1.8rem 1.2rem !important; }
+  #contacto .contact-card { padding: 1.8rem 1.2rem !important; }
+  #contacto input,
+  #contacto textarea,
+  #contacto .contact-form input,
+  #contacto .contact-form textarea {
+    font-size: 16px !important; /* Previene auto-zoom en iOS Safari */
+    padding: 1.1rem 1rem !important;
+  }
 }

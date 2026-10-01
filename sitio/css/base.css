@@ -17,10 +17,22 @@
   --season-accent: #FFC15E;
   --season-bg1: rgba(255, 157, 46, 0.18);
   --season-bg2: rgba(255, 157, 46, 0.06);
-  --season-dark: #FBF6EA;
+  --season-bg3: rgba(255, 157, 46, 0.02);
+  --season-accent-soft: rgba(255, 157, 46, 0.12);
+  --season-glow: rgba(255, 157, 46, 0.35);
+  --season-dark: #120D08;
+  --season-dark-soft: #1C1409;
+  --season-strong: #FBF6EA;
+  /* Safe area variables for mobile notches and home indicators */
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
 }
 
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -28,6 +40,11 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -35,8 +52,18 @@ body {
   background-color: var(--pure-black);
   color: var(--ashen-grey);
   line-height: 1.7;
+  width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
+  position: relative;
   font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 /* Salvaguarda global: ninguna imagen se desborda de su contenedor en ningún
@@ -44,6 +71,7 @@ body {
    usan object-fit para no deformarse. */
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 

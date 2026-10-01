@@ -169,43 +169,6 @@
   }
 }
 
-/* BLOQUE DE COLECCIONES POR EDAD (OCTUBRE) */
-.season-edades {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 2.5rem;
-  scroll-margin-top: 140px;
-}
-
-.edades-head {
-  display: grid;
-  gap: 0.4rem;
-  text-align: left;
-  padding: 0 0.4rem;
-}
-
-.edades-head .season-catalog-tag {
-  justify-self: start;
-}
-
-.edades-head h4 {
-  font-size: 1.6rem;
-  color: var(--halloween-vivid);
-  letter-spacing: 3px;
-  margin-bottom: 0.4rem;
-  text-shadow: 0 0 14px rgba(255, 157, 46, 0.3);
-}
-
-.edades-head .season-subtitle {
-  margin-bottom: 0.6rem;
-}
-
-@media (max-width: 640px) {
-  .season-edades {
-    gap: 1.8rem;
-  }
-}
-
 /* CATÁLOGOS DE CADA MES: COLOR PROPIO DE LA TEMPORADA (OCTUBRE MANTIENE SU NARANJA) */
 #temporadas[data-season="febrero"] .season-catalog,
 #temporadas[data-season="marzo"] .season-catalog,
@@ -1639,9 +1602,18 @@
   pointer-events: none;
 }
 
-/* Pausa al pasar el ratón, enfocar o tocar la cinta */
-.season-marquee:hover .season-marquee-track,
-.season-marquee:focus-within .season-marquee-track {
+/* Pausa solo con punteros reales (ratón/trackpad).
+   En táctil, :hover y :focus-within se quedan "pegados" tras el primer
+   toque y congelaban la cinta de forma permanente. */
+@media (hover: hover) and (pointer: fine) {
+  .season-marquee:hover .season-marquee-track,
+  .season-marquee:focus-within .season-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* En táctil la pausa la controla JS (tocar, deslizar o enfocar una pestaña) */
+.season-marquee-track.is-paused {
   animation-play-state: paused;
 }
 

@@ -2,20 +2,23 @@
 header {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 1000;
-  padding: 1.5rem 10%;
+  padding: max(1.2rem, var(--sat)) max(10%, var(--sar)) 1.2rem max(10%, var(--sal));
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(5, 5, 5, 0.85);
+  background: rgba(5, 5, 5, 0.88);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid var(--border-glow);
   transition: var(--transition-haunted);
 }
 
 header.scrolled {
-  padding: 1rem 10%;
+  padding: max(0.8rem, var(--sat)) max(10%, var(--sar)) 0.8rem max(10%, var(--sal));
   background: var(--pure-black);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
 }

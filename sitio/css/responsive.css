@@ -139,9 +139,77 @@
   width: 100%;
 }
 
+/* Overlay oscuro detrás del menú drawer en móvil/tablet */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+/* Botón X para cerrar el panel en móvil/tablet */
+.nav-close {
+  display: none;
+  position: fixed;
+  top: max(1rem, var(--sat));
+  right: max(1rem, var(--sar));
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--halloween-vivid);
+  background: rgba(18, 13, 8, 0.95);
+  border: 1.5px solid var(--halloween-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1005;
+  box-shadow: 0 0 16px rgba(255, 157, 46, 0.4);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-close:hover,
+.nav-close:active,
+.nav-close:focus-visible {
+  color: var(--pure-black);
+  background: var(--halloween-vivid);
+  box-shadow: 0 0 25px var(--halloween-vivid);
+  transform: rotate(90deg) scale(1.08);
+}
+
 @media (max-width: 900px) {
+  .nav-overlay {
+    display: block;
+  }
+
+  body.menu-open .nav-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .menu-toggle {
     display: flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-menu.is-open ~ .nav-close,
+  body.menu-open .nav-close {
+    display: flex;
+  }
+
+  body.menu-open {
+    overflow: hidden;
   }
 
   nav ul.nav-menu {
@@ -149,18 +217,23 @@
     top: 0;
     right: -110%;
     height: 100vh;
-    width: min(320px, 85vw);
+    height: 100dvh;
+    width: min(340px, 86vw);
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
     gap: 0;
     margin: 0;
-    padding: 6rem 2rem 2rem;
-    background: rgba(5, 5, 5, 0.97);
-    backdrop-filter: blur(20px);
+    padding: max(5rem, calc(var(--sat) + 4rem)) max(1.5rem, var(--sar)) max(2.5rem, var(--sab)) max(1.5rem, var(--sal));
+    background: rgba(5, 5, 5, 0.98);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-left: 1px solid var(--border-glow);
-    transition: right 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+    transition: right 0.4s cubic-bezier(0.2, 0, 0.2, 1);
     z-index: 1000;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   nav ul.nav-menu.is-open {
@@ -179,10 +252,11 @@
   .has-dropdown > .dropdown-toggle {
     display: flex;
     width: 100%;
-    padding: 1.4rem 0.5rem;
-    font-size: 0.85rem;
+    padding: 1.2rem 0.5rem;
+    font-size: 0.88rem;
     justify-content: space-between;
     align-items: center;
+    min-height: 48px;
   }
 
   .dropdown {
@@ -202,15 +276,18 @@
   .has-dropdown:hover .dropdown,
   .has-dropdown.is-open .dropdown {
     transform: none;
-    max-height: 320px;
+    max-height: 800px;
     padding: 0.6rem 0 0.6rem 1rem;
     visibility: visible;
   }
 
   .dropdown a {
-    padding: 0.9rem 0.8rem;
-    font-size: 0.78rem;
+    padding: 0.85rem 0.8rem;
+    font-size: 0.8rem;
     white-space: normal;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
   }
   .dropdown.dropdown-grid {
     grid-template-columns: 1fr;
@@ -304,6 +381,11 @@ section {
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
   }
+  /* Pestañas más compactas: se ven ~2-3 temporadas a la vez en celular */
+  .season-marquee .season-tab {
+    width: 150px;
+    min-height: 104px;
+  }
   .season-tab {
     flex: 0 0 auto;
     padding: 0.85rem 1.2rem;
@@ -357,12 +439,37 @@ section {
     font-size: 0.76rem;
   }
 
-  /* FABs: apilados verticalmente en 2 columnas sin solaparse */
-  .whatsapp-float { width: 3rem; height: 3rem; left: 1rem; bottom: 1rem; }
-  .edit-float { width: 3rem; height: 3rem; left: 1rem; bottom: 5rem; }
-  .admin-fab { width: 3rem; height: 3rem; left: 1rem; bottom: 9rem; }
-  .admin-save-fab { width: 3rem; height: 3rem; left: 4.5rem; bottom: 1rem; }
-  .admin-logout-fab { width: 3rem; height: 3rem; left: 4.5rem; bottom: 5rem; }
+  /* FABs: apilados verticalmente en 2 columnas sin solaparse con soporte safe-area */
+  .whatsapp-float {
+    width: 3.2rem;
+    height: 3.2rem;
+    left: max(1rem, var(--sal));
+    bottom: max(1rem, calc(var(--sab) + 0.8rem));
+  }
+  .edit-float {
+    width: 3.2rem;
+    height: 3.2rem;
+    left: max(1rem, var(--sal));
+    bottom: max(4.8rem, calc(var(--sab) + 4.6rem));
+  }
+  .admin-fab {
+    width: 3.2rem;
+    height: 3.2rem;
+    left: max(1rem, var(--sal));
+    bottom: max(8.6rem, calc(var(--sab) + 8.4rem));
+  }
+  .admin-save-fab {
+    width: 3.2rem;
+    height: 3.2rem;
+    left: max(4.8rem, calc(var(--sal) + 4.2rem));
+    bottom: max(1rem, calc(var(--sab) + 0.8rem));
+  }
+  .admin-logout-fab {
+    width: 3.2rem;
+    height: 3.2rem;
+    left: max(4.8rem, calc(var(--sal) + 4.2rem));
+    bottom: max(4.8rem, calc(var(--sab) + 4.6rem));
+  }
 
   .admin-modal-actions { flex-wrap: wrap; }
   .admin-photorow { flex-wrap: wrap; }
@@ -370,7 +477,7 @@ section {
 
 /* ===== CELULAR (<= 640px) ===== */
 @media (max-width: 640px) {
-  .hero-horror { height: 100svh; min-height: 520px; }
+  .hero-horror { height: 100svh; height: 100dvh; min-height: 520px; }
   .hero-box h2 { margin-bottom: 1.4rem; }
   .hero-box p { letter-spacing: 2px; line-height: 1.7; }
 
@@ -381,7 +488,7 @@ section {
   #temporadas[data-season] .section-head h2 { letter-spacing: 1px; }
 
   .grid-haunted { grid-template-columns: 1fr; }
-  .img-ghost { height: 250px; }
+  .img-ghost { height: 260px; }
   .card-body-haunted { padding: 1.8rem 1.3rem; }
   .card-body-haunted h3 { font-size: 1.5rem; }
 
@@ -400,6 +507,10 @@ section {
     padding: 1.05rem 1.4rem;
     letter-spacing: 2px;
     font-size: 0.75rem;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .season-item { grid-template-columns: 82px 1fr; gap: 0.9rem; padding: 0.55rem; }
   .season-item img { width: 82px; height: 82px; }
@@ -413,7 +524,43 @@ section {
 
   .season-quick-nav a { padding: 0.6rem 1.2rem; font-size: 0.68rem; letter-spacing: 2px; }
 
-  .contact-form-container { padding: 1.5rem; border-radius: 14px; }
+  .contact-form-container { padding: 1.5rem 1rem; border-radius: 14px; }
+
+  /* Secciones sobre nosotros y disfraces en móvil */
+  .disfraces-section {
+    padding: 3.5rem 4%;
+  }
+  .disfraces-section .section-head {
+    margin-bottom: 2.2rem;
+  }
+  .disfraces-section .season-catalog {
+    padding: 1.2rem 1rem;
+    border-radius: 14px;
+  }
+  .essence-container {
+    padding: 0 0.5rem;
+  }
+  .essence-cover img {
+    max-height: 220px;
+    border-radius: 12px;
+  }
+  .essence-heading {
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+    margin-bottom: 1.2rem;
+  }
+  .essence-lead, .essence-detail, .essence-cat {
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+  .essence-links {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .essence-links .season-cta {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 
   footer { padding: 3rem 4%; }
   footer p { font-size: 0.9rem; line-height: 1.8; }
@@ -429,7 +576,7 @@ section {
   .logo-container img { height: 32px; }
   .hero-box h2 { font-size: 1.6rem; }
   .hero-box p { letter-spacing: 1.5px; font-size: 0.72rem; }
-  .btn-haunted { padding: 0.9rem 1.8rem; font-size: 0.7rem; letter-spacing: 2px; }
+  .btn-haunted { padding: 0.9rem 1.8rem; font-size: 0.7rem; letter-spacing: 2px; min-height: 44px; }
   .season-cta { font-size: 0.7rem; letter-spacing: 1.5px; }
   .season-quick-nav a { font-size: 0.62rem; padding: 0.55rem 0.95rem; letter-spacing: 1px; }
   .season-item { grid-template-columns: 72px 1fr; }
@@ -442,19 +589,48 @@ section {
   .halloween-landing-title { font-size: clamp(1.2rem, 5vw, 2rem); letter-spacing: 1px; }
   .halloween-landing-sub { letter-spacing: 1.5px; font-size: 0.75rem; }
 
-  /* FABs más compactos en ≤420px (apilados sin solaparse) */
-  .whatsapp-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 0.8rem; font-size: 1.2rem; }
-  .edit-float { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 4.2rem; font-size: 1rem; }
-  .admin-fab { width: 2.6rem; height: 2.6rem; left: 0.8rem; bottom: 7.6rem; font-size: 1.1rem; }
-  .admin-save-fab { width: 2.6rem; height: 2.6rem; left: 4rem; bottom: 0.8rem; font-size: 1rem; }
-  .admin-logout-fab { width: 2.4rem; height: 2.4rem; left: 4rem; bottom: 4.2rem; }
+  /* FABs más compactos en ≤420px (apilados sin solaparse con soporte safe-area) */
+  .whatsapp-float {
+    width: 2.8rem;
+    height: 2.8rem;
+    left: max(0.8rem, var(--sal));
+    bottom: max(0.8rem, calc(var(--sab) + 0.6rem));
+    font-size: 1.2rem;
+  }
+  .edit-float {
+    width: 2.8rem;
+    height: 2.8rem;
+    left: max(0.8rem, var(--sal));
+    bottom: max(4.2rem, calc(var(--sab) + 3.8rem));
+    font-size: 1rem;
+  }
+  .admin-fab {
+    width: 2.8rem;
+    height: 2.8rem;
+    left: max(0.8rem, var(--sal));
+    bottom: max(7.6rem, calc(var(--sab) + 7.0rem));
+    font-size: 1.1rem;
+  }
+  .admin-save-fab {
+    width: 2.8rem;
+    height: 2.8rem;
+    left: max(4.0rem, calc(var(--sal) + 3.4rem));
+    bottom: max(0.8rem, calc(var(--sab) + 0.6rem));
+    font-size: 1rem;
+  }
+  .admin-logout-fab {
+    width: 2.6rem;
+    height: 2.6rem;
+    left: max(4.0rem, calc(var(--sal) + 3.4rem));
+    bottom: max(4.2rem, calc(var(--sab) + 3.8rem));
+  }
 
   /* Admin modal compacto */
   .admin-modal { padding: 0.5rem; }
-  .admin-modal-box { padding: 1rem; max-height: 90vh; font-size: 0.85rem; }
+  .admin-modal-box { padding: 1rem; max-height: 90dvh; font-size: 0.85rem; }
   .admin-modal-box h3 { font-size: 0.95rem; }
-  .admin-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; }
-  .admin-input, .admin-textarea { font-size: 0.85rem; }
+  .admin-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; min-height: 38px; }
+  .admin-input, .admin-textarea { font-size: 16px; }
   .admin-preview img { max-height: 160px; }
 
   /* Admin toolbar compacto */
@@ -470,6 +646,10 @@ section {
 
 /* Ancho máximo y centrado de las secciones de contenido */
 #inicio .hero-box,
+#nosotros .essence-container,
+.disfraces-section,
+.disfraces-section .section-head,
+.disfraces-section .season-catalog,
 #temporadas .section-head,
 #temporadas .season-marquee,
 #temporadas .season-panels,

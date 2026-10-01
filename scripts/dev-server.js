@@ -31,9 +31,10 @@ http
   .createServer((req, res) => {
     const p = decodeURIComponent(req.url.split('?')[0]);
 
-    /* En local el endpoint de guardado que en Vercel persiste en GitHub
-       responde con éxito (no-op) para que el panel no genere errores 404. */
-    if (req.method === 'POST' && (p === '/api/save-content' || p === '/api/save-content/')) {
+    /* En local los endpoints que en Vercel persisten datos (el guardado del
+       panel y el registro de consultas del asistente) responden con éxito
+       (no-op) para que el sitio no genere errores 404 en la consola. */
+    if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask)\/?$/.test(p))) {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ ok: true, local: true }));
       return;

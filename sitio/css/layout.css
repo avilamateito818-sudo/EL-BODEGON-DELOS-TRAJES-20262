@@ -225,12 +225,26 @@ body {
   flex-direction: column;
 }
 
+/* Secciones de página: catálogo por edades y sobre nosotros */
+.disfraces-section {
+  scroll-margin-top: 120px;
+}
+
+.disfraces-section .section-head {
+  margin-bottom: 4rem;
+}
+
+.disfraces-section .season-catalog {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 #inicio { order: 1; }
-body > #nosotros { order: 2; }
+#nosotros { order: 2; }
 #temporadas { order: 3; }
-body > #ninos { order: 4; }
-body > #jovenes { order: 5; }
-body > #adultos { order: 6; }
+#ninos { order: 4; }
+#jovenes { order: 5; }
+#adultos { order: 6; }
 #contacto { order: 7; }
 footer { order: 8; }
 

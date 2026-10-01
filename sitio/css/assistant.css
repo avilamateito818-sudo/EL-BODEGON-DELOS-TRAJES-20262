@@ -369,19 +369,26 @@
 
 @media (max-width: 768px) {
   .assistant-float {
-    right: 0.8rem;
-    bottom: 0.8rem;
-    width: 3.1rem;
-    height: 3.1rem;
+    right: max(0.8rem, var(--sar));
+    bottom: max(0.8rem, calc(var(--sab) + 0.8rem));
+    width: 3.2rem;
+    height: 3.2rem;
   }
 
   .assistant-window {
-    right: 0.5rem;
-    bottom: 4.2rem;
-    width: calc(100vw - 1rem);
-    height: calc(100vh - 5.5rem);
-    max-height: none;
-    max-width: none;
+    right: max(0.5rem, var(--sar));
+    left: max(0.5rem, var(--sal));
+    bottom: max(4.5rem, calc(var(--sab) + 4.5rem));
+    width: auto;
+    max-width: calc(100vw - 1rem);
+    height: min(560px, calc(100dvh - 6rem));
+    max-height: calc(100dvh - 6rem);
     border-radius: 18px;
+  }
+
+  .assistant-input input,
+  .lead-form input,
+  .lead-form textarea {
+    font-size: 16px !important; /* Previene auto-zoom molesto en iOS Safari */
   }
 }
