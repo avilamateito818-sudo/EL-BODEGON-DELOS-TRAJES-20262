@@ -273,6 +273,70 @@
   gap: 2.2rem;
 }
 
+/* PORTADA DE CADA TEMPORADA
+   El panel lo comparten los doce meses, pero cada uno toma el color de su
+   temporada en el borde, el titulo, el subtitulo y el boton. Halloween se
+   aparta del grupo y conserva el tratamiento de terror (fondo propio, naranja
+   y negro) porque es el mes destacado. */
+#temporadas .halloween-landing {
+  border-color: var(--season-accent, #ff8c00);
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), var(--season-bg, none);
+  background-size: cover;
+  background-position: center;
+}
+
+#temporadas .halloween-landing::before {
+  background: radial-gradient(ellipse at center, var(--season-accent-soft, rgba(10, 5, 0, 0.6)) 0%, rgba(5, 5, 5, 0.08) 72%);
+}
+
+#temporadas .halloween-landing .season-milestone {
+  color: var(--season-accent, var(--halloween-vivid));
+  border-color: var(--season-accent, var(--halloween-vivid));
+}
+
+#temporadas .halloween-landing-title span {
+  color: var(--season-accent, #ff8c00);
+}
+
+#temporadas .halloween-landing-sub {
+  color: var(--season-accent, var(--halloween-vivid));
+}
+
+#temporadas .halloween-landing .btn-haunted {
+  color: var(--season-accent, var(--halloween-vivid));
+  border-color: var(--season-accent, var(--halloween-vivid));
+}
+
+#temporadas .halloween-landing .btn-haunted:hover {
+  background: var(--season-accent, var(--halloween-vivid));
+  box-shadow: 0 0 50px var(--season-glow, rgba(255, 179, 71, 0.55));
+}
+
+/* HALLOWEEN: mantiene el terror, por eso ignora el color de temporada */
+#temporadas[data-season="octubre"] .halloween-landing {
+  border-color: rgba(255, 140, 0, 0.4);
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.png');
+  background-size: cover;
+  background-position: center;
+}
+
+#temporadas[data-season="octubre"] .halloween-landing::before {
+  background: radial-gradient(ellipse at center, rgba(10, 5, 0, 0.6) 0%, rgba(5, 5, 5, 0.1) 72%);
+}
+
+#temporadas[data-season="octubre"] .halloween-landing .season-milestone,
+#temporadas[data-season="octubre"] .halloween-landing-title span,
+#temporadas[data-season="octubre"] .halloween-landing-sub,
+#temporadas[data-season="octubre"] .halloween-landing .btn-haunted {
+  color: var(--halloween-vivid);
+  border-color: var(--halloween-vivid);
+}
+
+#temporadas[data-season="octubre"] .halloween-landing .btn-haunted:hover {
+  background: var(--halloween-vivid);
+  box-shadow: 0 0 50px rgba(255, 179, 71, 0.55);
+}
+
 .halloween-landing-title {
   font-size: clamp(1.6rem, 4vw, 3.2rem);
   color: #FFFFFF;
@@ -2319,4 +2383,100 @@ a.season-item:hover {
     padding: 1.1rem 2rem;
     letter-spacing: 2px;
   }
-}
+}
+
+/* CATALOGO GENERAL
+   Seccion propia que reune los catalogos de Halloween, noviembre y diciembre.
+   Solo se muestran los grupos: la franja de contacto y las anclas internas de
+   cada mes se quedan en su propia temporada para no repetir contenido. */
+.catalogo-general-root {
+  padding: 7rem 6%;
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, rgba(10, 6, 2, 0.6) 100%);
+}
+
+.catalogo-general-root .section-head h2 {
+  color: #FFFFFF;
+}
+
+.catalogo-general-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 3rem auto 2.5rem;
+  max-width: 900px;
+}
+
+.catalogo-general-tab {
+  padding: 0.9rem 1.8rem;
+  background: transparent;
+  color: var(--ghostly-white);
+  border: 1px solid var(--glass-border);
+  border-radius: 40px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-haunted);
+}
+
+.catalogo-general-tab:hover,
+.catalogo-general-tab:focus-visible {
+  border-color: var(--halloween-vivid);
+  color: var(--halloween-vivid);
+}
+
+.catalogo-general-tab.is-active {
+  background: linear-gradient(135deg, var(--halloween-vivid), #d35400);
+  border-color: var(--halloween-vivid);
+  color: var(--pure-black);
+  box-shadow: 0 8px 32px rgba(255, 140, 0, 0.35);
+}
+
+.catalogo-general-panel {
+  display: none;
+}
+
+.catalogo-general-panel.is-visible {
+  display: block;
+  animation: seasonIn 0.6s ease-out;
+}
+
+.catalogo-general-panel .season-subtitle {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 2.5rem;
+}
+
+.catalogo-general-panel .season-catalog {
+  margin-bottom: 3rem;
+}
+
+.catalogo-general-panel .season-catalog:last-child {
+  margin-bottom: 0;
+}
+
+.nosotros-halloween .essence-heading {
+  color: var(--halloween-vivid);
+}
+
+.nosotros-halloween .section-head h4 {
+  color: #FFFFFF;
+}
+
+@media (max-width: 768px) {
+  .catalogo-general-root {
+    padding: 4.5rem 5%;
+  }
+  .catalogo-general-nav {
+    gap: 0.6rem;
+    margin: 2rem auto;
+  }
+  .catalogo-general-tab {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+  }
+}

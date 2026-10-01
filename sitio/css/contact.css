@@ -596,3 +596,205 @@ footer p {
     padding: 1.1rem 1rem !important;
   }
 }
+
+/* DATOS RAPIDOS Y WHATSAPP
+   Direccion, horario y contacto siempre visibles, al estilo de la web de
+   referencia. La franja va en navbar.css por depender del header. */
+/* DATOS RÁPIDOS
+   Franja bajo el header con dirección, teléfono, correo, WhatsApp y horario.
+   Sigue la idea de la web de referencia: lo esencial a la vista sin scroll. */
+.datos-rapidos {
+  background: linear-gradient(90deg, rgba(255, 140, 0, 0.12), rgba(0, 0, 0, 0) 45%);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.9rem 6%;
+}
+
+.datos-rapidos-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2.2rem;
+}
+
+.dato-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--ghostly-white);
+}
+
+.dato-detail p {
+  margin: 0;
+}
+
+.dato-detail strong {
+  color: var(--halloween-vivid);
+  font-weight: 700;
+}
+
+.dato-detail a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.dato-detail a:hover {
+  color: var(--halloween-vivid);
+  border-bottom-color: var(--halloween-vivid);
+}
+
+.dato-icon {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.datos-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.6rem;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #FFFFFF;
+  border-radius: 40px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.datos-wa:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(37, 211, 102, 0.45);
+}
+
+.datos-horario-nota {
+  max-width: 1400px;
+  margin: 0.5rem auto 0;
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  color: rgba(200, 200, 200, 0.55);
+}
+
+/* HORARIO en la tarjeta de contacto */
+.contact-horario {
+  margin: 1.4rem 0 0;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--glass-border);
+  border-left: 3px solid var(--halloween-vivid);
+  border-radius: 10px;
+  background: rgba(255, 140, 0, 0.06);
+}
+
+.contact-horario h4 {
+  margin: 0 0 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--halloween-vivid);
+}
+
+.contact-horario p {
+  margin: 0.3rem 0;
+  font-size: 0.88rem;
+  color: var(--ghostly-white);
+}
+
+.contact-horario strong {
+  color: #FFFFFF;
+}
+
+/* WHATSAPP en la portada, junto al boton de temporadas */
+.btn-wa-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 1.2rem 0.8rem 0;
+  padding: 1.1rem 2.6rem;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.32);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-wa-hero:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 44px rgba(37, 211, 102, 0.5);
+}
+
+.hero-horario {
+  margin: 1.4rem 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(200, 200, 200, 0.72);
+}
+
+/* El boton de acceso al panel se ve siempre (es la forma de iniciar sesion) */
+.admin-menu-item {
+  list-style: none;
+}
+
+.admin-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  background: none;
+  border: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.admin-menu-btn:hover {
+  color: var(--halloween-vivid);
+}
+
+@media (max-width: 900px) {
+  .datos-rapidos {
+    padding: 0.8rem 5%;
+  }
+  .datos-rapidos-inner {
+    gap: 0.7rem 1.2rem;
+    justify-content: flex-start;
+  }
+  .dato-detail {
+    font-size: 0.75rem;
+  }
+  .datos-wa {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .datos-rapidos-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-wa-hero {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.4rem;
+  }
+}

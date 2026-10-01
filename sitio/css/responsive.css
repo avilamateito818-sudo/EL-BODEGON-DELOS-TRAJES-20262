@@ -637,7 +637,9 @@ section {
 
 /* Ancho máximo y centrado de las secciones de contenido */
 #inicio .hero-box,
-#nosotros .essence-container,
+.nosotros-halloween .essence-container,
+#catalogo-general .catalogo-general-panel,
+#catalogo-general .section-head,
 .disfraces-section,
 .disfraces-section .section-head,
 .disfraces-section .season-catalog,

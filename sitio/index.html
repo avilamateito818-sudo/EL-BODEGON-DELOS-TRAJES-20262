@@ -47,7 +47,9 @@
         <span></span>
       </button>
       <ul class="nav-menu" id="nav-menu">
-        <li><a href="#nosotros">Sobre Nosotros</a></li>
+        <li><a href="#inicio">Portada</a></li>
+        <li><a href="#temporadas" data-tab="octubre">Sobre Nosotros</a></li>
+        <li><a href="#catalogo-general">Catálogo</a></li>
         <li class="has-dropdown">
           <button type="button" class="dropdown-toggle" aria-expanded="false">
             Temporadas <span class="caret">&#9662;</span>
@@ -68,40 +70,53 @@
           </ul>
         </li>
         <li><a href="#contacto">Contáctanos</a></li>
+        <li class="admin-menu-item">
+          <button type="button" class="admin-menu-btn" id="admin-menu-btn">
+            <span aria-hidden="true">&#128274;</span> Panel de administración
+          </button>
+        </li>
       </ul>
       <button class="nav-close" id="nav-close" type="button" aria-label="Cerrar menú">&times;</button>
     </nav>
     <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
   </header>
 
+  <!-- DATOS RÁPIDOS: dirección, horario y WhatsApp siempre a la vista -->
+  <div class="datos-rapidos">
+    <div class="datos-rapidos-inner">
+      <div class="dato-detail">
+        <span class="dato-icon" aria-hidden="true">&#128205;</span>
+        <p><strong>Portal en Tunja:</strong> Diagonal 66 2B 04, Tunja, Boyacá</p>
+      </div>
+      <div class="dato-detail">
+        <span class="dato-icon" aria-hidden="true">&#128222;</span>
+        <p><a href="tel:+573107706615">+57 310 770 6615</a></p>
+      </div>
+      <div class="dato-detail">
+        <span class="dato-icon" aria-hidden="true">&#128231;</span>
+        <p><a href="mailto:elbodegondelostrajes@gmail.com">elbodegondelostrajes@gmail.com</a></p>
+      </div>
+      <a class="datos-wa" href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20un%20disfraz%20en%20El%20Bodeg%C3%B3n%20de%20los%20Trajes." target="_blank" rel="noopener">
+        <span aria-hidden="true">&#128172;</span> Cita por WhatsApp
+      </a>
+    </div>
+    <div class="dato-detail dato-horario">
+      <span class="dato-icon" aria-hidden="true">&#128197;</span>
+      <p><strong>Lunes a sábado:</strong> 8:00 am a 6:00 pm &middot; <strong>Domingos y festivos:</strong> 9:00 am a 1:00 pm</p>
+    </div>
+    <p class="datos-horario-nota">Horario provisional — confírmalo por WhatsApp antes de venir.</p>
+  </div>
+
   <section id="inicio" class="hero-horror">
     <div class="hero-box">
       <p>El Bodegón de los Trajes · Disfraces a la medida en Tunja</p>
       <h2>Viste tu imaginación, vive tu historia.</h2>
       <a href="#temporadas" class="btn-haunted">Entra a nuestras temporadas</a>
+      <a href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20un%20disfraz%20en%20El%20Bodeg%C3%B3n%20de%20los%20Trajes." class="btn-wa-hero" target="_blank" rel="noopener">
+        <span aria-hidden="true">&#128172;</span> Cotiza por WhatsApp
+      </a>
+      <p class="hero-horario">Lunes a sábado 8:00 am – 6:00 pm &middot; Domingos y festivos 9:00 am – 1:00 pm</p>
       <button class="admin-season-photo-btn admin-ui" type="button" data-season-photo="hero" title="Cambiar foto del hero">Cambiar portada</button>
-    </div>
-  </section>
-
-  <!-- SOBRE NOSOTROS SECTION -->
-  <section id="nosotros" class="disfraces-section">
-    <div class="section-head">
-      <span>El Taller de Sombras</span>
-      <h2>Sobre Nosotros</h2>
-    </div>
-    <div class="essence-container">
-      <div class="essence-cover">
-        <img loading="lazy" src="assets/img/horror_bg.png" alt="Portada El Bodegón de los Trajes">
-      </div>
-      <h3 class="essence-heading">Pasión por la creatividad y elegancia</h3>
-      <p class="essence-lead">En lo más profundo de <strong>El Bodegón de los Trajes</strong>,
-        la oscuridad se transforma en arte. Nuestra misión es dominar la línea entre lo aterrador y lo sofisticado,
-        creando disfraces que son verdaderas obras de sastrería.</p>
-      <p class="essence-detail">Ubicados en Tunja, somos
-        artesanos dedicados a la transformación total. No solo vestimos personajes; conjuramos experiencias memorables
-        para aquellos que se atreven a ser diferentes.</p>
-      <p class="essence-cat">Cada pieza se confecciona a la medida para que tu personaje cobre vida,
-        con la misma alta costura en cada traje que sale de nuestro taller.</p>
     </div>
   </section>
 
@@ -941,6 +956,27 @@
           <a class="season-cta" href="#catalogo">Explorar el catálogo</a>
         </div>
         <div class="season-sub-sections">
+          <section class="season-catalog nosotros-halloween" id="nosotros-halloween">
+            <div class="section-head">
+              <span>El Taller de Sombras</span>
+              <h4>Sobre Nosotros</h4>
+            </div>
+            <div class="essence-container">
+              <div class="essence-cover">
+                <img loading="lazy" src="assets/img/horror_bg.png" alt="Portada El Bodegón de los Trajes">
+              </div>
+              <h5 class="essence-heading">Pasión por la creatividad y elegancia</h5>
+              <p class="essence-lead">En lo más profundo de <strong>El Bodegón de los Trajes</strong>,
+                la oscuridad se transforma en arte. Nuestra misión es dominar la línea entre lo aterrador y lo sofisticado,
+                creando disfraces que son verdaderas obras de sastrería.</p>
+              <p class="essence-detail">Ubicados en Tunja, somos
+                artesanos dedicados a la transformación total. No solo vestimos personajes; conjuramos experiencias memorables
+                para aquellos que se atreven a ser diferentes.</p>
+              <p class="essence-cat">Cada pieza se confecciona a la medida para que tu personaje cobre vida,
+                con la misma alta costura en cada traje que sale de nuestro taller.</p>
+            </div>
+          </section>
+
           <section class="season-catalog" id="catalogo">
             <span class="season-catalog-tag">El Catálogo del Horror</span>
             <h4>Catálogo Exclusivo de Halloween</h4>
@@ -1120,6 +1156,449 @@
     </div>
   </section>
 
+
+  <!-- CATÁLOGO GENERAL -->
+  <section id="catalogo-general" class="catalogo-general-root">
+    <div class="section-head">
+      <span>Todo lo que hacemos</span>
+      <h2>Catálogo</h2>
+      <p class="season-range">Pieza por pieza, de la alta costura de nuestro taller en Tunja</p>
+    </div>
+
+    <div class="catalogo-general-nav" role="tablist" aria-label="Catálogos por temporada">
+      <button type="button" class="catalogo-general-tab is-active" data-cat="halloween" role="tab" aria-selected="true" aria-controls="cat-panel-halloween">Halloween</button>
+      <button type="button" class="catalogo-general-tab" data-cat="noviembre" role="tab" aria-selected="false" aria-controls="cat-panel-noviembre">Noviembre</button>
+      <button type="button" class="catalogo-general-tab" data-cat="diciembre" role="tab" aria-selected="false" aria-controls="cat-panel-diciembre">Diciembre</button>
+      <button type="button" class="catalogo-general-tab" data-cat="proximamente" role="tab" aria-selected="false" aria-controls="cat-panel-proximamente">Otras temporadas</button>
+    </div>
+
+    <div class="catalogo-general-panel is-visible" id="cat-panel-halloween" data-cat-panel="halloween" role="tabpanel">
+      <p class="season-subtitle">Disfraces armados a la medida: superhéroes, terror, cuentos y gala del inframundo.</p>
+<section class="season-catalog" id="catalogo-general-octubre">
+            <span class="season-catalog-tag">El Catálogo del Horror</span>
+            <h4>Catálogo Exclusivo de Halloween</h4>
+            <p class="season-subtitle">Explora nuestra colección completa de disfraces confeccionados a la medida: superhéroes, princesas, terror clásico, cosplay y la gala del inframundo. Cada pieza se arma según la foto o el modelo que nos compartas.</p>
+
+            <h5 class="catalog-group-title">Superhéroes y Anime</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/descarg6.jpg" alt="Capitana Marvel"></div>
+                <div class="card-body-haunted">
+                  <h3>Capitana Marvel</h3>
+                  <p>Valiente guerrera de la noche.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga7.jpg" alt="Thor Odinson"></div>
+                <div class="card-body-haunted">
+                  <h3>Thor Odinson</h3>
+                  <p>El poder del rayo en sus manos.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/images 8.jpg" alt="Traje Cuántico"></div>
+                <div class="card-body-haunted">
+                  <h3>Traje Cuántico</h3>
+                  <p>Especialista en viajes por el tiempo.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/images 9.jpg" alt="Pantera Negra"></div>
+                <div class="card-body-haunted">
+                  <h3>Pantera Negra</h3>
+                  <p>La fuerza letal de Wakanda.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/images 10.jpg" alt="Deadpool"></div>
+                <div class="card-body-haunted">
+                  <h3>Deadpool</h3>
+                  <p>El mercenario bocazas con estilo único.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/img14.jpg" alt="Zenitsu Agatsuma"></div>
+                <div class="card-body-haunted">
+                  <h3>Zenitsu Agatsuma</h3>
+                  <p>El rayo de Demon Slayer con gran detalle.</p>
+                </div>
+              </div>
+            </div>
+            <h5 class="catalog-group-title">Terror</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/ima21.jpg" alt="Art the Clown"></div>
+                <div class="card-body-haunted">
+                  <h3>Art the Clown</h3>
+                  <p>El terror silente de Terrifier.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/images (12.jpg" alt="The Joker"></div>
+                <div class="card-body-haunted">
+                  <h3>The Joker</h3>
+                  <p>Bromas del más allá y caos total.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/jr.jpg" alt="La Monja (Valak)"></div>
+                <div class="card-body-haunted">
+                  <h3>La Monja (Valak)</h3>
+                  <p>Misterios velados y sombras pesadas.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/jr2.jpg" alt="Pennywise"></div>
+                <div class="card-body-haunted">
+                  <h3>Pennywise</h3>
+                  <p>Artesanía en el miedo puro.</p>
+                </div>
+              </div>
+            </div>
+            <h5 class="catalog-group-title">Cuentos y Fantasía</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/ima18.jpg" alt="Blanca Nieves"></div>
+                <div class="card-body-haunted">
+                  <h3>Blanca Nieves</h3>
+                  <p>Cuentos clásicos con un toque místico.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/img19.jpg" alt="Bella"></div>
+                <div class="card-body-haunted">
+                  <h3>Bella</h3>
+                  <p>Encanto real y detallado de gala.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/img20.jpg" alt="Mérida (Valiente)"></div>
+                <div class="card-body-haunted">
+                  <h3>Mérida (Valiente)</h3>
+                  <p>Aventura y tradición escocesa.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/er.jpg" alt="Elsa y Ana"></div>
+                <div class="card-body-haunted">
+                  <h3>Elsa y Ana</h3>
+                  <p>Magia blanca en la oscuridad.</p>
+                </div>
+              </div>
+            </div>
+            <h5 class="catalog-group-title">Gala y Elegancia</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/img13.jpg" alt="Capitana Marvel · Gala"></div>
+                <div class="card-body-haunted">
+                  <h3>Capitana Marvel · Gala</h3>
+                  <p>Poder cósmico en traje de gala.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga5.jpg" alt="El Sombrerero Loco"></div>
+                <div class="card-body-haunted">
+                  <h3>El Sombrerero Loco</h3>
+                  <p>Elegancia caótica del País de las Maravillas.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/descarga4.jpg" alt="Director de Orquesta"></div>
+                <div class="card-body-haunted">
+                  <h3>Director de Orquesta</h3>
+                  <p>Sinfonía oscura en corte clásico.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/img17.jpg" alt="Graduado / Toga"></div>
+                <div class="card-body-haunted">
+                  <h3>Graduado / Toga</h3>
+                  <p>Elegancia académica para celebraciones.</p>
+                </div>
+              </div>
+            </div>
+            <h5 class="catalog-group-title">Oficios y Uniforme</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/imagen 3.jpg" alt="Especialista Médico"></div>
+                <div class="card-body-haunted">
+                  <h3>Especialista Médico</h3>
+                  <p>Realismo técnico y fantasía profesional.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/images.jpg" alt="Oficial de Policía"></div>
+                <div class="card-body-haunted">
+                  <h3>Oficial de Policía</h3>
+                  <p>La ley del silencio y el castigo.</p>
+                </div>
+              </div>
+            </div>
+            <div class="catalog-note">
+              <p><strong>Disfraz a la medida:</strong> toda la colección se confecciona con alta costura. Envíanos la referencia que deseas por WhatsApp y la armamos para ti.</p>
+            </div>
+          </section>
+    </div>
+    <div class="catalogo-general-panel" id="cat-panel-noviembre" data-cat-panel="noviembre" role="tabpanel" hidden>
+<section class="season-catalog" id="catalogo-general-noviembre">
+            <span class="season-catalog-tag">Catálogo del Mes</span>
+            <h4>Catálogo de Noviembre</h4>
+            <p class="season-subtitle">Noviembre es temporada de grados, prom y clausuras: togas y trajes de grado para tus ceremonias, smokings elegantes para hombre, adolescente y niño, vestidos de gala y fiesta para mujer, adolescente y niña, y trajes típicos para los bailes folclóricos de clausura de Colombia —cumbia, sanjuanero, joropo, bambuco, currulao y bullerengue—. Todo confeccionado a la medida en El Bodegón de los Trajes.</p>
+
+            <h5 class="catalog-group-title">Alquiler de Togas y Trajes para Grados</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.graduacion.com/cdn/shop/products/82f951f873ce72ada8360d4e4b125862.jpg?v=1579938235" alt="Toga roja de grado"></div>
+                <div class="card-body-haunted">
+                  <h3>Toga Roja para Grado</h3>
+                  <p>Toga roja mate con birrete para niños y adultos, confeccionada a la medida para tu ceremonia de grado.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.graduacion.com/cdn/shop/products/f932254c2000286e4f87c517fbd08622_bfa94108-8e6a-4d25-8bb6-2e42f3a2a012.jpg?v=1579938172" alt="Toga azul de grado"></div>
+                <div class="card-body-haunted">
+                  <h3>Toga Azul para Grado</h3>
+                  <p>Toga azul brillante con birrete para colegios y universidades, alquilada y ajustada a tu talla.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.graduacion.com/cdn/shop/products/12360e8204d820c7c0e0be625e707eb7.jpg?v=1579938235" alt="Toga ejecutiva de grado"></div>
+                <div class="card-body-haunted">
+                  <h3>Toga Ejecutiva</h3>
+                  <p>Conjunto completo de toga y birrete de corte elegante para grados y clausuras formales de fin de año.</p>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="catalog-group-title">Alquiler de Bailes Típicos para Clausura</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://antifazdisfracesbogota.com/wp-content/uploads/2023/09/cumbia-colombia-mujer-falda-amarilla-arandela-tricolor-blusa-campesina-antifaz-disfraces-bogota.jpg.jpg" alt="Traje típico de cumbia amarillo"></div>
+                <div class="card-body-haunted">
+                  <h3>Cumbia Colombiana</h3>
+                  <p>Traje típico de cumbia con falda arandela tricolor para las clausuras de colegio y presentaciones folclóricas.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost img-ghost-centered"><img loading="lazy" src="assets/img/ChatGPT%20Image%2013%20ago%202026%2C%2013_46_16.png" alt="Traje de pasillo fiestero"></div>
+                <div class="card-body-haunted">
+                  <h3>Pasillo Fiestero</h3>
+                  <p>Traje para el baile del pasillo fiestero: falda y blusa de colores alegres con caída de vuelo, ideal para clausuras, festivales y presentaciones folclóricas. Se confecciona a la medida en El Bodegón.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://latiendadelaempatia.com/cdn/shop/files/Trajetipicodecumbiaparamujerbailecolombiano_1800x1800.jpg?v=1721701664" alt="Traje típico para baile colombiano"></div>
+                <div class="card-body-haunted">
+                  <h3>Traje Típico para Baile</h3>
+                  <p>Vestuario tradicional para bailes de clausura y presentaciones de fin de año, confeccionado en El Bodegón.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://antifazdisfracesbogota.com/wp-content/uploads/2023/09/San-Juanero.jpg" alt="Traje de sanjuanero para mujer"></div>
+                <div class="card-body-haunted">
+                  <h3>Sanjuanero Huilense</h3>
+                  <p>Traje típico del bambuco sanjuanero con faldón de colores para las clausuras y festivales folclóricos del Huila.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://antifazdisfracesbogota.com/wp-content/uploads/2023/09/traje-joropo-pareja.jpg" alt="Traje de joropo llanero para pareja"></div>
+                <div class="card-body-haunted">
+                  <h3>Joropo Llanero</h3>
+                  <p>Vestuario de joropo de los Llanos Orientales para parejas: liqui liqui y falda de polleras para tu baile de clausura.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://antifazdisfracesbogota.com/wp-content/uploads/2023/09/Antifaz-Disfraces-Bogota-Bambuco-Pareja-Region-Andina.jpg" alt="Traje de bambuco para pareja"></div>
+                <div class="card-body-haunted">
+                  <h3>Bambuco Andino</h3>
+                  <p>Atuendo típico de la Región Andina para parejas, ideal para clausuras, festivales y muestras folclóricas de fin de año.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://antifazdisfracesbogota.com/wp-content/uploads/2025/03/Pacifico-rojo-sombrero.jpg" alt="Traje típico del Pacífico colombiano"></div>
+                <div class="card-body-haunted">
+                  <h3>Pacífico · Currulao y Bullerengue</h3>
+                  <p>Vestuario del Pacífico colombiano para bailes de currulao y bullerengue en clausuras y presentaciones escolares.</p>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="catalog-group-title">Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.elitetuxedo.com.mx/wp-content/uploads/2021/09/ETC_0059-cc-1-scaled.jpg" alt="Smoking elegante para hombre"></div>
+                <div class="card-body-haunted">
+                  <h3>Smoking para Hombre</h3>
+                  <p>Esmoquin negro de corte tradicional para prom, grados y cenas de clausura, confeccionado a la medida.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.elitetuxedo.com.mx/wp-content/uploads/2026/07/SMOK-BLUE.png" alt="Smoking para adolescente"></div>
+                <div class="card-body-haunted">
+                  <h3>Smoking para Adolescente</h3>
+                  <p>Smoking azul juvenil para adolescentes en prom y grados, con ajuste moderno y a la medida.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://ceremoniasanny.com/cdn/shop/files/traje-daltonceremonias-anny-4124966.jpg?v=1762482697&amp;width=533" alt="Traje elegante para niño"></div>
+                <div class="card-body-haunted">
+                  <h3>Traje para Niño</h3>
+                  <p>Traje elegante para niños en grados de kinder y clausuras, confeccionado a la medida en El Bodegón.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://gerat.com.mx/cdn/shop/files/3411_mode_caf59852-63d0-46e9-88ad-fe475bb65017.jpg?v=1715724141" alt="Vestido de fiesta para mujer"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido de Fiesta para Mujer</h3>
+                  <p>Vestido largo elegante para mujer en prom, cenas de gala y clausuras, con corte a la medida.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.princessly.com/cdn/shop/files/GreenSatinHighLowFormalGirlPartyDress_400x.jpg" alt="Vestido de fiesta para adolescente"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido para Adolescente</h3>
+                  <p>Vestido de fiesta para adolescente en prom, bailes de grado y celebraciones de clausura.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.princessly.com/cdn/shop/files/NavyBlueFlowerGirlDress-0031_800x.jpg" alt="Vestido de fiesta para niña"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido para Niña</h3>
+                  <p>Vestido de gala para niñas en graduaciones de kinder, primaria y presentaciones de fin de año.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+    </div>
+    <div class="catalogo-general-panel" id="cat-panel-diciembre" data-cat-panel="diciembre" role="tabpanel" hidden>
+<section class="season-catalog" id="catalogo-general-diciembre">
+            <span class="season-catalog-tag">Catálogo del Mes</span>
+            <h4>Catálogo de Diciembre</h4>
+
+            <h5 class="catalog-group-title">Trajes Elegantes para Grados y Clausuras · Niños y Adultos</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.elitetuxedo.com.mx/wp-content/uploads/2021/09/ETC_0059-cc-scaled.jpg" alt="Smoking para grado"></div>
+                <div class="card-body-haunted">
+                  <h3>Smoking de Gala</h3>
+                  <p>Esmoquin clásico para niños y adultos en grados, clausuras y celebraciones de fin de año.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://mimetikbcn.com/cdn/shop/products/p_2_0_4_0_2040-Teal-long-dress-maxi-dress-bridesmaid-dress-turquoise-party-dress-turquoise-bridesmaid-dresses-feminine-party-long-dress-e_1024x.jpg?v=1754044322" alt="Vestido de fiesta para grado"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido de Fiesta</h3>
+                  <p>Vestido largo elegante para niñas y mujeres en clausuras, bailes de grado y cenas de fin de año.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://lalapita.com/wp-content/uploads/2025/05/986-vestido-rosa-largo-dama-honor-palo-de-rosa-largo-de-mujer.webp" alt="Vestido de gala de fin de año"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido de Gala</h3>
+                  <p>Atuendo de alto corte para niñas y mujeres en despedidas, bailes y clausuras en el salón de eventos.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://ceremoniasanny.com/cdn/shop/files/traje-daltonceremonias-anny-4124966.jpg?v=1762482697&amp;width=533" alt="Traje formal para niño"></div>
+                <div class="card-body-haunted">
+                  <h3>Traje de Niño</h3>
+                  <p>Traje elegante para niños en grados de kinder y clausuras, confeccionado a la medida.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/vestido_nina.jpg" alt="Vestido de graduación para niña"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido de Niña</h3>
+                  <p>Vestido de fiesta para niñas en graduaciones de kinder y primaria, con diseño a la medida.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://ceremoniasanny.com/cdn/shop/files/Vestido_unicornio_5.jpg?v=1775156375&amp;width=533" alt="Vestido de princesa para niña"></div>
+                <div class="card-body-haunted">
+                  <h3>Vestido de Princesa</h3>
+                  <p>Vestido de presentación para niñas en clausuras y eventos de fin de año, con detalle de unicornio.</p>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="catalog-group-title">Disfraces Navideños</h5>
+            <div class="grid-haunted">
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.disfracesjarana.com/cdn/shop/files/disfraz-de-papa_noel-deluxe-para-hombre.jpg?v=1711486583&amp;width=1200" alt="Papá Noel"></div>
+                <div class="card-body-haunted">
+                  <h3>Papá Noel</h3>
+                  <p>Traje clásico rojo con barba y gorro para alegrar la navidad.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.disfracesjarana.com/cdn/shop/files/disfraz-de-elfo-de-papa-noel-para-nino.jpg?v=1711644363&amp;width=1500" alt="Duende navideño"></div>
+                <div class="card-body-haunted">
+                  <h3>Duende Navideño</h3>
+                  <p>El ayudante más travieso del taller de Santa.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="assets/img/reno_rudolfo.jpg" alt="Reno Rodolfo"></div>
+                <div class="card-body-haunted">
+                  <h3>Reno Rodolfo</h3>
+                  <p>El reno de la nariz roja que guía el trineo mágico.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://correos-market.ams3.cdn.digitaloceanspaces.com/prod-new/uploads/correos-marketplace-shop/1/product/35619-f4lpvvob-disfraz-de-arbol-de-navidad-para-ninos-1.jpg" alt="Árbol de navidad"></div>
+                <div class="card-body-haunted">
+                  <h3>Árbol de Navidad</h3>
+                  <p>Disfraz de árbol decorado para posadas y eventos.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://mercadisfraces.es/cdn/shop/files/disfraz-angel-bebe_1024x.webp" alt="Ángel de navidad"></div>
+                <div class="card-body-haunted">
+                  <h3>Ángel de Navidad</h3>
+                  <p>Alas blancas y aureola dorada para anunciar la época.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.casangel.com/axos/imagenes/by03065-disfraz-muneco-nieve-infantil-1.jpg" alt="Muñeco de nieve"></div>
+                <div class="card-body-haunted">
+                  <h3>Muñeco de Nieve</h3>
+                  <p>Frosty listo para decorar las fiestas en familia.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.disfracesjarana.com/cdn/shop/files/disfraz-de-galleta-de-jengibre-para-nino.jpg?v=1711492225&amp;width=1500" alt="Galleta de jengibre"></div>
+                <div class="card-body-haunted">
+                  <h3>Galleta de Jengibre</h3>
+                  <p>Dulce navideño con detalles de azúcar glas.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.disfracesjarana.com/cdn/shop/files/disfraz-de-estrella-de-navidad-para-nino.jpg?width=1500" alt="Estrella de Belén"></div>
+                <div class="card-body-haunted">
+                  <h3>Estrella de Belén</h3>
+                  <p>Brilla en lo alto de tu celebración navideña.</p>
+                </div>
+              </div>
+              <div class="card-ghost">
+                <div class="img-ghost"><img loading="lazy" src="https://www.disfracessimon.com/cdn/shop/files/disfraz-de-duende-grunon-de-navidad-verde-para-nino-230641.jpg?v=1751449960" alt="Grinch navideño"></div>
+                <div class="card-body-haunted">
+                  <h3>El Grinch</h3>
+                  <p>El gruñón más querido de la navidad, verde y peludo.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+    </div>
+    <div class="catalogo-general-panel" id="cat-panel-proximamente" data-cat-panel="proximamente" role="tabpanel" hidden>
+      <div class="season-empty">
+        <span class="season-empty-icon" aria-hidden="true">&#10022;</span>
+        <p class="season-blank-title">Próximamente</p>
+        <p class="season-empty-text">Los catálogos de los demás meses están en confección en nuestro taller. Escríbenos y te avisamos en cuanto estén listos.</p>
+        <a class="season-cta" href="#contacto">Cotiza tu traje hoy</a>
+      </div>
+    </div>
+  </section>
+
   <section id="contacto">
     <div class="section-head">
       <span>¿Deseas conjurar un diseño?</span>
@@ -1130,7 +1609,12 @@
         <h3>Portal en Tunja</h3>
         <p class="contact-intro">Nuestro equipo está listo para transformar tu visión en una realidad aterradora con la calidad que nos define.</p>
         <div class="contact-detail">
-          <p>📍 Diagonal 66 2B 04, Tunja</p>
+          <p>📍 <strong>Diagonal 66 2B 04</strong> — Tunja, Boyacá</p>
+        </div>
+        <div class="contact-horario">
+          <h4>Horario de atención</h4>
+          <p><strong>Lunes a sábado:</strong> 8:00 am a 6:00 pm</p>
+          <p><strong>Domingos y festivos:</strong> 9:00 am a 1:00 pm</p>
         </div>
         <div class="contact-detail">
           <p>📞 +57 310 770 6615</p>
@@ -1169,18 +1653,26 @@
       <nav class="footer-col" aria-label="Enlaces rápidos">
         <h4>Explora</h4>
         <ul>
-          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#inicio">Portada</a></li>
+          <li><a href="#temporadas" data-tab="octubre">Sobre Nosotros</a></li>
+          <li><a href="#catalogo-general">Catálogo</a></li>
           <li><a href="#temporadas">Temporadas</a></li>
-        <li><a href="#nosotros">Sobre Nosotros</a></li>
           <li><a href="#contacto">Contáctanos</a></li>
+          <li class="admin-menu-item">
+            <button type="button" class="admin-menu-btn" id="admin-menu-btn-footer">
+              <span aria-hidden="true">&#128274;</span> Panel de administración
+            </button>
+          </li>
         </ul>
       </nav>
       <div class="footer-col">
         <h4>Contacto</h4>
         <ul>
           <li>📍 Diagonal 66 2B 04, Tunja</li>
-          <li>📞 +57 310 770 6615</li>
-          <li>📧 elbodegondelostrajes@gmail.com</li>
+          <li>📞 <a href="tel:+573107706615">+57 310 770 6615</a></li>
+          <li>📧 <a href="mailto:elbodegondelostrajes@gmail.com">elbodegondelostrajes@gmail.com</a></li>
+          <li>📅 Lun–Sáb 8:00 am – 6:00 pm</li>
+          <li>🏁 Dom y festivos 9:00 am – 1:00 pm</li>
         </ul>
       </div>
     </div>

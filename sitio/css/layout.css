@@ -239,9 +239,12 @@ body {
   margin: 0 auto;
 }
 
+/* ORDEN DE LA PAGINA
+   "Sobre Nosotros" ya no es una seccion propia: vive dentro de Halloween.
+   El orden es Portada, Temporadas, Catálogo, Contacto y pie. */
 #inicio { order: 1; }
-#nosotros { order: 2; }
-#temporadas { order: 3; }
+#temporadas { order: 2; }
+#catalogo-general { order: 3; }
 #contacto { order: 4; }
 footer { order: 5; }
 

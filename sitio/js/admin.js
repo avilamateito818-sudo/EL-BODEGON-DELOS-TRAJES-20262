@@ -1837,6 +1837,30 @@
       }
     });
     document.body.appendChild(fab);
+
+    /* Acceso al panel tambien desde el menu y el pie. Estos botones no llevan
+       .admin-ui a proposito: deben verse siempre, porque son la forma de
+       iniciar sesion. Al pulsar, mimetizan el boton flotante para no duplicar
+       la logica de login. */
+    function onAdminEntryClick() {
+      if (!authed) { openLogin(); return; }
+      if (window.confirm('¿Cerrar sesión de administrador?')) {
+        authed = false;
+        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+        disableEditMode();
+        updateFabState();
+        toast('Sesión cerrada.');
+      }
+    }
+    fab.__adminEntry = onAdminEntryClick;
+    document.querySelectorAll('#admin-menu-btn, #admin-menu-btn-footer').forEach(function (btn) {
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var enlace = btn.closest('a');
+        if (enlace) enlace.preventDefault();
+        onAdminEntryClick();
+      });
+    });
   }
 
   function updateFabState() {

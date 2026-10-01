@@ -150,10 +150,10 @@
     }
     window.selectSeason = selectSeason;
 
-    /* Abre una temporada: quita la portada, ensena el contenido y lleva la
-       pagina hasta el primer bloque con texto. Se usa al tocar una pestaña, al
-       elegir una temporada desde el menu y al pulsar "Entrar", para que las tres
-       rutas se comporten igual. */
+/* Enseña el contenido de una temporada y lleva la pagina hasta el primer
+       bloque con texto. Solo se llama al pulsar el boton de portada: al elegir
+       una temporada desde la cinta o el menu se muestra su panel y queda la
+       decision de entrar al catalogo. */
     function openSeason(month) {
       revealContent(month);
       const target = firstContentBlock(month);
@@ -162,14 +162,38 @@
       setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
     }
 
-    document.querySelectorAll('.season-tab').forEach((tab) => {
+    /* Elige una temporada y deja su portada a la vista. La cinta y el menu usan
+       esta ruta; el boton de portada usa openSeason para entrar al catalogo. */
+    function previewSeason(month) {
+      selectSeason(month);
+      const landing = getLanding(month);
+      if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
+      if (landing) setTimeout(() => landing.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
+    }
+
+document.querySelectorAll('.season-tab').forEach((tab) => {
       tab.addEventListener('click', (e) => {
         if (document.body.classList.contains('admin-edit-mode') && e.target.closest('.tab-desc')) return;
-        const month = tab.dataset.month;
-        selectSeason(month);
-        /* Elegir una temporada desde la cinta la abre directamente: solo la
-           carga inicial de la pagina muestra la portada y el boton "Entrar". */
-        openSeason(month);
+        previewSeason(tab.dataset.month);
+      });
+    });
+
+    /* Pestañas del catálogo general: el catálogo Halloween ya tiene su propia
+       temporada, asi que ese botón lleva allí; el resto filtra en el sitio. */
+    document.querySelectorAll('.catalogo-general-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        var key = tab.dataset.cat;
+        document.querySelectorAll('.catalogo-general-tab').forEach((t) => {
+          var on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        document.querySelectorAll('.catalogo-general-panel').forEach((panel) => {
+          var on = panel.dataset.catPanel === key;
+          panel.classList.toggle('is-visible', on);
+          panel.hidden = !on;
+        });
+        if (key === 'halloween') previewSeason('octubre');
       });
     });
 
@@ -615,13 +639,11 @@
       });
     });
 
-    // Season shortcuts (abrir directamente la temporada elegida)
+    // Atajos de temporada del menú: muestran la portada de esa temporada
     document.querySelectorAll('a[data-tab][href="#temporadas"]').forEach((link) => {
       link.addEventListener('click', (e) => {
-        const linkedMonth = link.dataset.tab;
-        selectSeason(linkedMonth);
         e.preventDefault();
-        openSeason(linkedMonth);
+        previewSeason(link.dataset.tab);
       });
     });
 
