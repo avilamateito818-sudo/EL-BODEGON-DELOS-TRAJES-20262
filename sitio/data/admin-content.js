@@ -102,8 +102,8 @@ window.ADMIN_CONTENT = {
   },
   "photoSettings": {
     "enero": {
-      "width": 361,
-      "height": 300
+      "width": 341,
+      "height": 280
     }
   },
   "editorStyles": {
@@ -111,6 +111,7 @@ window.ADMIN_CONTENT = {
     "#temporadas": "",
     "#temporadas > div:nth-child(4) > article:nth-child(1) > div:nth-child(4)": "",
     "#catalogo-general": "width: 1532px; height: 3605px; background-color: rgb(173, 216, 225);",
+    "#catalogo-general > div:nth-child(1) > h2:nth-child(2)": "",
     "html > body:nth-child(2) > footer:nth-child(7)": "background-color: rgb(98, 152, 163);",
     "html > body:nth-child(2) > footer:nth-child(7) > div:nth-child(1) > nav:nth-child(2) > h4:nth-child(1)": "",
     "html > body:nth-child(2) > footer:nth-child(7) > div:nth-child(2) > p:nth-child(1)": "",
