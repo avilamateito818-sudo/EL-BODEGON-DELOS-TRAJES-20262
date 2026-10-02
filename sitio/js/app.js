@@ -103,6 +103,27 @@
              content.firstElementChild || content;
     }
 
+    const monthNames = {
+      enero: 'Enero', febrero: 'Febrero', marzo: 'Marzo', abril: 'Abril', mayo: 'Mayo',
+      junio: 'Junio', julio: 'Julio', agosto: 'Agosto', septiembre: 'Septiembre',
+      octubre: 'Octubre', noviembre: 'Noviembre', diciembre: 'Diciembre'
+    };
+
+    /* La seccion de catalogo es una sola y siempre enseña el de la temporada
+       elegida: no hay pestanas ni copias, asi que aqui basta con mostrar el
+       panel del mes y escribir su nombre en el titulo. */
+    function syncCatalogoGeneral(month) {
+      const panels = document.querySelectorAll('.catalogo-general-panel');
+      if (!panels.length) return;
+      panels.forEach((panel) => {
+        const on = panel.dataset.catPanel === month;
+        panel.classList.toggle('is-visible', on);
+        panel.hidden = !on;
+      });
+      const nombre = document.getElementById('catalogo-general-mes');
+      if (nombre) nombre.textContent = monthNames[month] || month;
+    }
+
     function resetSeasonGates() {
       document.querySelectorAll('.halloween-landing').forEach((l) => l.classList.remove('is-visible'));
       document.querySelectorAll('.halloween-content').forEach((c) => c.classList.remove('is-visible'));
@@ -142,6 +163,7 @@
       if (seasonSection) seasonSection.dataset.season = month;
       resetSeasonGates();
       showLanding(month);
+      syncCatalogoGeneral(month);
       if (window.__centerMarqueeOn) window.__centerMarqueeOn(month);
       // Elegir temporada deja la cinta quieta en la portada de esa temporada
       document.querySelectorAll('.season-marquee').forEach((m) => {
@@ -178,44 +200,14 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
       });
     });
 
-    /* Pestañas del catálogo general: el catálogo Halloween ya tiene su propia
-       temporada, asi que ese botón lleva allí; el resto filtra en el sitio. */
-    document.querySelectorAll('.catalogo-general-tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        var key = tab.dataset.cat;
-        document.querySelectorAll('.catalogo-general-tab').forEach((t) => {
-          var on = t === tab;
-          t.classList.toggle('is-active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-        document.querySelectorAll('.catalogo-general-panel').forEach((panel) => {
-          var on = panel.dataset.catPanel === key;
-          panel.classList.toggle('is-visible', on);
-          panel.hidden = !on;
-        });
-        if (key === 'halloween') previewSeason('octubre');
-      });
-    });
+    /* La seccion de catalogo no lleva pestanas: sigue a la temporada, asi que
+       no hay nada que filtrar aqui. Al abrir el menu o la cinta ya se
+       actualiza desde selectSeason. */
 
-    /* Enlaces del catalogo general ("Las temporadas del ano"): abren la
-       temporada y llevan hasta su catalogo, no solo a su portada. */
-    document.querySelectorAll('[data-open-season]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const month = link.dataset.openSeason;
-        selectSeason(month);
-        revealContent(month);
-        const catalogo = document.getElementById(month + '-catalogo');
-        if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
-        setTimeout(function () {
-          (catalogo || firstContentBlock(month)).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 150);
-      });
-    });
-
-    // Estado inicial: enero
+    /* Estado inicial: enero */
     resetSeasonGates();
     showLanding('enero');
+    syncCatalogoGeneral('enero');
 
     const MONTH_ORDER = [
       'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',

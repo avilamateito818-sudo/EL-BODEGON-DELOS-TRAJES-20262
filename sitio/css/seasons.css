@@ -2398,43 +2398,7 @@ a.season-item:hover {
   color: #FFFFFF;
 }
 
-.catalogo-general-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin: 3rem auto 2.5rem;
-  max-width: 900px;
-}
-
-.catalogo-general-tab {
-  padding: 0.9rem 1.8rem;
-  background: transparent;
-  color: var(--ghostly-white);
-  border: 1px solid var(--glass-border);
-  border-radius: 40px;
-  font-family: inherit;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: var(--transition-haunted);
-}
-
-.catalogo-general-tab:hover,
-.catalogo-general-tab:focus-visible {
-  border-color: var(--halloween-vivid);
-  color: var(--halloween-vivid);
-}
-
-.catalogo-general-tab.is-active {
-  background: linear-gradient(135deg, var(--halloween-vivid), #d35400);
-  border-color: var(--halloween-vivid);
-  color: var(--pure-black);
-  box-shadow: 0 8px 32px rgba(255, 140, 0, 0.35);
-}
-
+/* La seccion no lleva pestanas: muestra el catalogo del mes activo y ya. */
 .catalogo-general-panel {
   display: none;
 }
@@ -2458,6 +2422,30 @@ a.season-item:hover {
   margin-bottom: 0;
 }
 
+.catalogo-general-panel .season-sub-sections {
+  display: grid;
+  gap: 3rem;
+}
+
+.catalogo-general-aviso {
+  margin: 3.5rem auto 0;
+  text-align: center;
+  color: var(--ghostly-white);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+
+.catalogo-general-aviso a {
+  color: var(--halloween-vivid);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.catalogo-general-aviso a:hover,
+.catalogo-general-aviso a:focus-visible {
+  color: var(--pure-black);
+}
+
 .nosotros-halloween .essence-heading {
   color: var(--halloween-vivid);
 }
@@ -2470,14 +2458,9 @@ a.season-item:hover {
   .catalogo-general-root {
     padding: 4.5rem 5%;
   }
-  .catalogo-general-nav {
-    gap: 0.6rem;
-    margin: 2rem auto;
-  }
-  .catalogo-general-tab {
-    padding: 0.75rem 1.2rem;
-    font-size: 0.65rem;
-    letter-spacing: 1.5px;
+  .catalogo-general-aviso {
+    margin: 2.5rem auto 0;
+    font-size: 0.85rem;
   }
 }
 
