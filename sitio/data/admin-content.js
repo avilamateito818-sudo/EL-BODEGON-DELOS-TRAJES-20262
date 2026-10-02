@@ -107,6 +107,6 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "#catalogo-general": "width: 1591px; height: 3442px; background-color: rgb(183, 235, 245);"
+    "#catalogo-general": "width: 1591px; height: 3442px; background-color: rgb(179, 221, 230);"
   }
 };
