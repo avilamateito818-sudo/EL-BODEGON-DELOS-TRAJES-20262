@@ -107,6 +107,6 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "#catalogo-general": "width: 1309px; height: 2831px;"
+    "#catalogo-general": "width: 1591px; height: 3442px;"
   }
 };
