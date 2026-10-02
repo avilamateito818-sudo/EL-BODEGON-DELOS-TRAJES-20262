@@ -106,5 +106,7 @@ window.ADMIN_CONTENT = {
       "height": 300
     }
   },
-  "editorStyles": {}
+  "editorStyles": {
+    "#catalogo-general": "width: 1309px; height: 2831px;"
+  }
 };
