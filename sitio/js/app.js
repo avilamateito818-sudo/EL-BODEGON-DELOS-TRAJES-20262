@@ -21,28 +21,28 @@
 
     const monthBtnLabels = {
       enero: 'Descubre la Magia de Reyes',
-      febrero: 'Enamora con Estilo',
-      marzo: 'Brilla en Carnaval',
-      abril: 'Viste la Primavera',
-      mayo: 'Elegancia Floral',
-      junio: 'Rayos de Sol y Gala',
-      julio: 'Frescura Tropical',
-      agosto: 'Otoño Dorado',
-      septiembre: 'Renuévate con Clase',
+      febrero: 'Carnaval y Glamour',
+      marzo: 'Efecto Ejecutivo',
+      abril: 'Feria y Renovación',
+      mayo: 'Día de las Madres',
+      junio: 'Bodas y Quinceañeras',
+      julio: 'Fiestas Patrias',
+      agosto: 'Gala y Aniversario',
+      septiembre: 'Amor y Amistad',
       octubre: 'Disfraces de Halloween y de Baile',
       noviembre: 'Graduación y Clausura te Espera',
       diciembre: 'La Navidad nos Viste'
     };
     const monthSubtitles = {
-      enero: 'Reyes, uniformes y bautizos para arrancar el año con estilo.',
-      febrero: 'Carnaval, San Valentín y bodas confeccionados a tu medida.',
-      marzo: 'Disfraces coloridos y comparsas para el carnaval más vivo.',
-      abril: 'Trajes frescos y elegantes para la primavera más radiante.',
-      mayo: 'Flores, elegancia y tradición para un mayo inolvidable.',
-      junio: 'Sol, brillo y celebración con la mejor costura.',
-      julio: 'Frescura, baile y color para el verano colombiano.',
-      agosto: 'Caen las hojas, sube el estilo con nuestra nueva colección.',
-      septiembre: 'Renueva tu guardarropa con piezas únicas y modernas.',
+      enero: 'Reyes Magos, uniformes y batas para arrancar el año con estilo.',
+      febrero: 'Carnaval de Negros y Blancos, San Valentín y bodas a la medida.',
+      marzo: 'Cuaresma, Semana Santa y el Día de la Mujer.',
+      abril: 'Prenda de primavera, la feria y los uniformes de ingreso.',
+      mayo: 'Todo para el Día de las Madres, del 10 de mayo.',
+      junio: 'Quinceañeras, bodas y el Día del Padre.',
+      julio: 'El 20 de julio, el desfile y toda la ropa del verano.',
+      agosto: 'Aniversario de Tunja, galas y temporada de bodas.',
+      septiembre: 'Aniversarios, la Raza y el regreso a las aulas.',
       octubre: 'Disfraces terroríficos y trajes de baile para clausuras y eventos.',
       noviembre: 'Grados, clausuras y ceremonias. Cotiza tu traje hoy.',
       diciembre: 'La navidad se viste aquí. Brilla en cada celebración.'
@@ -194,6 +194,22 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
           panel.hidden = !on;
         });
         if (key === 'halloween') previewSeason('octubre');
+      });
+    });
+
+    /* Enlaces del catalogo general ("Las temporadas del ano"): abren la
+       temporada y llevan hasta su catalogo, no solo a su portada. */
+    document.querySelectorAll('[data-open-season]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const month = link.dataset.openSeason;
+        selectSeason(month);
+        revealContent(month);
+        const catalogo = document.getElementById(month + '-catalogo');
+        if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
+        setTimeout(function () {
+          (catalogo || firstContentBlock(month)).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
       });
     });
 
