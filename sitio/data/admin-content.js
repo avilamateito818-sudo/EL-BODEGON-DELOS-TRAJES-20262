@@ -107,6 +107,8 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "#catalogo-general": "width: 1613px; height: 3614px; background-color: rgb(173, 216, 225);"
+    "#catalogo-general": "width: 1613px; height: 3614px; background-color: rgb(173, 216, 225);",
+    "html > body:nth-child(2) > footer:nth-child(7)": "background-color: rgb(185, 225, 233);",
+    "html > body:nth-child(2) > footer:nth-child(7) > div:nth-child(1) > nav:nth-child(2) > h4:nth-child(1)": ""
   }
 };
