@@ -46,6 +46,7 @@
     deleteSections: [],
     hiddenSeasons: [],
     seasonCovers: {},
+    seasonColors: {},
     photoSettings: {},
     editorStyles: {}
   };
@@ -145,6 +146,27 @@
         parts.unshift('#' + CSS.escape(node.id));
         break;
       }
+      /* La ruta se acota al bloque de la temporada. Las 12 temporadas repiten
+         la misma estructura, asi que sin este dato un ":nth-child" guardado
+         para enero terminaria apuntando a otra mes al cambiar de temporada. */
+      var mes = node.getAttribute && (node.getAttribute('data-landing') || node.getAttribute('data-season'));
+      if (mes) {
+        var attr = node.hasAttribute('data-landing') ? 'data-landing' : 'data-season';
+        /* Se ignoran las clases que el panel se pone y quita (admin-edit-mode,
+           editor-selected, reveal...): no existen al volver a cargar y
+           dejarian el estilo sin aplicar. */
+        var clase = '';
+        if (node.classList) {
+          for (var c = 0; c < node.classList.length; c++) {
+            var nombre = node.classList[c];
+            if (/^(admin-|editor-|is-|has-|reveal|no-)/.test(nombre)) continue;
+            clase = '.' + CSS.escape(nombre);
+            break;
+          }
+        }
+        parts.unshift(node.tagName.toLowerCase() + clase + '[' + attr + '="' + mes + '"]');
+        break;
+      }
       var tag = node.tagName.toLowerCase();
       var parent = node.parentElement;
       if (parent) {
@@ -156,6 +178,25 @@
       node = parent;
     }
     return parts.join(' > ');
+  }
+
+  /* Clave con la que se guarda el estilo de un elemento. Se prefiere un id o
+     una clase que pertenezca a un solo elemento, porque la ruta con
+     nth-child de cssPath() cambia cuando la pagina se reconstruye (por
+     ejemplo al cambiar de temporada) y el color guardado se perdia. */
+  function editorKey(el) {
+    if (!el) return '';
+    if (el.id) return '#' + CSS.escape(el.id);
+    var clases = String(el.className || '').trim().split(/\s+/).filter(function (c) {
+      return c && c !== 'editor-selected' && c.indexOf('reveal') !== 0;
+    });
+    for (var i = 0; i < clases.length; i++) {
+      var sel = '.' + CSS.escape(clases[i]);
+      try {
+        if (document.querySelectorAll(sel).length === 1) return sel;
+      } catch (e) { /* selector no valido */ }
+    }
+    return cssPath(el);
   }
 
   function q(path) {
@@ -910,14 +951,18 @@
         '<div class="editor-prop-row">' +
           '<label>Fondo</label>' +
           '<input type="color" class="editor-color" data-prop="backgroundColor">' +
+          '<button type="button" class="editor-clear" data-clear-prop="backgroundColor" title="Quitar el color de fondo y volver al original">&#10005;</button>' +
         '</div>' +
         '<div class="editor-prop-row">' +
           '<label>Color texto</label>' +
           '<input type="color" class="editor-color" data-prop="color">' +
+          '<button type="button" class="editor-clear" data-clear-prop="color" title="Quitar el color de texto y volver al original">&#10005;</button>' +
         '</div>' +
         '<div class="editor-prop-row">' +
           '<label>Borde</label>' +
           '<input type="number" class="editor-input" data-prop="borderWidth" min="0" max="20"> px' +
+          '<input type="color" class="editor-color" data-prop="borderColor">' +
+          '<button type="button" class="editor-clear" data-clear-prop="borderColor" title="Quitar el color de borde y volver al original">&#10005;</button>' +
         '</div>' +
         '<div class="editor-prop-row">' +
           '<label>Radio</label>' +
@@ -1023,10 +1068,9 @@
       editBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        editorActive = !editorActive;
-        editBtn.classList.toggle('is-active', editorActive);
-        if (!editorActive) deselectElement();
-        toast(editorActive ? 'Editor activado. Haz clic en cualquier elemento.' : 'Editor desactivado.');
+        var on = !editorActive;
+        setEditorActive(on);
+        toast(on ? 'Editor activado. Haz clic en cualquier elemento.' : 'Editor desactivado.');
       });
     }
 
@@ -1079,7 +1123,24 @@
           selectedEl.style[prop] = val;
         }
         updateHandle();
+        syncClearButtons();
         autoSave();
+      });
+    });
+
+    /* Quitar un color para volver al del diseno original */
+    qa('.editor-clear', panel).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!selectedEl) return;
+        var prop = btn.dataset.clearProp;
+        /* style[prop] = '' es lo correcto: removeProperty() exige el nombre
+           con guiones (background-color) y no acepta camelCase. */
+        selectedEl.style[prop] = '';
+        if (prop === 'borderColor') selectedEl.style.border = '';
+        syncPanel();
+        updateHandle();
+        autoSave();
+        toast('Color quitado: vuelve el del diseño original.');
       });
     });
 
@@ -1305,6 +1366,38 @@
     }
   }
 
+  /* Convierte el color que devuelve el navegador al calcular estilos
+     (rgb/rgba) a #hex, porque los <input type="color"> solo aceptan hex. */
+  function computedColorToHex(value) {
+    if (!value) return null;
+    var v = String(value).trim();
+    if (v.charAt(0) === '#') {
+      var h = v.slice(1);
+      if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+      return /^[0-9a-fA-F]{6}$/.test(h) ? '#' + h.toLowerCase() : null;
+    }
+    var m = v.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i);
+    if (!m) return null;
+    return seasonColorToHex(Number(m[1]), Number(m[2]), Number(m[3]));
+  }
+
+  function setEditorActive(on) {
+    editorActive = !!on;
+    var editBtn = document.getElementById('edit-float-btn');
+    if (editBtn) editBtn.classList.toggle('is-active', editorActive);
+    if (!editorActive) deselectElement();
+  }
+
+  /* El boton de quitar color solo se habilita cuando el elemento tiene un
+     color puesto a mano, no cuando el color viene de la hoja de estilos. */
+  function syncClearButtons() {
+    var panel = document.getElementById('editor-panel');
+    if (!panel || !selectedEl) return;
+    qa('.editor-clear', panel).forEach(function (btn) {
+      btn.disabled = !selectedEl.style[btn.dataset.clearProp];
+    });
+  }
+
   function syncPanel() {
     if (!selectedEl) return;
     var s = window.getComputedStyle(selectedEl);
@@ -1336,10 +1429,15 @@
       var num = parseInt(raw, 10);
       if (!isNaN(num)) inp.value = num;
     });
+    /* Los colores del sitio salen de variables CSS, no del estilo inline, asi
+       que se lee el color calculado (rgb/rgba) para que cada selector muestre
+       el color real que se esta viendo. */
     qa('.editor-color', panel).forEach(function (inp) {
       var prop = inp.dataset.prop;
-      var raw = selectedEl.style[prop] || '';
-      if (raw && raw.charAt(0) === '#') inp.value = raw;
+      var hex = computedColorToHex(s[prop]);
+      if (hex) inp.value = hex;
+      var clearBtn = panel.querySelector('[data-clear-prop="' + prop + '"]');
+      if (clearBtn) clearBtn.disabled = !selectedEl.style[prop];
     });
     var opRange = panel.querySelector('[data-prop="opacity"]');
     if (opRange) {
@@ -1746,16 +1844,38 @@
         else el.remove();
       }
     });
+    /* Los catalogos y las temporadas se construyen despues de cargar el
+       contenido, asi que un estilo guardado puede todavia no existir. Se
+       reintenta unas pocas veces para que los colores y tamanos guardados
+       terminen aplicandose aunque el elemento aparezca mas tarde. */
+    applyEditorStylesWithRetry();
+  }
+
+  function applyEditorStylesWithRetry() {
     applyEditorStyles();
+    var intentos = 0;
+    (function reintentar() {
+      if (intentos++ >= 6) return;
+      var es = content.editorStyles || {};
+      var pendientes = Object.keys(es).filter(function (key) {
+        return !(q('[data-editor-id="' + key + '"]') || q(key));
+      });
+      if (!pendientes.length) return;
+      setTimeout(function () {
+        applyEditorStyles();
+        reintentar();
+      }, 400 * intentos);
+    })();
   }
 
 function applyEditorStyles() {
     var es = content.editorStyles || {};
     Object.keys(es).forEach(function (key) {
       var el = null;
-      try {
-        el = document.querySelector('[data-editor-id="' + key + '"]') || q(key);
-      } catch (e) { el = null; }
+      /* Una clave con comillas (por ejemplo [data-landing="enero"]) hace
+         invalido el selector de data-editor-id. q() captura ese fallo, asi
+         que la busqueda por la propia clave sigue funcionando. */
+      el = q('[data-editor-id="' + key + '"]') || q(key);
       if (el && es[key]) {
         el.style.cssText = es[key];
         if (!el.dataset.editorId) el.dataset.editorId = key;
@@ -1788,6 +1908,285 @@ function applyEditorStyles() {
       landing.style.backgroundSize = 'cover';
       landing.style.backgroundPosition = 'center';
     });
+  }
+
+  /* ---------- COLORES POR TEMPORADA ---------- */
+
+  var SEASON_COLOR_MONTHS = [
+    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+  ];
+
+  var SEASON_COLOR_LABELS = {
+    enero: 'Enero', febrero: 'Febrero', marzo: 'Marzo', abril: 'Abril',
+    mayo: 'Mayo', junio: 'Junio', julio: 'Julio', agosto: 'Agosto',
+    septiembre: 'Septiembre', octubre: 'Octubre', noviembre: 'Noviembre',
+    diciembre: 'Diciembre'
+  };
+
+  /* Solo se editan 5 colores por temporada. El resto de variables --m-* se
+     derivan del acento y del fondo para que un solo control cambie el tono
+     completo (bordes, brillos, sombras y texto de contraste). */
+  var SEASON_COLOR_FIELDS = [
+    { key: 'accent', label: 'Acento', cssVar: '--m-accent', fallback: '#d4a017' },
+    { key: 'bg1', label: 'Fondo 1', cssVar: '--m-bg1', fallback: '#141024' },
+    { key: 'bg2', label: 'Fondo 2', cssVar: '--m-bg2', fallback: '#1b1433' },
+    { key: 'bg3', label: 'Fondo 3', cssVar: '--m-bg3', fallback: '#241b45' },
+    { key: 'dark', label: 'Texto', cssVar: '--m-dark', fallback: '#2a1e4f' }
+  ];
+
+  var SEASON_COLOR_STYLE_ID = 'admin-season-colors-style';
+  var SEASON_COLOR_DEFAULTS = null;
+
+  function seasonColorHex(value, fallback) {
+    var h = String(value == null ? '' : value).trim().replace(/^#/, '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    if (!/^[0-9a-fA-F]{6}$/.test(h)) return fallback;
+    return '#' + h.toLowerCase();
+  }
+
+  function seasonColorRgb(hex) {
+    var h = String(hex || '').replace(/^#/, '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    if (!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+    return {
+      r: parseInt(h.slice(0, 2), 16),
+      g: parseInt(h.slice(2, 4), 16),
+      b: parseInt(h.slice(4, 6), 16)
+    };
+  }
+
+  function seasonColorToHex(r, g, b) {
+    function part(v) {
+      var n = Math.max(0, Math.min(255, Math.round(v)));
+      return (n < 16 ? '0' : '') + n.toString(16);
+    }
+    return '#' + part(r) + part(g) + part(b);
+  }
+
+  /* amount = 0 devuelve hexA, amount = 1 devuelve hexB */
+  function seasonColorMix(hexA, hexB, amount) {
+    var a = seasonColorRgb(hexA);
+    var b = seasonColorRgb(hexB);
+    if (!a) return hexB;
+    if (!b) return hexA;
+    return seasonColorToHex(
+      a.r + (b.r - a.r) * amount,
+      a.g + (b.g - a.g) * amount,
+      a.b + (b.b - a.b) * amount
+    );
+  }
+
+  function seasonColorRgba(hex, alpha) {
+    var c = seasonColorRgb(hex);
+    if (!c) return 'rgba(255,255,255,' + alpha + ')';
+    return 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + alpha + ')';
+  }
+
+  /* Texto legible (negro o blanco) según el brillo del fondo. */
+  function seasonColorContrastText(hex) {
+    var c = seasonColorRgb(hex);
+    if (!c) return '#ffffff';
+    var lum = (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255;
+    return lum > 0.6 ? '#150d02' : '#ffffff';
+  }
+
+  /* Los valores por defecto se leen de la propia hoja season-colors.css
+     (cambiando data-season en el <body> dentro de la misma tarea, sin
+     repintado) para no duplicar las paletas en el código. */
+  function getSeasonColorDefaults() {
+    if (SEASON_COLOR_DEFAULTS) return SEASON_COLOR_DEFAULTS;
+    var previous = document.body.getAttribute('data-season');
+    var style = document.getElementById(SEASON_COLOR_STYLE_ID);
+    if (style) style.remove();
+    var map = {};
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      document.body.setAttribute('data-season', month);
+      var computed = getComputedStyle(document.body);
+      var entry = {};
+      SEASON_COLOR_FIELDS.forEach(function (field) {
+        entry[field.key] = seasonColorHex(computed.getPropertyValue(field.cssVar), field.fallback);
+      });
+      map[month] = entry;
+    });
+    if (previous) document.body.setAttribute('data-season', previous);
+    else document.body.removeAttribute('data-season');
+    SEASON_COLOR_DEFAULTS = map;
+    if (style) document.head.appendChild(style);
+    return map;
+  }
+
+  function getSeasonColorEntry(month) {
+    var overrides = content.seasonColors || {};
+    var entry = overrides[month];
+    if (!entry) return null;
+    var defaults = getSeasonColorDefaults()[month] || {};
+    var resolved = {};
+    SEASON_COLOR_FIELDS.forEach(function (field) {
+      resolved[field.key] = seasonColorHex(entry[field.key], defaults[field.key] || field.fallback);
+    });
+    return resolved;
+  }
+
+  /* Convierte los 5 colores editados en el bloque completo de variables --m-*. */
+  function seasonColorVars(entry) {
+    var accent = entry.accent;
+    var dark = entry.dark;
+    return [
+      '--m-accent:' + accent,
+      '--m-ink:' + seasonColorMix(accent, '#000000', 0.42),
+      '--m-lit:' + seasonColorMix(accent, '#ffffff', 0.3),
+      '--m-on-accent:' + seasonColorContrastText(accent),
+      '--m-soft:' + seasonColorRgba(accent, 0.18),
+      '--m-faint:' + seasonColorRgba(accent, 0.07),
+      '--m-glow:' + seasonColorRgba(accent, 0.36),
+      '--m-bg1:' + entry.bg1,
+      '--m-bg2:' + entry.bg2,
+      '--m-bg3:' + entry.bg3,
+      '--m-deep1:' + seasonColorMix(accent, '#000000', 0.78),
+      '--m-deep2:' + seasonColorMix(accent, '#000000', 0.86),
+      '--m-deep3:' + seasonColorMix(accent, '#000000', 0.92),
+      '--m-dark:' + dark,
+      '--m-dark-soft:' + seasonColorMix(dark, '#ffffff', 0.3),
+      '--m-strong:' + seasonColorMix(accent, '#000000', 0.2)
+    ].join(';');
+  }
+
+  /* Inyecta una sola etiqueta <style> global. Al ir al final de <head>
+     gana a season-colors.css por orden de documento, así que el cambio
+     sobrevive al cambio de temporada en app.js. */
+  function applySeasonColors() {
+    var style = document.getElementById(SEASON_COLOR_STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = SEASON_COLOR_STYLE_ID;
+      document.head.appendChild(style);
+    }
+    var overrides = content.seasonColors || {};
+    var css = '';
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      var entry = getSeasonColorEntry(month);
+      if (!entry) return;
+      css += 'body[data-season="' + month + '"]{' + seasonColorVars(entry) + '}';
+    });
+    style.textContent = css;
+  }
+
+  function seasonColorRowHtml(month) {
+    var defaults = getSeasonColorDefaults()[month] || {};
+    var entry = getSeasonColorEntry(month) || defaults;
+    var customized = !!(content.seasonColors && content.seasonColors[month]);
+    var fields = SEASON_COLOR_FIELDS.map(function (field) {
+      return '<label class="admin-season-field">' +
+        '<span>' + field.label + '</span>' +
+        '<input type="color" class="admin-season-input" data-month="' + month + '"' +
+        ' data-key="' + field.key + '" value="' + (entry[field.key] || field.fallback) + '">' +
+        '</label>';
+    }).join('');
+    return '<section class="admin-season-row' + (customized ? ' is-custom' : '') +
+      '" data-season-row="' + month + '">' +
+      '<header class="admin-season-head">' +
+      '<span class="admin-season-dot" data-role="season-dot" data-month="' + month + '"' +
+      ' style="background:' + (entry.accent || '#d4a017') + '"></span>' +
+      '<strong class="admin-season-name">' + (SEASON_COLOR_LABELS[month] || month) + '</strong>' +
+      '<span class="admin-season-tag" data-role="season-tag">' +
+      (customized ? 'Personalizado' : 'Original') + '</span>' +
+      '<button type="button" class="admin-btn admin-btn-season-reset" data-role="reset-month"' +
+      ' data-month="' + month + '"' + (customized ? '' : ' disabled') + '>Restablecer</button>' +
+      '</header>' +
+      '<div class="admin-season-fields">' + fields + '</div>' +
+      '</section>';
+  }
+
+  function openSeasonColorsPanel() {
+    var rows = SEASON_COLOR_MONTHS.map(seasonColorRowHtml).join('');
+    var overlay = openModal(
+      '<h3>Colores de las temporadas</h3>' +
+      '<p class="admin-hint">Elige el color de cualquier mes de la lista. ' +
+      'El resto de tonos se ajustan solos. Se guarda con el mismo botón ' +
+      '<em>Guardar</em> y con "Sincronizar ahora".</p>' +
+      '<div class="admin-season-list">' + rows + '</div>' +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn" data-role="reset-all">Restablecer todo</button>' +
+      '<button type="button" class="admin-btn admin-btn-primary" data-role="close-seasons">Listo</button>' +
+      '</div>'
+    );
+    var box = overlay.querySelector('.admin-modal-box');
+    if (box) box.classList.add('admin-modal-wide');
+
+    overlay.addEventListener('input', function (e) {
+      var input = e.target;
+      if (!input.classList || !input.classList.contains('admin-season-input')) return;
+      var month = input.getAttribute('data-month');
+      var key = input.getAttribute('data-key');
+      if (!month || !key) return;
+      var entry = content.seasonColors[month] || {};
+      entry[key] = seasonColorHex(input.value, null);
+      content.seasonColors[month] = entry;
+      applySeasonColors();
+      markSeasonRowCustom(overlay, month);
+    });
+
+    overlay.addEventListener('change', function (e) {
+      if (!e.target.classList || !e.target.classList.contains('admin-season-input')) return;
+      autoSave();
+      toast('Colores guardados en el navegador.');
+    });
+
+    overlay.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('button') : null;
+      if (!btn) return;
+      var role = btn.getAttribute('data-role');
+      if (role === 'close-seasons') { closeModal(); return; }
+      if (role === 'reset-month') {
+        var month = btn.getAttribute('data-month');
+        delete content.seasonColors[month];
+        applySeasonColors();
+        refreshSeasonColorRow(overlay, month);
+        autoSave();
+        toast((SEASON_COLOR_LABELS[month] || month) + ' vuelve a su color original.');
+        return;
+      }
+      if (role === 'reset-all') {
+        content.seasonColors = {};
+        applySeasonColors();
+        SEASON_COLOR_MONTHS.forEach(function (m) { refreshSeasonColorRow(overlay, m); });
+        autoSave();
+        toast('Todas las temporadas vuelven a sus colores originales.');
+      }
+    });
+  }
+
+  function markSeasonRowCustom(overlay, month) {
+    var row = overlay.querySelector('[data-season-row="' + month + '"]');
+    if (!row) return;
+    var entry = getSeasonColorEntry(month);
+    var dot = row.querySelector('[data-role="season-dot"]');
+    if (dot && entry) dot.style.background = entry.accent;
+    row.classList.add('is-custom');
+    var tag = row.querySelector('[data-role="season-tag"]');
+    if (tag) tag.textContent = 'Personalizado';
+    var reset = row.querySelector('[data-role="reset-month"]');
+    if (reset) reset.disabled = false;
+  }
+
+  function refreshSeasonColorRow(overlay, month) {
+    var row = overlay.querySelector('[data-season-row="' + month + '"]');
+    if (!row) return;
+    var defaults = getSeasonColorDefaults()[month] || {};
+    var entry = getSeasonColorEntry(month) || defaults;
+    var customized = !!(content.seasonColors && content.seasonColors[month]);
+    row.classList.toggle('is-custom', customized);
+    row.querySelectorAll('.admin-season-input').forEach(function (input) {
+      var key = input.getAttribute('data-key');
+      input.value = entry[key] || defaults[key] || '#000000';
+    });
+    var dot = row.querySelector('[data-role="season-dot"]');
+    if (dot) dot.style.background = entry.accent || '#000000';
+    var tag = row.querySelector('[data-role="season-tag"]');
+    if (tag) tag.textContent = customized ? 'Personalizado' : 'Original';
+    var reset = row.querySelector('[data-role="reset-month"]');
+    if (reset) reset.disabled = !customized;
   }
 
   /* ---------- wire de elementos dinámicos ---------- */
@@ -2063,6 +2462,11 @@ function applyEditorStyles() {
     wireSeasonPhotoButtons();
     wirePhotoControls();
     wireVisualEditor();
+    /* Al entrar en modo administrador el editor visual queda activo: asi se
+       puede pulsar cualquier elemento de la pagina y cambiar sus colores,
+       fondo, texto, borde o tamano sin tener que pulsar antes el boton de
+       editar. Ese boton sigue sirviendo para desactivar el modo edicion. */
+    setEditorActive(true);
     wireCtxMenu();
     ensureGridOverlay();
     if (gridEnabled()) document.getElementById('admin-grid-overlay').classList.add('is-visible');
@@ -2070,6 +2474,7 @@ function applyEditorStyles() {
 
   function disableEditMode() {
     editMode = false;
+    setEditorActive(false);
     closeCtxMenu();
     document.body.classList.remove('admin-edit-mode');
     setMarqueePaused(false);
@@ -2104,6 +2509,7 @@ function applyEditorStyles() {
       '<button type="button" class="admin-btn admin-btn-guide" data-guide="guides" title="Mostrar/ocultar guías de alineación al mover">Guías</button>' +
       '<button type="button" class="admin-btn admin-btn-guide" data-guide="grid" title="Mostrar/ocultar la rejilla de alineación">&#9638; Rejilla</button>' +
       '<button type="button" class="admin-btn admin-btn-help" data-guide="help" title="Abrir la guía de uso">Ayuda ?</button>' +
+      '<button type="button" class="admin-btn admin-btn-colors" data-role="colors" title="Cambiar los colores de cualquier temporada">Colores</button>' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="save">Guardar</button>' +
       '<button type="button" class="admin-btn admin-btn-sync" data-role="sync">Sincronizar ahora</button>' +
       '<button type="button" class="admin-btn admin-btn-notif" data-role="notify" title="Mostrar un aviso de prueba local (ya no se envía por correo)">Probar alerta</button>' +
@@ -2147,6 +2553,9 @@ function applyEditorStyles() {
     });
     tb.querySelector('[data-guide="help"]').addEventListener('click', function () {
       openHelpPanel();
+    });
+    tb.querySelector('[data-role="colors"]').addEventListener('click', function () {
+      openSeasonColorsPanel();
     });
   }
 
@@ -3200,10 +3609,19 @@ function applyEditorStyles() {
   }
 
   function serialize() {
+    var previos = content.editorStyles || {};
     var editorStyles = {};
     qa('[data-editor-id]').forEach(function (el) {
-      var path = cssPath(el);
-      if (path) editorStyles[path] = el.style.cssText;
+      var path = editorKey(el);
+      if (path && el.style.cssText) editorStyles[path] = el.style.cssText;
+    });
+    /* Los estilos cuyo elemento todavia no existe en la pagina (los catalogos
+       y las temporadas se construyen despues) se conservan: si se descartaran
+       aqui, el siguiente guardado borraria para siempre un color ya elegido. */
+    Object.keys(previos).forEach(function (key) {
+      if (!previos[key] || editorStyles[key]) return;
+      var el = q('[data-editor-id="' + key + '"]') || q(key);
+      if (!el) editorStyles[key] = previos[key];
     });
     var out = {
       version: 2,
@@ -3235,6 +3653,7 @@ function applyEditorStyles() {
       deleteSections: content.deleteSections,
       hiddenSeasons: content.hiddenSeasons,
       seasonCovers: content.seasonCovers || {},
+      seasonColors: content.seasonColors || {},
       photoSettings: content.photoSettings || {},
       editorStyles: editorStyles
     };
@@ -3314,10 +3733,12 @@ function applyEditorStyles() {
     if (obj.passwordHash) content.passwordHash = obj.passwordHash;
     if (obj.usernameHash) content.usernameHash = obj.usernameHash;
     content.seasonCovers = obj.seasonCovers || {};
+    content.seasonColors = obj.seasonColors || {};
     content.photoSettings = obj.photoSettings || {};
     content.editorStyles = obj.editorStyles || {};
     applyContent();
     applySeasonCovers();
+    applySeasonColors();
   }
 
   function changePassword() {
@@ -3562,6 +3983,7 @@ function applyEditorStyles() {
     if (override.deleteSections !== undefined) result.deleteSections = override.deleteSections;
     if (override.hiddenSeasons !== undefined) result.hiddenSeasons = override.hiddenSeasons;
     if (override.seasonCovers !== undefined) result.seasonCovers = override.seasonCovers;
+    if (override.seasonColors !== undefined) result.seasonColors = override.seasonColors;
     if (override.photoSettings !== undefined) result.photoSettings = override.photoSettings;
     if (override.editorStyles !== undefined) result.editorStyles = override.editorStyles;
     if (override.passwordHash) result.passwordHash = override.passwordHash;

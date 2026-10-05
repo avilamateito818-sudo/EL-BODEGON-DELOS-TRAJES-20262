@@ -621,6 +621,10 @@ section {
   .admin-modal-box h3 { font-size: 0.95rem; }
   .admin-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; min-height: 38px; }
   .admin-input, .admin-textarea { font-size: 16px; }
+  .admin-modal-box.admin-modal-wide { max-width: 100%; }
+  .admin-season-list { max-height: 62vh; }
+  .admin-season-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .admin-season-input { height: 40px; }
   .admin-preview img { max-height: 160px; }
 
   /* Admin toolbar compacto */
