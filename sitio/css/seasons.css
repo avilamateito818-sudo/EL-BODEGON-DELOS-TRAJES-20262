@@ -1,8 +1,5 @@
 /* ============ TEMPORADAS (CATÁLOGO POR TEMPORADA) ============ */
 #temporadas {
-  --season-accent: #d4af37;
-  --season-glow: rgba(212, 175, 55, 0.18);
-  --season-accent-soft: rgba(212, 175, 55, 0.08);
   padding: 12rem 12%;
   background:
     radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
@@ -13,15 +10,12 @@
 }
 
 #temporadas[data-season="enero"] {
-  --season-accent: #D4A017;
-  --season-glow: rgba(212, 160, 23, 0.35);
-  --season-accent-soft: rgba(212, 160, 23, 0.15);
   background:
-    radial-gradient(circle at 85% 8%, rgba(212, 160, 23, 0.25), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.5), transparent 55%),
-    linear-gradient(165deg, #7FB3E0 0%, #A8D4F2 50%, #85BBE8 100%);
-  border-top: 2px solid #D4A017;
-  border-bottom: 2px solid #D4A017;
+    linear-gradient(165deg, var(--season-bg1) 0%, var(--season-bg2) 50%, var(--season-bg3) 100%);
+  border-top: 2px solid var(--season-accent);
+  border-bottom: 2px solid var(--season-accent);
 }
 
 #temporadas[data-season="enero"] .section-head {
@@ -234,7 +228,7 @@
   padding: 6rem 2rem;
   border: 1px solid rgba(255, 140, 0, 0.4);
   border-radius: 16px;
-  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.png');
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.webp');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -315,7 +309,7 @@
 /* HALLOWEEN: mantiene el terror, por eso ignora el color de temporada */
 #temporadas[data-season="octubre"] .halloween-landing {
   border-color: rgba(255, 140, 0, 0.4);
-  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.png');
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.webp');
   background-size: cover;
   background-position: center;
 }
@@ -591,18 +585,19 @@
 #temporadas[data-season="enero"] .enero-hero-photo {
   position: relative;
   width: 380px;
-  height: 380px;
+  aspect-ratio: var(--foto-relacion, 4 / 3);
   flex-shrink: 0;
   border-radius: 20px;
   overflow: hidden;
   border: 3px solid rgba(255, 215, 0, 0.5);
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35), 0 0 30px rgba(255, 215, 0, 0.15);
+  background: #0d0d12;
 }
 
 #temporadas[data-season="enero"] .enero-hero-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -701,7 +696,7 @@
 #temporadas[data-season="enero"] .enero-hero-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -844,7 +839,7 @@
 
 #temporadas[data-season="enero"] .season-subsection .subsection-img {
   width: 220px;
-  height: 160px;
+  aspect-ratio: var(--foto-relacion, 4 / 3);
   border-radius: 12px;
 }
 
@@ -906,147 +901,75 @@
 }
 
 #temporadas[data-season="febrero"] {
-  --season-accent: #cf7f8a;
-  --season-glow: rgba(207, 127, 138, 0.2);
-  --season-accent-soft: rgba(207, 127, 138, 0.1);
-  --season-bg1: #f4d7da;
-  --season-bg2: #fbecee;
-  --season-bg3: #efcdd1;
-  --season-dark: #6e3540;
-  --season-dark-soft: #8a5560;
-  --season-strong: #a85462;
   background:
-    radial-gradient(circle at 85% 8%, rgba(232, 180, 184, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(207, 127, 138, 0.5);
-  border-bottom: 1px solid rgba(207, 127, 138, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="marzo"] {
-  --season-accent: #c9a227;
-  --season-glow: rgba(201, 162, 39, 0.2);
-  --season-accent-soft: rgba(201, 162, 39, 0.1);
-  --season-bg1: #f3e3b8;
-  --season-bg2: #fbf3da;
-  --season-bg3: #ecd7a2;
-  --season-dark: #6b5613;
-  --season-dark-soft: #8a7325;
-  --season-strong: #a8841c;
   background:
-    radial-gradient(circle at 85% 8%, rgba(201, 162, 39, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(201, 162, 39, 0.5);
-  border-bottom: 1px solid rgba(201, 162, 39, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="abril"] {
-  --season-accent: #5aa75a;
-  --season-glow: rgba(90, 167, 90, 0.2);
-  --season-accent-soft: rgba(90, 167, 90, 0.1);
-  --season-bg1: #cfe8c4;
-  --season-bg2: #e9f5e1;
-  --season-bg3: #c2dfb4;
-  --season-dark: #2f5d2f;
-  --season-dark-soft: #4c744c;
-  --season-strong: #3d7a3d;
   background:
-    radial-gradient(circle at 85% 8%, rgba(90, 167, 90, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(90, 167, 90, 0.5);
-  border-bottom: 1px solid rgba(90, 167, 90, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="mayo"] {
-  --season-accent: #8f7bc9;
-  --season-glow: rgba(143, 123, 201, 0.2);
-  --season-accent-soft: rgba(143, 123, 201, 0.1);
-  --season-bg1: #ded4f1;
-  --season-bg2: #efe9fa;
-  --season-bg3: #cfc1ea;
-  --season-dark: #4b3a7a;
-  --season-dark-soft: #6b5799;
-  --season-strong: #5d47a3;
   background:
-    radial-gradient(circle at 85% 8%, rgba(143, 123, 201, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(143, 123, 201, 0.5);
-  border-bottom: 1px solid rgba(143, 123, 201, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="junio"] {
-  --season-accent: #d4a72e;
-  --season-glow: rgba(212, 167, 46, 0.2);
-  --season-accent-soft: rgba(212, 167, 46, 0.1);
-  --season-bg1: #f5e9b8;
-  --season-bg2: #fcf5dc;
-  --season-bg3: #eedea3;
-  --season-dark: #6b5613;
-  --season-dark-soft: #8a7325;
-  --season-strong: #a8841c;
   background:
-    radial-gradient(circle at 85% 8%, rgba(212, 167, 46, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(212, 167, 46, 0.5);
-  border-bottom: 1px solid rgba(212, 167, 46, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="julio"] {
-  --season-accent: #3fa49b;
-  --season-glow: rgba(63, 164, 155, 0.2);
-  --season-accent-soft: rgba(63, 164, 155, 0.1);
-  --season-bg1: #c2e6e2;
-  --season-bg2: #e6f6f4;
-  --season-bg3: #b0dcd7;
-  --season-dark: #1f5b56;
-  --season-dark-soft: #3d7570;
-  --season-strong: #2a7a73;
   background:
-    radial-gradient(circle at 85% 8%, rgba(63, 164, 155, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(63, 164, 155, 0.5);
-  border-bottom: 1px solid rgba(63, 164, 155, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="agosto"] {
-  --season-accent: #cf8b4a;
-  --season-glow: rgba(207, 139, 74, 0.2);
-  --season-accent-soft: rgba(207, 139, 74, 0.1);
-  --season-bg1: #f7d9c4;
-  --season-bg2: #fcede1;
-  --season-bg3: #f0ccb0;
-  --season-dark: #7a4a24;
-  --season-dark-soft: #9a6438;
-  --season-strong: #b26b2e;
   background:
-    radial-gradient(circle at 85% 8%, rgba(207, 139, 74, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(207, 139, 74, 0.5);
-  border-bottom: 1px solid rgba(207, 139, 74, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="septiembre"] {
-  --season-accent: #64748b;
-  --season-glow: rgba(100, 116, 139, 0.2);
-  --season-accent-soft: rgba(100, 116, 139, 0.1);
-  --season-bg1: #c9d4e0;
-  --season-bg2: #e6edf5;
-  --season-bg3: #bcc9d8;
-  --season-dark: #33445c;
-  --season-dark-soft: #51647e;
-  --season-strong: #42587a;
   background:
-    radial-gradient(circle at 85% 8%, rgba(100, 116, 139, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
-  border-top: 1px solid rgba(100, 116, 139, 0.5);
-  border-bottom: 1px solid rgba(100, 116, 139, 0.5);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 /* ===== CONTENIDO LEGIBLE EN FONDO CLARO (Febrero - Septiembre) ===== */
@@ -1361,40 +1284,21 @@
 
 /* ===== NOVIEMBRE · DICIEMBRE (fondo claro) ===== */
 #temporadas[data-season="noviembre"] {
-  --season-accent: #1a5276;
-  --season-glow: rgba(26, 82, 118, 0.25);
-  --season-accent-soft: rgba(26, 82, 118, 0.12);
-  --season-bg1: #a9cce3;
-  --season-bg2: #d4e6f1;
-  --season-bg3: #85c1e9;
-  --season-dark: #1a3c5e;
-  --season-dark-soft: #2c5f8a;
-  --season-strong: #d4ac0d;
   background:
-    radial-gradient(circle at 85% 8%, rgba(212, 172, 13, 0.18), transparent 45%),
-    radial-gradient(circle at 12% 92%, rgba(26, 82, 118, 0.14), transparent 55%),
-    linear-gradient(165deg, #a9cce3 0%, #d4e6f1 45%, #f9e79f 100%);
-  border-top: 1px solid rgba(26, 82, 118, 0.55);
-  border-bottom: 1px solid rgba(212, 172, 13, 0.55);
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
+    radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
+    linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="diciembre"] {
-  --season-accent: #b91c1c;
-  --season-glow: rgba(185, 28, 28, 0.25);
-  --season-accent-soft: rgba(27, 94, 32, 0.12);
-  --season-bg1: #e8f5e9;
-  --season-bg2: #c8e6c9;
-  --season-bg3: #f8bbd0;
-  --season-dark: #1b5e20;
-  --season-dark-soft: #2e7d32;
-  --season-strong: #b71c1c;
-  --season-green: #1b5e20;
   background:
-    radial-gradient(circle at 85% 8%, rgba(27, 94, 32, 0.14), transparent 45%),
-    radial-gradient(circle at 12% 92%, rgba(183, 28, 28, 0.12), transparent 55%),
-    linear-gradient(165deg, #e8f5e9 0%, #f1f8e9 40%, #fce4ec 100%);
-  border-top: 1px solid rgba(27, 94, 32, 0.45);
-  border-bottom: 1px solid rgba(183, 28, 28, 0.45);
+    radial-gradient(circle at 85% 8%, var(--season-accent-soft), transparent 45%),
+    radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
+    linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="noviembre"] .section-head h2,
@@ -1608,9 +1512,11 @@
 }
 
 #temporadas[data-season="octubre"] {
-  --season-accent: #ff8c00;
-  --season-glow: rgba(255, 140, 0, 0.32);
-  --season-accent-soft: rgba(255, 140, 0, 0.1);
+  background:
+    radial-gradient(circle at 85% 8%, rgba(255, 107, 0, 0.16), transparent 45%),
+    linear-gradient(165deg, #1A0A02, #0D0500 50%, #2A1000 100%);
+  border-top: 1px solid var(--season-accent);
+  border-bottom: 1px solid var(--season-accent);
 }
 
 #temporadas[data-season="octubre"] .section-head span {
@@ -1694,7 +1600,12 @@
 .season-marquee .season-tab {
   flex: 0 0 auto;
   white-space: normal;
-  width: 220px;
+  /* El ancho incluye el relleno: 220px de caja dejan poco para el texto
+     ("Halloween · Exclusivo" no cabia y se cortaba). Se ensancha la caja y
+     se recorta el relleno lateral para que el texto entre completo. */
+  width: 236px;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
   min-height: 120px;
   text-align: center;
   line-height: 1.35;
@@ -1765,6 +1676,11 @@
   text-transform: uppercase;
   opacity: 0.85;
   margin-top: 0.5rem;
+  /* Los nombres largos ("Halloween · Exclusivo") bajan de linea en vez de
+     recortarse contra el borde de la pastilla. */
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .season-tab .tab-desc {
@@ -1920,20 +1836,9 @@
   opacity: 1;
 }
 
-.season-tab-exclusive::before {
-  content: 'EXCLUSIVO';
-  position: absolute;
-  top: 12px;
-  right: -34px;
-  background: #ff8c00;
-  color: #0a0a0a;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 0.48rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 3px 36px;
-  transform: rotate(45deg);
-}
+/* La cinta diagonal "EXCLUSIVO" se elimino: el texto ya dice
+   "Halloween · Exclusivo" dentro de la pastilla y la cinta girada se salia
+   de la caja, recortando el borde. El October se distingue con su fondo. */
 
 @keyframes exclusivePulse {
   0%,
@@ -2012,12 +1917,14 @@ a.season-item:hover {
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid var(--season-accent);
+  aspect-ratio: var(--foto-relacion, 4 / 3);
+  background: #0d0d12;
 }
 
 .subsection-img img {
   width: 100%;
-  height: 230px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
   display: block;
   transition: transform 2s var(--transition-haunted);
 }
@@ -2389,8 +2296,11 @@ a.season-item:hover {
    Seccion propia que reune los catalogos de Halloween, noviembre y diciembre.
    Solo se muestran los grupos: la franja de contacto y las anclas internas de
    cada mes se quedan en su propia temporada para no repetir contenido. */
+/* El relleno va en px y no en porcentaje: un 6% depende del ancho final de la
+   seccion, y como los hijos de abajo usan width:100%, ambos se calculan uno
+   con el otro y la seccion termina mas ancha que la pantalla. */
 .catalogo-general-root {
-  padding: 7rem 6%;
+  padding: 7rem 72px;
   background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, rgba(10, 6, 2, 0.6) 100%);
 }
 

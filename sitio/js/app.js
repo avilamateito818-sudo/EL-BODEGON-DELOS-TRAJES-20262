@@ -161,6 +161,9 @@
         p.classList.toggle('is-active', p.dataset.panel === month);
       });
       if (seasonSection) seasonSection.dataset.season = month;
+      /* El color de la pagina lo decide el mes activo: cinta, temporada,
+         catalogo y contacto leen las mismas variables. */
+      document.body.dataset.season = month;
       resetSeasonGates();
       showLanding(month);
       syncCatalogoGeneral(month);
@@ -205,6 +208,7 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
        actualiza desde selectSeason. */
 
     /* Estado inicial: enero */
+    document.body.dataset.season = 'enero';
     resetSeasonGates();
     showLanding('enero');
     syncCatalogoGeneral('enero');
@@ -743,20 +747,60 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
       '.section-head, .card-ghost, .season-catalog, .season-subsection, .season-hero, .season-item, .contact-card, .contact-form-container, .footer-col'
     );
     if ('IntersectionObserver' in window) {
-      revealTargets.forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.setProperty('--d', ((i % 6) * 90) + 'ms');
-      });
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-      revealTargets.forEach((el) => revealObserver.observe(el));
+    revealTargets.forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.setProperty('--d', ((i % 6) * 90) + 'ms');
+    });
+    // Establece proporción real de las fotos para evitar recortes
+    function setRealRatio(img) {
+      if (!img || img.dataset.ratioSet) return;
+      if (img.complete && img.naturalWidth && img.naturalHeight) {
+        const r = img.naturalWidth / img.naturalHeight;
+        const wrap = img.parentElement;
+        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+        img.dataset.ratioSet = '1';
+      }
+      img.addEventListener('load', () => {
+        if (!img.naturalWidth || !img.naturalHeight) return;
+        const r = img.naturalWidth / img.naturalHeight;
+        const wrap = img.parentElement;
+        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+        img.dataset.ratioSet = '1';
+      }, { once: true });
     }
+    document.querySelectorAll('.img-ghost img, .subsection-img img, .enero-hero-photo img, .season-item img, .admin-added-photo, .season-subsection img').forEach((img) => {
+      setRealRatio(img);
+      // Si ya está cargada, intenta leerla ahora
+      if (img.complete && img.naturalWidth && img.naturalHeight) {
+        const r = img.naturalWidth / img.naturalHeight;
+        const wrap = img.parentElement;
+        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+        img.dataset.ratioSet = '1';
+      }
+    });
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('img').forEach(setRealRatio);
+          entry.target.classList.add('is-revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach((el) => revealObserver.observe(el));
+    }
+
+    // Respaldo cuando una foto no existe: los errores de recurso no burbujean,
+    // asi que se escuchan en fase de captura sobre el documento.
+    window.addEventListener('error', (e) => {
+      const t = e.target;
+      if (!t || t.tagName !== 'IMG') return;
+      const fb = 'assets/img/ph-generico.svg';
+      if (t.getAttribute('src') === fb || t.dataset.fallbackApplied) return;
+      t.dataset.fallbackApplied = '1';
+      t.removeAttribute('loading');
+      t.src = fb;
+    }, true);
 
     // vCard: descargar contacto con nombre ELBODEGONDELOSTRAJES
     // (eliminado junto con los elementos de descarga de contacto)

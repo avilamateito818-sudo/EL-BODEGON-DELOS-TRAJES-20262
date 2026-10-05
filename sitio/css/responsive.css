@@ -334,7 +334,7 @@ section {
   section { padding: 5rem 5%; }
   #temporadas { padding: 5rem 5%; }
   .section-head { margin-bottom: 4rem; }
-  .img-ghost { height: 340px; }
+  .img-ghost { aspect-ratio: var(--foto-relacion, 3 / 4); }
   .card-body-haunted { padding: 2rem 1.6rem; }
   .season-catalog { padding: 2rem; }
   .season-tab { padding: 1.1rem 1.7rem; font-size: 1rem; }
@@ -363,7 +363,7 @@ section {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 2rem;
   }
-  .img-ghost { height: 260px; }
+  .img-ghost { aspect-ratio: var(--foto-relacion, 3 / 4); }
   .season-catalog .grid-haunted { gap: 1.6rem; }
 
   .season-panel.is-active { gap: 2.5rem; }
@@ -400,7 +400,7 @@ section {
   .season-item-body p { font-size: 0.85rem; }
 
   .season-subsection { gap: 1.6rem; padding: 1.6rem; }
-  .subsection-img img { height: 200px; }
+  .subsection-img img { width: 100%; height: 100%; object-fit: contain; aspect-ratio: unset; }
 
   .contact-form-container { padding: 2rem; }
 
@@ -488,7 +488,7 @@ section {
   #temporadas[data-season] .section-head h2 { letter-spacing: 1px; }
 
   .grid-haunted { grid-template-columns: 1fr; }
-  .img-ghost { height: 260px; }
+  .img-ghost { aspect-ratio: var(--foto-relacion, 3 / 4); }
   .card-body-haunted { padding: 1.8rem 1.3rem; }
   .card-body-haunted h3 { font-size: 1.5rem; }
 
@@ -518,7 +518,7 @@ section {
   .expand-icon { font-size: 0.85rem; }
 
   .season-subsection { padding: 1.3rem; gap: 1.3rem; }
-  .subsection-img img { height: 185px; }
+  .subsection-img img { width: 100%; height: 100%; object-fit: contain; }
   .season-subsection h4 { font-size: 1.25rem; }
   .season-subsection p { font-size: 0.92rem; line-height: 1.75; }
 
@@ -574,7 +574,6 @@ section {
   .season-item img { width: 72px; height: 72px; }
   .section-head span { letter-spacing: 2px; font-size: 0.75rem; }
   .season-tab { padding: 0.75rem 0.95rem; font-size: 0.78rem; }
-  .season-tab-exclusive::before { right: -38px; }
 
   .halloween-landing { padding: 3.5rem 1rem; gap: 1.6rem; }
   .halloween-landing-title { font-size: clamp(1.2rem, 5vw, 2rem); letter-spacing: 1px; }
@@ -655,6 +654,39 @@ footer .footer-grid {
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Las secciones nunca sobrepasan el ancho de la ventana. El body es un
+   contenedor flex y el contenido puede empujarlo mas alla de la pantalla;
+   max-width con 100vw deja cada seccion siempre dentro de la vista. */
+body > section,
+body > footer,
+body > header {
+  max-width: 100vw;
+}
+
+/* Los paneles y subsections no fuerzan ancho: un width:100% dentro de una
+   seccion con relleno en porcentaje hace que la seccion crezca mas alla de
+   la pantalla. Se deja que ocupen el ancho disponible y el limite se aplica
+   solo al contenedor exterior. */
+#catalogo-general .catalogo-general-panel,
+#catalogo-general .section-head,
+#temporadas .season-panels,
+#temporadas .season-panel.is-active,
+#temporadas .season-sub-sections {
+  width: auto;
+  max-width: 1400px;
+}
+
+/* Las rejillas de dos columnas no deben forzar ancho minimo del contenido:
+   sin min-width:0 el texto ancho de un lado estira la seccion entera. */
+.season-subsection,
+.subsection-body,
+.season-sub-sections,
+.season-panel,
+.season-item,
+.card-ghost {
+  min-width: 0;
 }
 
 /* Los paneles de temporada se centran y no se desbordan en PC */
@@ -855,7 +887,7 @@ textarea:focus-visible,
   }
   #temporadas[data-season="enero"] .enero-hero-photo {
     width: 300px;
-    height: 300px;
+    aspect-ratio: var(--foto-relacion, 4 / 3);
     margin: 0 auto;
     order: -1;
   }
@@ -887,7 +919,7 @@ textarea:focus-visible,
   }
   #temporadas[data-season="enero"] .enero-hero-photo {
     width: 260px;
-    height: 260px;
+    aspect-ratio: var(--foto-relacion, 4 / 3);
   }
 }
 
@@ -910,7 +942,7 @@ textarea:focus-visible,
   }
   #temporadas[data-season="enero"] .enero-hero-photo {
     width: 220px;
-    height: 220px;
+    aspect-ratio: var(--foto-relacion, 4 / 3);
   }
   #temporadas[data-season="enero"] .enero-quick-nav {
     flex-wrap: wrap;
@@ -938,13 +970,13 @@ textarea:focus-visible,
   .season-subsection .subsection-img {
     max-width: 480px;
     margin: 0 auto;
+    aspect-ratio: var(--foto-relacion, 4 / 3);
   }
 
   .season-subsection .subsection-img img {
     width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
   }
 
   .season-subsection .season-cta {
@@ -1011,7 +1043,7 @@ textarea:focus-visible,
     gap: 2rem;
   }
   .img-ghost {
-    height: 320px;
+    aspect-ratio: var(--foto-relacion, 3 / 4);
   }
   .card-body-haunted {
     padding: 2rem 1.6rem;

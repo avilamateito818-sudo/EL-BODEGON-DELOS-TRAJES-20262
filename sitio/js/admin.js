@@ -1431,7 +1431,7 @@
     card.className = 'card-ghost admin-added';
     card.dataset.adminId = entry.id;
     card.innerHTML =
-      '<div class="img-ghost"><img src="' + esc(entry.img) + '" alt="' + esc(entry.title) + '"></div>' +
+      '<div class="img-ghost"><img loading="lazy" decoding="async" src="' + esc(entry.img) + '" alt="' + esc(entry.title) + '"></div>' +
       '<div class="card-body-haunted"><h3>' + esc(entry.title) + '</h3><p>' + esc(entry.desc) + '</p></div>';
     grid.appendChild(card);
     wireCard(card, entry);
@@ -1749,7 +1749,7 @@
     applyEditorStyles();
   }
 
-  function applyEditorStyles() {
+function applyEditorStyles() {
     var es = content.editorStyles || {};
     Object.keys(es).forEach(function (key) {
       var el = null;
@@ -1759,6 +1759,14 @@
       if (el && es[key]) {
         el.style.cssText = es[key];
         if (!el.dataset.editorId) el.dataset.editorId = key;
+        /* Una seccion de la pagina no puede quedar con alto fijo: si el editor
+           guardo un alto, queda un bloque de espacio vacio que no se ve al
+           redimensionar la ventana. Se descarta el alto de las secciones. */
+        if (el.matches('section, footer')) {
+          el.style.removeProperty('height');
+          el.style.removeProperty('min-height');
+          el.style.removeProperty('max-height');
+        }
       }
     });
   }
@@ -2037,6 +2045,8 @@
 
   function enableEditMode() {
     editMode = true;
+    /* Solo ahora hace falta la version mas reciente del contenido. */
+    if (!remoteSynced) syncRemote(remoteBaseSnapshot);
     document.body.classList.add('admin-edit-mode');
     setMarqueePaused(true);
     var activeMonth = (document.getElementById('temporadas') || {}).dataset;
@@ -3401,7 +3411,14 @@
   var GITHUB_CONTENT_PATH = 'sitio/data/admin-content.js';
   var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + GITHUB_CONTENT_PATH;
 
+  /* Descargar el contenido remoto cuesta ~650 KB. El visitante normal ya ve
+     todo el contenido publicado en data/admin-content.js, asi que la descarga
+     solo hace falta cuando el administrador abre el panel para editar. */
+  var remoteSynced = false;
+  var remoteBaseSnapshot = null;
+
   function fetchFromGitHub(callback) {
+    remoteSynced = true;
     fetch(GITHUB_API)
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -3426,23 +3443,11 @@
       });
   }
 
-  function init() {
-    var base = null;
-    if (window.ADMIN_CONTENT) {
-      try {
-        base = JSON.parse(JSON.stringify(window.ADMIN_CONTENT));
-      } catch (e) {}
-    }
-    var saved = loadAutoSave();
-    if (saved) {
-      try {
-        base = mergeData(base || {}, saved);
-      } catch (e) {}
-    }
-    if (base) {
-      try { applyData(base); } catch (e) {}
-    }
-
+  /* Descarga y aplica el contenido de GitHub. NO se ejecuta al cargar la pagina:
+     el visitante ya ve el contenido publicado en data/admin-content.js y esta
+     peticion a la API de GitHub cuesta ~650 KB. Solo se usa al abrir el panel
+     de edicion, que es donde el administrador necesita la version mas nueva. */
+  function syncRemote(base) {
     fetchFromGitHub(function (remoteData) {
       var pendingRaw = null;
       try { pendingRaw = localStorage.getItem(PENDING_SYNC_KEY); } catch (e) {}
@@ -3497,6 +3502,27 @@
         }
       } catch (e) {}
     });
+  }
+
+  function init() {
+    var base = null;
+    if (window.ADMIN_CONTENT) {
+      try {
+        base = JSON.parse(JSON.stringify(window.ADMIN_CONTENT));
+      } catch (e) {}
+    }
+    var saved = loadAutoSave();
+    if (saved) {
+      try {
+        base = mergeData(base || {}, saved);
+      } catch (e) {}
+    }
+    if (base) {
+      try { applyData(base); } catch (e) {}
+    }
+    /* Se guarda para que syncRemote() pueda compararlo con la version de
+       GitHub cuando el administrador abra el panel. */
+    remoteBaseSnapshot = base;
 
     buildFab();
     reCompressOld();

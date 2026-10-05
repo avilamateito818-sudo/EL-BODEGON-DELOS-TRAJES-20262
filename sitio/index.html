@@ -31,13 +31,15 @@
   <link rel="stylesheet" href="css/admin.css">
   <link rel="stylesheet" href="css/admin-guide.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <!-- El color de cada mes vive aqui; se carga al final para que mande -->
+  <link rel="stylesheet" href="css/season-colors.css">
   <link rel="icon" href="assets/img/logo.jpg">
 </head>
 
 <body>
   <header id="main-header">
     <div class="logo-container">
-      <img src="assets/img/logo.jpg" alt="Logo Boutique Horror">
+      <img src="assets/img/logo.jpg" alt="Logo Boutique Horror" loading="eager" fetchpriority="high" decoding="async">
       <h1>El Bodegón de los Trajes</h1>
     </div>
     <nav id="main-nav" aria-label="Menú principal">
@@ -48,7 +50,6 @@
       </button>
       <ul class="nav-menu" id="nav-menu">
         <li><a href="#inicio">Portada</a></li>
-        <li><a href="#temporadas" data-tab="octubre">Sobre Nosotros</a></li>
         <li><a href="#catalogo-general">Catálogo</a></li>
         <li class="has-dropdown">
           <button type="button" class="dropdown-toggle" aria-expanded="false">
@@ -69,7 +70,6 @@
             <li><a href="#temporadas" data-tab="diciembre">Navidad &amp; Fin de Año</a></li>
           </ul>
         </li>
-        <li><a href="#contacto">Contáctanos</a></li>
         <li class="admin-menu-item">
           <button type="button" class="admin-menu-btn" id="admin-menu-btn">
             <span aria-hidden="true">&#128274;</span> Panel de administración
@@ -217,7 +217,7 @@
         <div class="season-hero-wrapper enero-hero-wrapper">
           <div class="season-hero enero-hero-full">
             <span class="season-milestone">Hito Colombiano · Reyes Magos y regreso a clases</span>
-            <h3 class="season-title">Reyes, uniformes y batas para enero.</h3>
+            <h3 class="season-title">Enero · Reyes Magos, Uniformes y Batas</h3>
             <p class="season-subtitle">Celebra el Día de Reyes con nuestros trajes y prepárate para el nuevo año escolar con uniformes y batas ajustados a la medida. Elige una categoría y te llevamos a su sección.</p>
             <a class="season-cta" href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20enero.">Cotizar por WhatsApp</a>
             <nav class="season-quick-nav enero-quick-nav" aria-label="Navegación de enero">
@@ -228,7 +228,7 @@
             </nav>
           </div>
           <div class="enero-hero-photo" id="enero-hero-photo">
-            <img src="assets/img/reyes_magos.jpg" alt="Foto de temporada - Enero">
+            <img src="assets/img/reyes_magos.webp" alt="Foto de temporada - Enero" loading="eager" fetchpriority="high" decoding="async">
             <button class="admin-season-photo-btn admin-ui photo-change-btn" type="button" data-season-photo="enero-hero" title="Cambiar foto de esta temporada">Cambiar fotos de esta temporada</button>
             <div class="admin-photo-controls admin-ui" id="admin-photo-controls">
               <div class="admin-photo-hint">Rueda: tamaño | Triple clic: ajustar | Arrastrar: mover | Shift+Rueda: mover X | Ctrl+Rueda: mover Y</div>

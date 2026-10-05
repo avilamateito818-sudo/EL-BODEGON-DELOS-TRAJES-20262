@@ -6,7 +6,7 @@ header {
   right: 0;
   width: 100%;
   z-index: 1000;
-  padding: max(1.2rem, var(--sat)) max(10%, var(--sar)) 1.2rem max(10%, var(--sal));
+  padding: max(1.2rem, var(--sat)) max(5%, var(--sar)) 1.2rem max(5%, var(--sal));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +18,7 @@ header {
 }
 
 header.scrolled {
-  padding: max(0.8rem, var(--sat)) max(10%, var(--sar)) 0.8rem max(10%, var(--sal));
+  padding: max(0.8rem, var(--sat)) max(5%, var(--sar)) 0.8rem max(5%, var(--sal));
   background: var(--pure-black);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
 }
@@ -29,6 +29,8 @@ header.scrolled {
   gap: 1.5rem;
   min-width: 0;
   overflow: hidden;
+  flex-shrink: 1;
+  flex-grow: 0;
 }
 
 .logo-container img {
@@ -40,18 +42,32 @@ header.scrolled {
 }
 
 header h1 {
-  font-size: 1.5rem;
   color: var(--halloween-vivid);
   text-shadow: 0 0 12px rgba(255, 179, 71, 0.4);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* El titulo no se recorta: si el espacio aprieta, baja de tamano en vez de
+     perder letras. min-width evita que el contenedor flexible lo aplaste. */
+  flex-shrink: 0;
+  min-width: max-content;
+  font-size: clamp(1rem, 2.1vw, 1.5rem);
+  letter-spacing: 1px;
+}
+
+/* El menu puede encogerse antes que el titulo: si no, el logo se queda sin
+   espacio y "El Bodegon de los Trajes" aparece cortado. */
+nav {
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 nav ul {
   display: flex;
-  gap: 2.5rem;
+  gap: 1rem;
   list-style: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 nav a {

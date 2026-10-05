@@ -1,0 +1,625 @@
+/* ===================================================================
+   EL COLOR DE LOS DOCE MESES · UNA SOLA FUENTE DE VERDAD
+   -------------------------------------------------------------------
+   Aqui se decide el color de cada temporada. Ningun otro archivo
+   escoge tonos: todos leen estas variables.
+
+   Que color lleva cada mes y por que:
+
+     enero      oro de Reyes
+     febrero    rosa de San Valentin
+     marzo      violeta de Cuaresma
+     abril      verde de primavera
+     mayo       magenta del Dia de las Madres
+     junio      champana de las bodas
+     julio      turquesa del verano y las fiestas patrias
+     agosto     vino de las galas
+     septiembre azul pizarra del regreso a clases
+     octubre    naranja de Halloween
+     noviembre  azul marino de los grados
+     diciembre  verde de Navidad
+
+   Para cambiar el color de un mes se toca unicamente su bloque de aqui.
+
+   De cada mes se guardan tres cosas:
+
+     --m-accent   el color del mes: cintas, titulos, bordes, botones
+     --m-bg1/2/3  el fondo suave de la temporada, en tres tonos
+     --m-dark*    el texto oscuro que se lee bien sobre ese fondo
+
+   Los nombres arrancan con --m- a proposito: asi ningun archivo puede
+   pisar la paleta por accidente. Los archivos viejos usan --season-*
+   y lo unico que hacen es copiar estos valores.
+   =================================================================== */
+
+/* ------------------------------------------------------------------
+   ENERO · ORO DE REYES
+   ------------------------------------------------------------------ */
+body[data-season="enero"] {
+  --m-accent: #D4A017;
+  --m-ink: #59430A;
+  --m-lit: #D4A017;
+  --m-on-accent: #1A1204;
+  --m-soft: rgba(212, 160, 23, 0.18);
+  --m-faint: rgba(212, 160, 23, 0.07);
+  --m-glow: rgba(212, 160, 23, 0.35);
+  /* Enero tiene cielo de invierno: el fondo es azul y el acento, el oro
+     de Reyes. */
+  --m-bg1: #A8D4F2;
+  --m-bg2: #D6EAF9;
+  --m-bg3: #85BBE8;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C170A;
+  --m-deep2: #2A2311;
+  --m-deep3: #110E06;
+  --m-dark: #0D2440;
+  --m-dark-soft: #1A3A6B;
+  --m-strong: #D4A017;
+}
+
+/* ------------------------------------------------------------------
+   FEBRERO · ROSA DE SAN VALENTIN
+   ------------------------------------------------------------------ */
+body[data-season="febrero"] {
+  --m-accent: #E4738F;
+  --m-ink: #8B4657;
+  --m-lit: #E4738F;
+  --m-on-accent: #2A0A14;
+  --m-soft: rgba(228, 115, 143, 0.18);
+  --m-faint: rgba(228, 115, 143, 0.07);
+  --m-glow: rgba(228, 115, 143, 0.38);
+  --m-bg1: #FDE8EE;
+  --m-bg2: #FBDCE4;
+  --m-bg3: #F6C9D6;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C0A0F;
+  --m-deep2: #2A1117;
+  --m-deep3: #110609;
+  --m-dark: #6E3540;
+  --m-dark-soft: #8A5560;
+  --m-strong: #A85462;
+}
+
+/* ------------------------------------------------------------------
+   MARZO · VIOLETA DE CUARESMA
+   ------------------------------------------------------------------ */
+body[data-season="marzo"] {
+  --m-accent: #8B5CF6;
+  --m-ink: #603FAA;
+  --m-lit: #9266F7;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(139, 92, 246, 0.18);
+  --m-faint: rgba(139, 92, 246, 0.07);
+  --m-glow: rgba(139, 92, 246, 0.40);
+  --m-bg1: #EFE7FE;
+  --m-bg2: #E2D8FB;
+  --m-bg3: #D2C2F6;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #100A1C;
+  --m-deep2: #19112A;
+  --m-deep3: #090611;
+  --m-dark: #3B2A63;
+  --m-dark-soft: #5B4794;
+  --m-strong: #6D3FD6;
+}
+
+/* ------------------------------------------------------------------
+   ABRIL · VERDE DE PRIMAVERA
+   ------------------------------------------------------------------ */
+body[data-season="abril"] {
+  --m-accent: #4CA968;
+  --m-ink: #2F6940;
+  --m-lit: #4CA968;
+  --m-on-accent: #06180D;
+  --m-soft: rgba(76, 169, 104, 0.18);
+  --m-faint: rgba(76, 169, 104, 0.07);
+  --m-glow: rgba(76, 169, 104, 0.36);
+  --m-bg1: #E2F5E8;
+  --m-bg2: #D2EDDB;
+  --m-bg3: #BCE0C9;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #0A1C10;
+  --m-deep2: #112A18;
+  --m-deep3: #061109;
+  --m-dark: #1F4A2C;
+  --m-dark-soft: #3A6B48;
+  --m-strong: #35834C;
+}
+
+/* ------------------------------------------------------------------
+   MAYO · MAGENTA DEL DIA DE LAS MADRES
+   ------------------------------------------------------------------ */
+body[data-season="mayo"] {
+  --m-accent: #C0509E;
+  --m-ink: #8C3A73;
+  --m-lit: #C45CA5;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(192, 80, 158, 0.18);
+  --m-faint: rgba(192, 80, 158, 0.07);
+  --m-glow: rgba(192, 80, 158, 0.38);
+  --m-bg1: #FBE6F4;
+  --m-bg2: #F7D8EC;
+  --m-bg3: #EDC3E0;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C0A17;
+  --m-deep2: #2A1122;
+  --m-deep3: #11060E;
+  --m-dark: #5B1B50;
+  --m-dark-soft: #83387A;
+  --m-strong: #9A2E86;
+}
+
+/* ------------------------------------------------------------------
+   JUNIO · CHAMPANA DE LAS BODAS
+   ------------------------------------------------------------------ */
+body[data-season="junio"] {
+  --m-accent: #D9A441;
+  --m-ink: #775A24;
+  --m-lit: #D9A441;
+  --m-on-accent: #221703;
+  --m-soft: rgba(217, 164, 65, 0.18);
+  --m-faint: rgba(217, 164, 65, 0.07);
+  --m-glow: rgba(217, 164, 65, 0.36);
+  --m-bg1: #FDF0D8;
+  --m-bg2: #FAE7C2;
+  --m-bg3: #F0D9A4;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C160A;
+  --m-deep2: #2A2111;
+  --m-deep3: #110D06;
+  --m-dark: #5C4413;
+  --m-dark-soft: #8A6E2A;
+  --m-strong: #A87A22;
+}
+
+/* ------------------------------------------------------------------
+   JULIO · TURQUESA DEL VERANO
+   ------------------------------------------------------------------ */
+body[data-season="julio"] {
+  --m-accent: #17A2A2;
+  --m-ink: #0E6464;
+  --m-lit: #17A2A2;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(23, 162, 162, 0.18);
+  --m-faint: rgba(23, 162, 162, 0.07);
+  --m-glow: rgba(23, 162, 162, 0.36);
+  --m-bg1: #D9F2F2;
+  --m-bg2: #C4E9E9;
+  --m-bg3: #A9DCDB;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #0A1C1C;
+  --m-deep2: #112A2A;
+  --m-deep3: #061111;
+  --m-dark: #124F4F;
+  --m-dark-soft: #2E7373;
+  --m-strong: #0E8282;
+}
+
+/* ------------------------------------------------------------------
+   AGOSTO · VINO DE LAS GALAS
+   ------------------------------------------------------------------ */
+body[data-season="agosto"] {
+  --m-accent: #9E2B4E;
+  --m-ink: #932849;
+  --m-lit: #BB6B83;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(158, 43, 78, 0.18);
+  --m-faint: rgba(158, 43, 78, 0.07);
+  --m-glow: rgba(158, 43, 78, 0.38);
+  --m-bg1: #F8E2E9;
+  --m-bg2: #F2D3DE;
+  --m-bg3: #E4B7C7;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C0A10;
+  --m-deep2: #2A1119;
+  --m-deep3: #110609;
+  --m-dark: #5A1730;
+  --m-dark-soft: #7E2E4A;
+  --m-strong: #8A2444;
+}
+
+/* ------------------------------------------------------------------
+   SEPTIEMBRE · AZUL PIZARRA DEL REGRESO A CLASES
+   ------------------------------------------------------------------ */
+body[data-season="septiembre"] {
+  --m-accent: #5A7BA6;
+  --m-ink: #3F5674;
+  --m-lit: #6684AC;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(90, 123, 166, 0.20);
+  --m-faint: rgba(90, 123, 166, 0.08);
+  --m-glow: rgba(90, 123, 166, 0.36);
+  --m-bg1: #E4EBF3;
+  --m-bg2: #D3DEEC;
+  --m-bg3: #BACAE0;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #081019;
+  --m-deep2: #0D1826;
+  --m-deep3: #04090F;
+  --m-dark: #2C3E55;
+  --m-dark-soft: #46597A;
+  --m-strong: #456189;
+}
+
+/* ------------------------------------------------------------------
+   OCTUBRE · NARANJA DE HALLOWEEN
+   Es el unico mes con fondo oscuro: el resto usa --m-bg1/2/3 claros.
+   ------------------------------------------------------------------ */
+body[data-season="octubre"] {
+  --m-accent: #FF6B00;
+  --m-ink: #FF6B00;
+  --m-lit: #FF6B00;
+  --m-on-accent: #1A0A00;
+  --m-soft: rgba(255, 107, 0, 0.18);
+  --m-faint: rgba(255, 107, 0, 0.07);
+  --m-glow: rgba(255, 107, 0, 0.45);
+  --m-bg1: #2A0D00;
+  --m-bg2: #160800;
+  --m-bg3: #3A1500;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #1C120A;
+  --m-deep2: #2A1B11;
+  --m-deep3: #110B06;
+  --m-dark: #FFB870;
+  --m-dark-soft: #E08A3C;
+  --m-strong: #FF8C00;
+}
+
+/* ------------------------------------------------------------------
+   NOVIEMBRE · AZUL MARINO DE LOS GRADOS
+   ------------------------------------------------------------------ */
+body[data-season="noviembre"] {
+  --m-accent: #2C5FA8;
+  --m-ink: #265392;
+  --m-lit: #5D84BC;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(44, 95, 168, 0.20);
+  --m-faint: rgba(44, 95, 168, 0.08);
+  --m-glow: rgba(44, 95, 168, 0.38);
+  --m-bg1: #E3EBF6;
+  --m-bg2: #D0DDF0;
+  --m-bg3: #B4C9E5;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #0A121C;
+  --m-deep2: #111B2A;
+  --m-deep3: #060A11;
+  --m-dark: #16355F;
+  --m-dark-soft: #2C5F8A;
+  --m-strong: #23497F;
+}
+
+/* ------------------------------------------------------------------
+   DICIEMBRE · VERDE DE NAVIDAD
+   ------------------------------------------------------------------ */
+body[data-season="diciembre"] {
+  --m-accent: #2E7D32;
+  --m-ink: #26682A;
+  --m-lit: #63B067;
+  --m-on-accent: #FFFFFF;
+  --m-soft: rgba(46, 125, 50, 0.18);
+  --m-faint: rgba(46, 125, 50, 0.07);
+  --m-glow: rgba(46, 125, 50, 0.36);
+  --m-bg1: #E3F3E4;
+  --m-bg2: #D3EBD6;
+  --m-bg3: #BBDCC0;
+  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
+  --m-deep1: #061405;
+  --m-deep2: #0C230D;
+  --m-deep3: #040E04;
+  --m-dark: #14401C;
+  --m-dark-soft: #2E7D32;
+  --m-strong: #22612A;
+}
+
+/* ===================================================================
+   PUENTES
+   Los archivos viejos работа con nombres --season-*. Estas reglas los
+   conectan con la paleta de arriba, sin cambiar una sola linea de mas.
+   =================================================================== */
+body[data-season="enero"],
+body[data-season="febrero"],
+body[data-season="marzo"],
+body[data-season="abril"],
+body[data-season="mayo"],
+body[data-season="junio"],
+body[data-season="julio"],
+body[data-season="agosto"],
+body[data-season="septiembre"],
+body[data-season="octubre"],
+body[data-season="noviembre"],
+body[data-season="diciembre"] {
+  --season-accent: var(--m-accent);
+  --season-ink: var(--m-ink);
+  --season-lit: var(--m-lit);
+  --season-on-accent: var(--m-on-accent);
+  --season-accent-soft: var(--m-soft);
+  --season-accent-faint: var(--m-faint);
+  --season-glow: var(--m-glow);
+  --season-bg1: var(--m-bg1);
+  --season-bg2: var(--m-bg2);
+  --season-bg3: var(--m-bg3);
+  --season-dark: var(--m-dark);
+  --season-dark-soft: var(--m-dark-soft);
+  --season-strong: var(--m-strong);
+  --season-surface: linear-gradient(165deg, var(--m-bg1), var(--m-bg2), var(--m-bg3));
+  --season-deep-surface: linear-gradient(165deg, var(--m-deep1), var(--m-deep2), var(--m-deep3));
+}
+
+/* ===================================================================
+   1. LA CINTA DE TEMPORADAS
+   Cada pastilla muestra su color y la del mes abierto se highlights.
+   =================================================================== */
+#temporadas .season-marquee .season-tab[data-month="enero"]      { --pill-accent: #D4A017; }
+#temporadas .season-marquee .season-tab[data-month="febrero"]    { --pill-accent: #E4738F; }
+#temporadas .season-marquee .season-tab[data-month="marzo"]      { --pill-accent: #8B5CF6; }
+#temporadas .season-marquee .season-tab[data-month="abril"]      { --pill-accent: #4CA968; }
+#temporadas .season-marquee .season-tab[data-month="mayo"]       { --pill-accent: #C0509E; }
+#temporadas .season-marquee .season-tab[data-month="junio"]      { --pill-accent: #D9A441; }
+#temporadas .season-marquee .season-tab[data-month="julio"]      { --pill-accent: #17A2A2; }
+#temporadas .season-marquee .season-tab[data-month="agosto"]     { --pill-accent: #9E2B4E; }
+#temporadas .season-marquee .season-tab[data-month="septiembre"] { --pill-accent: #5A7BA6; }
+#temporadas .season-marquee .season-tab[data-month="octubre"]    { --pill-accent: #FF6B00; }
+#temporadas .season-marquee .season-tab[data-month="noviembre"]  { --pill-accent: #2C5FA8; }
+#temporadas .season-marquee .season-tab[data-month="diciembre"]  { --pill-accent: #2E7D32; }
+
+/* La pastilla del mes abierto: fondo oscuro con su color y aura clara. */
+#temporadas .season-marquee .season-tab.is-active {
+  background:
+    radial-gradient(160% 150% at 20% 0%, var(--m-soft), transparent 62%),
+    linear-gradient(180deg, var(--m-bg1), var(--m-bg2));
+  color: var(--m-dark);
+  border-color: var(--m-accent);
+  border-left: 4px solid var(--m-accent);
+  box-shadow: 0 0 0 2px var(--m-accent),
+              0 0 44px var(--m-glow),
+              inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+#temporadas .season-marquee .season-tab.is-active .tab-label {
+  color: var(--m-dark);
+}
+#temporadas .season-marquee .season-tab.is-active .tab-desc {
+  color: var(--m-dark-soft);
+}
+
+/* Las pastillas de los demas meses ya se tiñen con su --pill-accent;
+   aqui solo se garantiza que todas tiren del mismo color. */
+#temporadas .season-marquee .season-tab .tab-label {
+  color: color-mix(in srgb, var(--pill-accent) 70%, #10333b);
+}
+#temporadas .season-marquee .season-tab .tab-desc {
+  color: #14525d;
+}
+
+/* ===================================================================
+   2. LA TEMPORADA ABIERTA
+   Lo que se esta desplazando lleva el color del mes.
+   =================================================================== */
+#temporadas[data-season] .season-panel.is-active .season-milestone,
+#temporadas[data-season] .season-panel.is-active .halloween-landing .season-milestone {
+  color: var(--m-accent);
+  background: var(--m-soft);
+  border-color: var(--m-accent);
+}
+
+#temporadas[data-season="octubre"] .season-panel.is-active .season-title,
+#temporadas[data-season="octubre"] .season-panel.is-active .season-range,
+#temporadas[data-season="octubre"] .season-panel.is-active .season-subsection h4,
+#temporadas[data-season="octubre"] .season-panel.is-active .season-item-body h4,
+#temporadas[data-season="octubre"] .season-panel.is-active .card-body-haunted h3,
+#temporadas[data-season="octubre"] .season-panel.is-active .section-head span {
+  color: var(--m-lit);
+}
+
+/* Sobre fondo claro el color puro del mes no se lee: el texto usa la
+   tinta, que es el mismo color oscurecido lo justo para verse.
+   Halloween y el catalogo general quedan fuera: esos van sobre negro y
+   usan la version clara. */
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-title,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-range,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-subsection h4,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-item-body h4,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .card-body-haunted h3,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .section-head span,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-milestone,
+body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .section-head h2,
+body[data-season]:not([data-season="octubre"]) #temporadas .season-marquee .season-tab.is-active .tab-label {
+  color: var(--m-ink);
+}
+
+#temporadas[data-season] .season-panel.is-active .season-subtitle,
+#temporadas[data-season] .season-panel.is-active .season-item-body p,
+#temporadas[data-season] .season-panel.is-active .season-subsection p,
+#temporadas[data-season] .season-panel.is-active .subsection-list li {
+  color: var(--m-dark);
+}
+
+#temporadas[data-season] .season-panel.is-active .season-catalog-tag,
+#temporadas[data-season] .season-panel.is-active .season-quick-nav a {
+  color: var(--m-accent);
+  border-color: var(--m-accent);
+  background: var(--m-soft);
+}
+
+#temporadas[data-season] .season-panel.is-active .season-catalog {
+  border-color: var(--m-accent);
+  background: linear-gradient(135deg, var(--m-soft), transparent 55%);
+}
+#temporadas[data-season] .season-panel.is-active .season-catalog:hover {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 35px var(--m-glow);
+}
+#temporadas[data-season] .season-panel.is-active .season-catalog h4 {
+  color: var(--m-accent);
+  text-shadow: 0 0 14px var(--m-glow);
+}
+
+#temporadas[data-season] .season-panel.is-active .card-ghost {
+  border-color: var(--m-soft);
+}
+#temporadas[data-season] .season-panel.is-active .card-ghost:hover {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 28px var(--m-glow);
+}
+
+#temporadas[data-season] .season-panel.is-active .halloween-landing {
+  border-color: var(--m-accent);
+}
+#temporadas[data-season] .season-panel.is-active .halloween-landing-title span {
+  color: var(--m-accent);
+}
+#temporadas[data-season] .season-panel.is-active .halloween-landing .btn-haunted {
+  background: var(--m-accent);
+  color: var(--m-on-accent);
+  border-color: var(--m-accent);
+  box-shadow: 0 10px 34px var(--m-glow);
+}
+#temporadas[data-season] .season-panel.is-active .halloween-landing .btn-haunted:hover {
+  background: transparent;
+  color: var(--m-accent);
+}
+
+/* Un halo del color del mes detras del contenido que se desplaza. */
+#temporadas[data-season] .season-panel.is-active {
+  position: relative;
+}
+#temporadas[data-season] .season-panel.is-active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, var(--m-faint), transparent 62%);
+  z-index: 0;
+}
+#temporadas[data-season] .season-panel.is-active > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===================================================================
+   3. EL CATALOGO GENERAL
+   Este bloque esta sobre el fondo oscuro del sitio, asi que aqui el
+   color del mes se usa tal cual (no la tinta): sobre negro todos los
+   meses se leen bien.
+   =================================================================== */
+#catalogo-general {
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--m-soft), transparent 62%),
+    linear-gradient(165deg, var(--m-deep1), var(--m-deep2) 55%, var(--m-deep3));
+}
+
+/* El encabezado de la seccion tambien es del mes. */
+#catalogo-general .section-head h2 {
+  color: var(--m-lit);
+}
+#catalogo-general .section-head span,
+#catalogo-general-mes {
+  color: var(--m-lit);
+  background: var(--m-soft);
+  border-color: var(--m-accent);
+}
+
+#catalogo-general .catalogo-general-panel.is-visible .season-catalog-tag {
+  color: var(--m-lit);
+  border-color: var(--m-accent);
+  background: var(--m-soft);
+}
+#catalogo-general .catalogo-general-panel.is-visible .season-catalog {
+  border-color: var(--m-accent);
+}
+#catalogo-general .catalogo-general-panel.is-visible .season-catalog h4,
+#catalogo-general .catalogo-general-panel.is-visible .season-subsection h4,
+#catalogo-general .catalogo-general-panel.is-visible .card-body-haunted h3 {
+  color: var(--m-lit);
+  text-shadow: 0 0 14px var(--m-glow);
+}
+#catalogo-general .catalogo-general-panel.is-visible .card-ghost {
+  border-color: color-mix(in srgb, var(--m-accent) 35%, transparent);
+}
+#catalogo-general .catalogo-general-panel.is-visible .card-ghost:hover {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 28px var(--m-glow);
+}
+#catalogo-general .catalogo-general-panel.is-visible .season-cta {
+  background: var(--m-accent);
+  color: var(--m-on-accent);
+  border-color: var(--m-accent);
+}
+#catalogo-general .catalogo-general-panel.is-visible .season-cta:hover {
+  background: transparent;
+  color: var(--m-accent);
+}
+
+/* ===================================================================
+   4. CONTACTO
+   Fondo del color del mes; las tarjetas claras se conservan para que
+   el formulario se lea bien.
+   =================================================================== */
+#temporadas ~ #contacto {
+  background: linear-gradient(165deg, var(--m-bg1), var(--m-bg2), var(--m-bg3));
+}
+#contacto .contact-card {
+  border-top: 4px solid var(--m-accent) !important;
+}
+#contacto .contact-form input,
+#contacto .contact-form textarea {
+  border-bottom: 2px solid var(--m-accent);
+}
+#contacto .contact-form .contact-submit,
+#contacto .season-cta {
+  background: var(--m-accent);
+  color: var(--m-on-accent);
+  border-color: var(--m-accent);
+  box-shadow: 0 8px 28px var(--m-glow);
+}
+#contacto .contact-form .contact-submit:hover,
+#contacto .season-cta:hover {
+  filter: brightness(1.08);
+}
+
+/* Halloween es el mes estrella: su contacto se mantiene oscuro. */
+body[data-season="octubre"] #contacto .contact-card,
+body[data-season="octubre"] #contacto .contact-form-container {
+  background: rgba(28, 10, 2, 0.86) !important;
+  border-color: rgba(255, 107, 0, 0.35) !important;
+}
+body[data-season="octubre"] #contacto .contact-card {
+  border-top: 4px solid var(--m-accent) !important;
+}
+body[data-season="octubre"] #contacto .section-head h2,
+body[data-season="octubre"] #contacto .section-head span,
+body[data-season="octubre"] #contacto .contact-intro,
+body[data-season="octubre"] #contacto .contact-form-container h3,
+body[data-season="octubre"] #contacto .contact-alt,
+body[data-season="octubre"] #contacto .contact-save {
+  color: var(--m-dark) !important;
+}
+body[data-season="octubre"] #contacto input,
+body[data-season="octubre"] #contacto textarea {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #FFF3E6 !important;
+  border-color: rgba(255, 107, 0, 0.35) !important;
+}
+body[data-season="octubre"] #contacto input::placeholder,
+body[data-season="octubre"] #contacto textarea::placeholder {
+  color: var(--m-dark-soft) !important;
+}
+
+/* ===================================================================
+   5. EL COLOR CAMBIA CON EL MES, NO DA UN SALTO
+   =================================================================== */
+#temporadas .season-tab,
+#temporadas[data-season] .season-panel,
+#catalogo-general,
+#temporadas ~ #contacto,
+.card-ghost,
+.season-milestone,
+.season-title,
+.season-range,
+.season-cta,
+.season-catalog-tag,
+.season-subtitle,
+.card-body-haunted h3 {
+  transition: color 0.45s ease, background-color 0.45s ease,
+              border-color 0.45s ease, box-shadow 0.45s ease,
+              background 0.45s ease;
+}

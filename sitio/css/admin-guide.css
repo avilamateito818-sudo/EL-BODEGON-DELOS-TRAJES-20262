@@ -61,6 +61,16 @@ body.admin-edit-mode .admin-added-photo {
   cursor: pointer;
 }
 
+/* Fuera del modo edición, las fotos añadidas del admin se ven completas */
+.admin-added-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin: 0.8rem auto;
+  border-radius: 10px;
+}
+
 /* ---- Botones "Agregar título" y "Agregar foto" ---- */
 .admin-addbtn-title { background: linear-gradient(135deg, #7c4dff, #a06bff) !important; }
 .admin-addbtn-title:hover { background: linear-gradient(135deg, #9166ff, #b98cff) !important; }

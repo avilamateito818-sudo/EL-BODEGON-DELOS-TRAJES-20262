@@ -15,7 +15,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url('../assets/img/horror_bg.png') center / cover no-repeat;
+  background: url('../assets/img/horror_bg.webp') center / cover no-repeat;
   animation: heroKenBurns 20s ease-in-out infinite alternate;
   will-change: transform;
 }
