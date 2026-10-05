@@ -108,6 +108,7 @@ window.ADMIN_CONTENT = {
   },
   "editorStyles": {
     "#catalogo-general": "width: 1532px; background-color: rgb(173, 216, 225);",
+    "#batas": "--d: 270ms; --foto-relacion: 1.0000; width: 1613px; height: 55784px;",
     "html > body:nth-child(2) > footer:nth-child(7)": "background-color: rgb(98, 152, 163);"
   }
 };
