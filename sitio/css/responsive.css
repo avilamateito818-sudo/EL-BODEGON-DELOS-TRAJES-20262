@@ -625,6 +625,8 @@ section {
   .admin-season-list { max-height: 62vh; }
   .admin-season-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .admin-season-input { height: 40px; }
+  .admin-photo-manager { max-height: 58vh; }
+  .admin-photorow { flex-wrap: wrap; }
   .admin-preview img { max-height: 160px; }
 
   /* Admin toolbar compacto */

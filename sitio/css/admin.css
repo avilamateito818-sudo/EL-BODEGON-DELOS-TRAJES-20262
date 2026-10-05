@@ -146,6 +146,38 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 }
 .admin-season-input:focus { outline: none; border-color: #a06bff; }
 .admin-btn-colors { border-color: rgba(255,184,77,.5); color: #ffb84d; }
+
+/* ---------- iconos y colores especiales ---------- */
+.admin-btn-special { border-color: rgba(255,107,207,.5); color: #ff6bcf; }
+.admin-btn-photos { border-color: rgba(93,224,180,.5); color: #5de0b4; }
+
+.admin-special-title {
+  margin: 1.1rem 0 0.5rem; font-size: 0.8rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #c9b8e6;
+}
+.admin-special-hint {
+  margin: 0.35rem 0 0; font-size: 0.72rem; color: #a99ac9;
+}
+
+/* Capa de color sobre los iconos ilustrados (ph-mes.svg y los lienzos de
+   "foto por agregar"). Se hace con mix-blend-mode para conservar el dibujo y
+   no tener que reemplazar la imagen. */
+.admin-ph-tint {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; mix-blend-mode: color;
+}
+
+/* ---------- panel de fotos ---------- */
+.admin-photo-manager {
+  display: flex; flex-direction: column; gap: 0.8rem;
+  margin-top: 0.8rem; max-height: 52vh; overflow-y: auto; padding-right: 0.2rem;
+}
+.admin-photo-block { padding: 0.5rem 0.1rem; }
+.admin-photo-name {
+  flex: 1 1 auto; min-width: 0; font-size: 0.78rem; color: #f3eaff;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin-btn-danger { border-color: rgba(255,77,77,.5); color: #ff6b6b; }
 .admin-backup-list { display: flex; flex-direction: column; gap: 0.45rem; max-height: 44vh; overflow: auto; }
 .admin-backup-row {
   display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;

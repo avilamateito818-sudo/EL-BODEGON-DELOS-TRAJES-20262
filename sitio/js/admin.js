@@ -47,6 +47,7 @@
     hiddenSeasons: [],
     seasonCovers: {},
     seasonColors: {},
+    specialColors: {},
     photoSettings: {},
     editorStyles: {}
   };
@@ -364,7 +365,7 @@
 
   /* ---------- edición de imágenes ---------- */
 
-  function editImage(img, autoOpen) {
+  function editImage(img, autoOpen, onDone) {
     var addedHost = img.closest('[data-admin-id]');
     var entry = addedHost ? findEntry(content.addCards.concat(content.addPhotos), addedHost.dataset.adminId) : null;
 
@@ -411,13 +412,14 @@
         } else {
           var path = cssPath(img);
           for (var i = 0; i < content.images.length; i++) {
-            if (content.images[i].sel === path) { content.images[i].src = finalSrc; closeModal(box); autoSave(); toast('Foto actualizada.'); return; }
+            if (content.images[i].sel === path) { content.images[i].src = finalSrc; closeModal(box); autoSave(); toast('Foto actualizada.'); if (onDone) onDone(); return; }
           }
           content.images.push({ sel: path, src: finalSrc });
         }
         closeModal(box);
         autoSave();
         toast('Foto actualizada.');
+        if (onDone) onDone();
       }
       if (src.indexOf('data:') === 0) {
         compressImage(src, 1000, 0.55).then(applyImage);
@@ -1898,6 +1900,18 @@ function applyEditorStyles() {
       var landing;
       if (month === 'hero') {
         landing = document.getElementById('inicio');
+      } else if (month === 'enero-hero') {
+        /* La foto de portada de enero vive dentro de su propio marco, asi
+           que no es un fondo: se devuelve a la imagen del recuadro. */
+        var box = document.getElementById('enero-hero-photo');
+        var img = box ? box.querySelector('img') : null;
+        if (img) {
+          img.src = src;
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+        }
+        return;
       } else {
         landing = document.querySelector('.halloween-landing[data-landing="' + month + '"]') ||
                   document.getElementById('halloween-landing');
@@ -2187,6 +2201,714 @@ function applyEditorStyles() {
     if (tag) tag.textContent = customized ? 'Personalizado' : 'Original';
     var reset = row.querySelector('[data-role="reset-month"]');
     if (reset) reset.disabled = !customized;
+  }
+
+  /* ==========================================================
+     COLORES DE LOS ELEMENTOS ESPECIALES
+     Logo del encabezado, favicon, botón de WhatsApp, botón del
+     asistente, marco de la portada de cada temporada y tinte de
+     los iconos ilustrados de cada mes. Se guarda en
+     content.specialColors y sobrevive al guardado y a la
+     sincronización con el resto del contenido.
+     ========================================================== */
+
+  var SPECIAL_COLOR_STYLE_ID = 'admin-special-colors-style';
+  var SPECIAL_TINT_CLASS = 'admin-ph-tint';
+
+  var SPECIAL_COLOR_GROUPS = [
+    {
+      key: 'logo',
+      title: 'Logo del encabezado',
+      hint: 'La imagen del menú, su marco y su resplandor.',
+      fields: [
+        { key: 'tint', label: 'Tinte del logo', fallback: '', swatch: '#c8a227' },
+        { key: 'ring', label: 'Marco', fallback: '#ff8c00' },
+        { key: 'glow', label: 'Resplandor', fallback: '#ff8c00' }
+      ]
+    },
+    {
+      key: 'favicon',
+      title: 'Icono del navegador (favicon)',
+      hint: 'El cuadrado de la pestaña del navegador, con su fondo y su letra.',
+      fields: [
+        { key: 'bg', label: 'Fondo', fallback: '#1b1430' },
+        { key: 'glyph', label: 'Letra', fallback: '#c8a227' }
+      ]
+    },
+    {
+      key: 'whatsapp',
+      title: 'Botón flotante de WhatsApp',
+      hint: 'El botón de la esquina inferior izquierda.',
+      fields: [
+        { key: 'bg', label: 'Fondo', fallback: '#25d366' },
+        { key: 'icon', label: 'Icono', fallback: '#ffffff' },
+        { key: 'ring', label: 'Aro pulsante', fallback: '#25d366' }
+      ]
+    },
+    {
+      key: 'assistant',
+      title: 'Botón del asistente',
+      hint: 'El botón dorado de la esquina inferior derecha.',
+      fields: [
+        { key: 'bg', label: 'Fondo', fallback: '#d4af37' },
+        { key: 'icon', label: 'Icono', fallback: '#ffffff' },
+        { key: 'ring', label: 'Aro pulsante', fallback: '#d4af37' }
+      ]
+    }
+  ];
+
+  var SPECIAL_MONTH_GROUPS = [
+    {
+      key: 'covers',
+      title: 'Portada de cada temporada',
+      hint: 'Marco y resplandor del recuadro de portada de cada mes.',
+      fields: [
+        { key: 'frame', label: 'Marco', fallback: '#ff8c00' },
+        { key: 'glow', label: 'Resplandor', fallback: '#ff8c00' }
+      ]
+    },
+    {
+      key: 'icons',
+      title: 'Iconos ilustrados de cada mes',
+      hint: 'Tinte de los iconos ph-mes.svg y de los lienzos que avisan "foto por agregar".',
+      fields: [
+        { key: 'tint', label: 'Tinte', fallback: '', swatch: '#8d7fa0' }
+      ]
+    }
+  ];
+
+  function specialStore() {
+    if (!content.specialColors) content.specialColors = {};
+    return content.specialColors;
+  }
+
+  /* Leer un grupo nunca crea el almacen: si se creara, al abrir el panel
+     quedarian doce meses vacios por grupo dentro de admin-content.js. */
+  function specialBucket(groupKey, month) {
+    var store = content.specialColors || {};
+    var group = store[groupKey] || {};
+    return month ? (group[month] || {}) : group;
+  }
+
+  function specialSet(groupKey, month, key, value) {
+    var store = specialStore();
+    if (!store[groupKey]) store[groupKey] = {};
+    if (month) {
+      if (!store[groupKey][month]) store[groupKey][month] = {};
+      store[groupKey][month][key] = value;
+      return;
+    }
+    store[groupKey][key] = value;
+  }
+
+  function specialGroupFields(groupKey) {
+    var all = SPECIAL_COLOR_GROUPS.concat(SPECIAL_MONTH_GROUPS);
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].key === groupKey) return all[i].fields;
+    }
+    return [];
+  }
+
+  /* Convierte un color en una cadena de filtros que pinta cualquier imagen
+     (por oscura o monocroma que sea) del color pedido: gris -> sepia ->
+     giro de tono. El parche gris del sepia tiene un tono de unos 40 grados,
+     que es lo que se corrige con hue-rotate. */
+  function specialTintFilter(hex) {
+    var c = seasonColorRgb(hex);
+    if (!c) return '';
+    var r = c.r / 255, g = c.g / 255, b = c.b / 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var l = (max + min) / 2;
+    var h = 0;
+    var d = max - min;
+    if (d) {
+      if (max === r) h = 60 * (((g - b) / d) % 6);
+      else if (max === g) h = 60 * ((b - r) / d + 2);
+      else h = 60 * ((r - g) / d + 4);
+      if (h < 0) h += 360;
+    }
+    var light = Math.max(0.45, Math.min(0.78, l));
+    return 'grayscale(1) brightness(' + light.toFixed(2) + ') sepia(1) saturate(2.4) hue-rotate(' +
+      Math.round(h - 40) + 'deg) saturate(1.7)';
+  }
+
+  /* El favicon es una imagen de mapa de bits en el repositorio: para que el
+     color elegido llegue a la pestaña del navegador se dibuja un SVG con ese
+     fondo y esa letra, y se entrega como data URI. */
+  function faviconDataUri(bg, glyph) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
+      '<rect width="64" height="64" rx="14" fill="' + bg + '"/>' +
+      '<text x="32" y="46" font-family="Georgia,\'Times New Roman\',serif" font-size="40" ' +
+      'font-weight="bold" text-anchor="middle" fill="' + glyph + '">B</text></svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+
+  function faviconLink() {
+    var link = document.querySelector('link[rel="icon"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    /* Se guarda el icono que trae index.html la primera vez que se toca para
+       que "volver al original" no deje el icono generado pegado en la pagina. */
+    if (!link.dataset.adminOriginalHref) {
+      link.dataset.adminOriginalHref = link.getAttribute('href') || 'assets/img/logo.jpg';
+      link.dataset.adminOriginalType = link.getAttribute('type') || '';
+    }
+    return link;
+  }
+
+  function applyFavicon(bg, glyph) {
+    var link = faviconLink();
+    link.type = 'image/svg+xml';
+    link.href = faviconDataUri(bg, glyph);
+  }
+
+  function resetFavicon() {
+    var link = faviconLink();
+    link.removeAttribute('type');
+    link.href = link.dataset.adminOriginalHref;
+  }
+
+  /* Un icono ilustrado puede venir como ph-mes.svg, como ph-generico.svg
+     (respaldo de app.js) o dibujado dentro del propio HTML como lienzo de
+     "foto por agregar". En los tres casos el mes se deduce del archivo o del
+     panel de catalogo que lo contiene. */
+  function specialIconMonth(img) {
+    var src = img.getAttribute('src') || '';
+    var m = src.match(/ph-([a-z]+)\.svg/i);
+    if (!m && src.indexOf('data:image/svg+xml') !== 0) return null;
+    if (m && m[1].toLowerCase() !== 'generico') return m[1].toLowerCase();
+    var panel = img.closest('[data-cat-panel]');
+    if (panel && panel.dataset.catPanel) return panel.dataset.catPanel;
+    return null;
+  }
+
+  function applyIconTints(tints) {
+    qa('img').forEach(function (img) {
+      if (img.closest('.admin-ui')) return;
+      var host = img.parentElement;
+      if (!host || host === document.body) return;
+      var month = specialIconMonth(img);
+      var hex = month ? seasonColorHex((tints[month] || {}).tint, null) : null;
+      var layer = host.querySelector('.' + SPECIAL_TINT_CLASS);
+      if (!hex) {
+        if (layer) layer.remove();
+        return;
+      }
+      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+      if (!layer) {
+        layer = document.createElement('span');
+        layer.className = SPECIAL_TINT_CLASS;
+        layer.setAttribute('aria-hidden', 'true');
+        host.appendChild(layer);
+      }
+      layer.style.background = hex;
+    });
+  }
+
+  /* Un solo <style> para todo: al final de <head> gana a los CSS del sitio y
+     sobrevive al cambio de temporada de app.js. */
+  function applySpecialColors() {
+    var store = content.specialColors || {};
+    var css = '';
+
+    var logo = store.logo || {};
+    var logoFilter = logo.tint ? specialTintFilter(logo.tint) : '';
+    var logoBox = '';
+    if (logo.ring) logoBox += 'border-color:' + seasonColorRgba(logo.ring, 0.9) + ';';
+    if (logo.glow) logoBox += 'box-shadow:0 0 15px ' + seasonColorRgba(logo.glow, 0.35) + ';';
+    if (logoFilter || logoBox) {
+      css += '.logo-container img{' + (logoFilter ? 'filter:' + logoFilter + ';' : '') + logoBox + '}';
+    }
+
+    [['whatsapp', '.whatsapp-float', 'svg'], ['assistant', '.assistant-float', 'svg']].forEach(function (item) {
+      var values = store[item[0]] || {};
+      var sel = item[1];
+      var box = '';
+      if (values.bg) {
+        box += 'background:linear-gradient(135deg,' + values.bg + ',' +
+          seasonColorMix(values.bg, '#000000', 0.28) + ');';
+      }
+      if (values.icon) box += 'color:' + values.icon + ';';
+      if (box) {
+        css += sel + '{' + box + '}';
+        if (values.icon) css += sel + ' svg{fill:' + values.icon + ';stroke:' + values.icon + ';}';
+      }
+      if (values.ring) css += sel + '::before{border-color:' + seasonColorRgba(values.ring, 0.5) + ';}';
+    });
+
+    var covers = store.covers || {};
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      var values = covers[month];
+      if (!values) return;
+      /* Los selectores llevan "body" y el data-panel porque el sitio pinta el
+         marco del recuadro con reglas mas específicas (#temporadas[data-season]
+         .season-panel.is-active .halloween-landing) y, sin esto, el color
+         guardado no llegaria a verse. */
+      if (month === 'enero') {
+        var hero = '';
+        if (values.frame) hero += 'border-color:' + seasonColorRgba(values.frame, 0.5) + ';';
+        if (values.glow) {
+          hero += 'box-shadow:0 15px 45px rgba(0,0,0,.35), 0 0 30px ' +
+            seasonColorRgba(values.glow, 0.2) + ';';
+        }
+        if (hero) {
+          css += 'body #temporadas[data-season="enero"] .enero-hero-photo{' + hero + '}';
+        }
+      }
+      var box = '';
+      if (values.frame) box += 'border-color:' + seasonColorRgba(values.frame, 0.45) + ';';
+      if (values.glow) box += 'box-shadow:0 0 30px ' + seasonColorRgba(values.glow, 0.25) + ';';
+      if (box) {
+        css += 'body #temporadas[data-season] .season-panel[data-panel="' + month +
+          '"] .halloween-landing{' + box + '}';
+      }
+    });
+
+    var style = document.getElementById(SPECIAL_COLOR_STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = SPECIAL_COLOR_STYLE_ID;
+      document.head.appendChild(style);
+    }
+    style.textContent = css;
+
+    applyIconTints(store.icons || {});
+
+    var favicon = store.favicon || {};
+    if (favicon.bg || favicon.glyph) {
+      applyFavicon(favicon.bg || '#1b1430', favicon.glyph || '#c8a227');
+    } else {
+      resetFavicon();
+    }
+  }
+
+  function specialRowDot(group, values) {
+    for (var i = 0; i < group.fields.length; i++) {
+      var field = group.fields[i];
+      var hex = seasonColorHex(values[field.key], null);
+      if (hex) return hex;
+      if (field.swatch) return field.swatch;
+    }
+    return '#c8a227';
+  }
+
+  function specialRowHtml(group, month) {
+    var values = specialBucket(group.key, month);
+    var customized = Object.keys(values).some(function (key) {
+      return !!seasonColorHex(values[key], null);
+    });
+    var fields = group.fields.map(function (field) {
+      var value = seasonColorHex(values[field.key], null) || field.fallback || '#000000';
+      return '<label class="admin-season-field">' +
+        '<span>' + field.label + '</span>' +
+        '<input type="color" class="admin-special-input" data-group="' + group.key + '"' +
+        (month ? ' data-month="' + month + '"' : '') +
+        ' data-key="' + field.key + '" value="' + value + '">' +
+        '</label>';
+    }).join('');
+    return '<section class="admin-season-row admin-special-row' + (customized ? ' is-custom' : '') +
+      '" data-sp-row="' + group.key + '"' + (month ? ' data-month="' + month + '"' : '') + '>' +
+      '<header class="admin-season-head">' +
+      '<span class="admin-season-dot" data-role="sp-dot" style="background:' +
+        specialRowDot(group, values) + '"></span>' +
+      '<strong class="admin-season-name">' +
+        (month ? (SEASON_COLOR_LABELS[month] || month) : group.title) + '</strong>' +
+      '<span class="admin-season-tag" data-role="sp-tag">' +
+        (customized ? 'Personalizado' : 'Original') + '</span>' +
+      '<button type="button" class="admin-btn admin-btn-season-reset" data-role="sp-reset"' +
+      (customized ? '' : ' disabled') + '>Restablecer</button>' +
+      '</header>' +
+      '<p class="admin-special-hint">' + group.hint + '</p>' +
+      '<div class="admin-season-fields">' + fields + '</div>' +
+      '</section>';
+  }
+
+  function openSpecialColorsPanel() {
+    var globalRows = SPECIAL_COLOR_GROUPS.map(function (group) {
+      return specialRowHtml(group, null);
+    }).join('');
+    var monthBlocks = SPECIAL_MONTH_GROUPS.map(function (group) {
+      var rows = SEASON_COLOR_MONTHS.map(function (month) {
+        return specialRowHtml(group, month);
+      }).join('');
+      return '<h4 class="admin-special-title">' + group.title + '</h4>' +
+        '<div class="admin-season-list">' + rows + '</div>';
+    }).join('');
+    var overlay = openModal(
+      '<h3>Iconos y colores especiales</h3>' +
+      '<p class="admin-hint">Colores del logo, del icono del navegador, de los botones ' +
+      'flotantes, del marco de cada portada y de los iconos de cada mes. Se aplica ' +
+      'al momento y se guarda con <em>Guardar</em> o <em>Sincronizar ahora</em>.</p>' +
+      '<div class="admin-season-list">' + globalRows + '</div>' +
+      monthBlocks +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn" data-role="sp-reset-all">Restablecer todo</button>' +
+      '<button type="button" class="admin-btn admin-btn-primary" data-role="sp-close">Listo</button>' +
+      '</div>'
+    );
+    var box = overlay.querySelector('.admin-modal-box');
+    if (box) box.classList.add('admin-modal-wide');
+
+    overlay.addEventListener('input', function (e) {
+      var input = e.target;
+      if (!input.classList || !input.classList.contains('admin-special-input')) return;
+      var group = input.getAttribute('data-group');
+      var month = input.getAttribute('data-month');
+      var key = input.getAttribute('data-key');
+      if (!group || !key) return;
+      specialSet(group, month, key, seasonColorHex(input.value, null));
+      applySpecialColors();
+      markSpecialRowCustom(overlay, group, month);
+    });
+
+    overlay.addEventListener('change', function (e) {
+      if (!e.target.classList || !e.target.classList.contains('admin-special-input')) return;
+      autoSave();
+      toast('Colores guardados en el navegador.');
+    });
+
+    overlay.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('button') : null;
+      if (!btn) return;
+      var role = btn.getAttribute('data-role');
+      if (role === 'sp-close') { closeModal(); return; }
+      if (role === 'sp-reset') {
+        var groupKey = btn.getAttribute('data-group');
+        var month = btn.getAttribute('data-month');
+        var store = specialStore();
+        if (month) {
+          delete (store[groupKey] || {})[month];
+        } else {
+          delete store[groupKey];
+        }
+        applySpecialColors();
+        refreshSpecialRow(overlay, groupKey, month);
+        autoSave();
+        toast((month ? (SEASON_COLOR_LABELS[month] || month) : 'El grupo') +
+          ' vuelve a su color original.');
+        return;
+      }
+      if (role === 'sp-reset-all') {
+        content.specialColors = {};
+        applySpecialColors();
+        SPECIAL_COLOR_GROUPS.forEach(function (g) { refreshSpecialRow(overlay, g.key, null); });
+        SPECIAL_MONTH_GROUPS.forEach(function (g) {
+          SEASON_COLOR_MONTHS.forEach(function (m) { refreshSpecialRow(overlay, g.key, m); });
+        });
+        autoSave();
+        toast('Los iconos y colores especiales vuelven a su estado original.');
+      }
+    });
+  }
+
+  function markSpecialRowCustom(overlay, groupKey, month) {
+    var row = overlay.querySelector('[data-sp-row="' + groupKey + '"]' +
+      (month ? '[data-month="' + month + '"]' : ''));
+    if (!row) return;
+    var group = null;
+    SPECIAL_COLOR_GROUPS.concat(SPECIAL_MONTH_GROUPS).forEach(function (g) {
+      if (g.key === groupKey) group = g;
+    });
+    if (!group) return;
+    row.classList.add('is-custom');
+    var dot = row.querySelector('[data-role="sp-dot"]');
+    if (dot) dot.style.background = specialRowDot(group, specialBucket(groupKey, month));
+    var tag = row.querySelector('[data-role="sp-tag"]');
+    if (tag) tag.textContent = 'Personalizado';
+    var reset = row.querySelector('[data-role="sp-reset"]');
+    if (reset) reset.disabled = false;
+  }
+
+  function refreshSpecialRow(overlay, groupKey, month) {
+    var row = overlay.querySelector('[data-sp-row="' + groupKey + '"]' +
+      (month ? '[data-month="' + month + '"]' : ''));
+    if (!row) return;
+    var group = null;
+    SPECIAL_COLOR_GROUPS.concat(SPECIAL_MONTH_GROUPS).forEach(function (g) {
+      if (g.key === groupKey) group = g;
+    });
+    if (!group) return;
+    var values = specialBucket(groupKey, month);
+    var customized = Object.keys(values).some(function (key) {
+      return !!seasonColorHex(values[key], null);
+    });
+    row.classList.toggle('is-custom', customized);
+    row.querySelectorAll('.admin-special-input').forEach(function (input) {
+      var key = input.getAttribute('data-key');
+      var field = null;
+      group.fields.forEach(function (f) { if (f.key === key) field = f; });
+      input.value = seasonColorHex(values[key], null) || (field && field.fallback) || '#000000';
+    });
+    var dot = row.querySelector('[data-role="sp-dot"]');
+    if (dot) dot.style.background = specialRowDot(group, values);
+    var tag = row.querySelector('[data-role="sp-tag"]');
+    if (tag) tag.textContent = customized ? 'Personalizado' : 'Original';
+    var reset = row.querySelector('[data-role="sp-reset"]');
+    if (reset) reset.disabled = !customized;
+  }
+
+  /* ==========================================================
+     PANEL DE FOTOS: elegir seccion o catalogo y cambiar sus fotos
+     ========================================================== */
+
+  function photoTargetList() {
+    var list = [
+      { group: 'Portadas', key: 'inicio', label: 'Portada de inicio (hero)' },
+      { group: 'Portadas', key: 'enero-hero', label: 'Foto de portada de Enero' }
+    ];
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      list.push({
+        group: 'Portadas de temporada',
+        key: 'landing-' + month,
+        label: 'Portada de ' + (SEASON_COLOR_LABELS[month] || month)
+      });
+    });
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      list.push({
+        group: 'Catálogos',
+        key: 'cat-' + month,
+        label: 'Catálogo de ' + (SEASON_COLOR_LABELS[month] || month)
+      });
+    });
+    SEASON_COLOR_MONTHS.forEach(function (month) {
+      list.push({
+        group: 'Secciones del catálogo',
+        key: 'sub-' + month,
+        label: 'Secciones de ' + (SEASON_COLOR_LABELS[month] || month)
+      });
+    });
+    list.push({ group: 'Otros', key: 'contacto', label: 'Formulario de contacto' });
+    list.push({ group: 'Otros', key: 'pie', label: 'Pie de página' });
+    return list;
+  }
+
+  function photoTargetEl(key) {
+    if (key === 'inicio') return document.getElementById('inicio');
+    if (key === 'enero-hero') return document.getElementById('enero-hero-photo');
+    if (key.indexOf('landing-') === 0) {
+      var month = key.slice(8);
+      return document.querySelector('.halloween-landing[data-landing="' + month + '"]') ||
+        document.getElementById('halloween-landing');
+    }
+    if (key.indexOf('cat-') === 0) return document.getElementById('cat-panel-' + key.slice(4));
+    if (key.indexOf('sub-') === 0) return document.getElementById('cat-panel-' + key.slice(4));
+    if (key === 'contacto') return document.getElementById('contacto');
+    if (key === 'pie') return document.querySelector('footer');
+    return null;
+  }
+
+  /* Las portadas guardan la foto como fondo del bloque, no como <img>. */
+  function photoTargetCoverKey(key) {
+    if (key === 'inicio') return 'hero';
+    if (key === 'enero-hero') return 'enero-hero';
+    if (key.indexOf('landing-') === 0) return key.slice(8);
+    return null;
+  }
+
+  function photoTargetLabel(child) {
+    var head = child.querySelector('h3, h4, .season-subtitle');
+    if (head && head.textContent.trim()) return head.textContent.trim();
+    return child.id || 'Bloque';
+  }
+
+  function openPhotoManagerPanel() {
+    var targets = photoTargetList();
+    var groups = [];
+    targets.forEach(function (target) {
+      var last = groups[groups.length - 1];
+      if (!last || last.name !== target.group) groups.push({ name: target.group, items: [] });
+      groups[groups.length - 1].items.push(target);
+    });
+    var options = groups.map(function (group) {
+      return '<optgroup label="' + esc(group.name) + '">' + group.items.map(function (target) {
+        return '<option value="' + target.key + '">' + esc(target.label) + '</option>';
+      }).join('') + '</optgroup>';
+    }).join('');
+    var overlay = openModal(
+      '<h3>Fotos del sitio</h3>' +
+      '<p class="admin-hint">Elige la seccion o el catalogo y veras todas sus fotos ' +
+      'para cambiarlas o quitarlas sin buscar en la pagina.</p>' +
+      '<label class="admin-field">Seccion o catalogo</label>' +
+      '<select class="admin-input" data-role="photo-target">' + options + '</select>' +
+      '<div class="admin-photo-manager" data-role="photo-body"></div>' +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn admin-btn-primary" data-role="photo-close">Listo</button>' +
+      '</div>'
+    );
+    var box = overlay.querySelector('.admin-modal-box');
+    if (box) box.classList.add('admin-modal-wide');
+
+    var select = overlay.querySelector('[data-role="photo-target"]');
+    select.addEventListener('change', function () {
+      renderPhotoManager(overlay, select.value);
+    });
+    overlay.querySelector('[data-role="photo-close"]').addEventListener('click', function () {
+      closeModal();
+    });
+    wirePhotoManagerClicks(overlay);
+    renderPhotoManager(overlay, select.value);
+  }
+
+  function renderPhotoManager(overlay, key) {
+    var body = overlay.querySelector('[data-role="photo-body"]');
+    var select = overlay.querySelector('[data-role="photo-target"]');
+    if (!body) return;
+    var el = photoTargetEl(key);
+    if (!el) {
+      body.innerHTML = '<p class="admin-hint">Esta seccion todavia no esta construida. ' +
+        'Abre el sitio y vuelve a intentarlo.</p>';
+      return;
+    }
+
+    var blocks = [];
+    if (key.indexOf('sub-') === 0) {
+      /* Los catalogos envuelven sus apartados en .season-sub-sections (enero)
+         o los cuelgan directamente del panel (los demas meses). */
+      var host = el.querySelector(':scope > .season-sub-sections') || el;
+      Array.prototype.forEach.call(host.children, function (child) {
+        if (child.querySelector('img')) blocks.push({ el: child, label: photoTargetLabel(child) });
+      });
+    } else {
+      blocks.push({ el: el, label: '' });
+    }
+
+    var total = blocks.reduce(function (sum, block) {
+      return sum + block.el.querySelectorAll('img').length;
+    }, 0);
+    if (!total && !photoTargetCoverKey(key)) {
+      body.innerHTML = '<p class="admin-hint">Esta seccion no tiene fotos todavia.</p>';
+      return;
+    }
+
+    var html = '';
+    blocks.forEach(function (block, index) {
+      var all = block.el.querySelectorAll('img');
+      var imgs = Array.prototype.filter.call(all, function (img) {
+        return !img.closest('.admin-ui');
+      });
+      if (!imgs.length) return;
+      var label = block.label || (blocks.length > 1 ? 'Fotos' : '');
+      html += '<section class="admin-photo-block"' +
+        (blocks.length > 1 ? ' data-photo-block="' + index + '"' : '') + '>';
+      if (label) html += '<h4 class="admin-special-title">' + esc(label) + '</h4>';
+      imgs.forEach(function (img, i) {
+        /* El indice se toma de la lista sin filtrar porque los botones
+           despues buscan la foto en querySelectorAll del bloque completo. */
+        var pos = Array.prototype.indexOf.call(all, img);
+        var name = img.alt || img.getAttribute('aria-label') || 'Foto ' + (i + 1);
+        html += '<div class="admin-photorow">' +
+          '<img src="' + esc(img.currentSrc || img.src) + '" alt="">' +
+          '<span class="admin-photo-name">' + esc(name) + '</span>' +
+          '<button type="button" class="admin-btn" data-role="photo-change" data-index="' +
+            pos + '" data-key="' + key + '">Cambiar</button>' +
+          '<button type="button" class="admin-btn admin-btn-danger" data-role="photo-del" data-index="' +
+            pos + '">Quitar</button>' +
+          '</div>';
+      });
+      html += '</section>';
+    });
+
+    if (photoTargetCoverKey(key)) {
+      html += '<div class="admin-photo-block">' +
+        '<p class="admin-hint">Esta portada usa una imagen de fondo.</p>' +
+        '<div class="admin-modal-actions">' +
+        '<button type="button" class="admin-btn" data-role="photo-cover">Cambiar la foto de portada</button>' +
+        '</div></div>';
+    }
+
+    html += '<div class="admin-photo-block">' +
+      '<div class="admin-modal-actions">' +
+      '<button type="button" class="admin-btn" data-role="photo-go">Ir a esta seccion</button>' +
+      '</div></div>';
+    body.innerHTML = html;
+    body.dataset.key = key;
+    body.dataset.total = String(total);
+    if (select) select.value = key;
+  }
+
+  /* Al cambiar o quitar una foto el modal de edicion reemplaza al de fotos,
+     asi que el panel se vuelve a abrir sobre el mismo destino. */
+  function reopenPhotoManager(key) {
+    openPhotoManagerPanel();
+    var select = document.querySelector('.admin-modal [data-role="photo-target"]');
+    if (select && key) {
+      select.value = key;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  function wirePhotoManagerClicks(overlay) {
+    overlay.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('button') : null;
+      if (!btn) return;
+      var role = btn.getAttribute('data-role');
+      if (role === 'photo-change') {
+        var key = btn.getAttribute('data-key');
+        var el = photoTargetEl(key);
+        var img = el ? el.querySelectorAll('img')[parseInt(btn.getAttribute('data-index'), 10)] : null;
+        if (!img) { toast('La foto ya no esta en la pagina.'); return; }
+        editImage(img, true, function () {
+          reopenPhotoManager(key);
+        });
+        return;
+      }
+      if (role === 'photo-del') {
+        var body = overlay.querySelector('[data-role="photo-body"]');
+        var targetKey = body ? body.dataset.key : '';
+        var target = photoTargetEl(targetKey);
+        var victim = target ? target.querySelectorAll('img')[parseInt(btn.getAttribute('data-index'), 10)] : null;
+        if (!victim) { toast('La foto ya no esta en la pagina.'); return; }
+        if (!window.confirm('¿Quitar esta foto?')) return;
+        var host = victim.parentElement;
+        deleteEl(victim);
+        autoSave();
+        toast('Foto quitada.');
+        if (host) {
+          var cam = host.querySelector('.admin-photobtn:not(.admin-photo-delbtn)');
+          if (cam) cam.remove();
+        }
+        reopenPhotoManager(targetKey);
+        return;
+      }
+      if (role === 'photo-cover') {
+        changeCoverPhoto(overlay);
+        return;
+      }
+      if (role === 'photo-go') {
+        var current = overlay.querySelector('[data-role="photo-body"]');
+        var goEl = current ? photoTargetEl(current.dataset.key) : null;
+        if (goEl && goEl.scrollIntoView) goEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  function changeCoverPhoto(overlay) {
+    var body = overlay.querySelector('[data-role="photo-body"]');
+    var key = body ? body.dataset.key : '';
+    var coverKey = photoTargetCoverKey(key);
+    if (!coverKey) return;
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.addEventListener('change', function () {
+      var f = input.files[0];
+      if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        compressImage(rd.result, 1000, 0.55).then(function (compressed) {
+          if (!content.seasonCovers) content.seasonCovers = {};
+          content.seasonCovers[coverKey] = compressed;
+          applySeasonCovers();
+          autoSave();
+          toast('Portada actualizada.');
+        });
+      };
+      rd.readAsDataURL(f);
+    });
+    input.click();
   }
 
   /* ---------- wire de elementos dinámicos ---------- */
@@ -2510,6 +3232,8 @@ function applyEditorStyles() {
       '<button type="button" class="admin-btn admin-btn-guide" data-guide="grid" title="Mostrar/ocultar la rejilla de alineación">&#9638; Rejilla</button>' +
       '<button type="button" class="admin-btn admin-btn-help" data-guide="help" title="Abrir la guía de uso">Ayuda ?</button>' +
       '<button type="button" class="admin-btn admin-btn-colors" data-role="colors" title="Cambiar los colores de cualquier temporada">Colores</button>' +
+      '<button type="button" class="admin-btn admin-btn-special" data-role="special" title="Colores del logo, del icono del navegador, de los botones flotantes, de las portadas y de los iconos de cada mes">Iconos</button>' +
+      '<button type="button" class="admin-btn admin-btn-photos" data-role="photos" title="Elegir la sección o el catálogo y cambiar sus fotos">Fotos</button>' +
       '<button type="button" class="admin-btn admin-btn-primary" data-role="save">Guardar</button>' +
       '<button type="button" class="admin-btn admin-btn-sync" data-role="sync">Sincronizar ahora</button>' +
       '<button type="button" class="admin-btn admin-btn-notif" data-role="notify" title="Mostrar un aviso de prueba local (ya no se envía por correo)">Probar alerta</button>' +
@@ -2556,6 +3280,12 @@ function applyEditorStyles() {
     });
     tb.querySelector('[data-role="colors"]').addEventListener('click', function () {
       openSeasonColorsPanel();
+    });
+    tb.querySelector('[data-role="special"]').addEventListener('click', function () {
+      openSpecialColorsPanel();
+    });
+    tb.querySelector('[data-role="photos"]').addEventListener('click', function () {
+      openPhotoManagerPanel();
     });
   }
 
@@ -2621,11 +3351,19 @@ function applyEditorStyles() {
         '</div>' +
         '<div class="admin-help-section"><h4>4 · Fotos de portada y temporadas</h4>' +
           '<ul>' +
+            '<li>Botón <b>Fotos</b> de la barra: elige la sección o el catálogo (portadas, catálogo de cada mes, secciones, contacto o pie) y verás todas sus fotos para cambiarlas o quitarlas.</li>' +
             '<li>Botón <b>Cambiar portada / fotos de temporada</b> sobre cada banner.</li>' +
             '<li>En Enero además hay controles de ancho, alto y posición de su foto.</li>' +
           '</ul>' +
         '</div>' +
-        '<div class="admin-help-section"><h4>5 · Guardar</h4>' +
+        '<div class="admin-help-section"><h4>5 · Colores</h4>' +
+          '<ul>' +
+            '<li><b>Colores</b>: los 5 colores de cada una de las 12 temporadas en una sola lista.</li>' +
+            '<li><b>Iconos</b>: logo del encabezado, icono del navegador (favicon), botón de WhatsApp, botón del asistente, marco de cada portada y tinte de los iconos de cada mes.</li>' +
+            '<li>El editor visual también pinta fondo, texto y borde de cualquier elemento sin salir del modo administrador.</li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="admin-help-section"><h4>6 · Guardar</h4>' +
           '<ul>' +
             '<li>Todo se guarda solo en el navegador (indicador verde "Guardado").</li>' +
             '<li><b>Guardar</b> guarda en este navegador; <b>Sincronizar</b> sube a GitHub/cloud.</li>' +
@@ -3654,6 +4392,7 @@ function applyEditorStyles() {
       hiddenSeasons: content.hiddenSeasons,
       seasonCovers: content.seasonCovers || {},
       seasonColors: content.seasonColors || {},
+      specialColors: content.specialColors || {},
       photoSettings: content.photoSettings || {},
       editorStyles: editorStyles
     };
@@ -3734,11 +4473,13 @@ function applyEditorStyles() {
     if (obj.usernameHash) content.usernameHash = obj.usernameHash;
     content.seasonCovers = obj.seasonCovers || {};
     content.seasonColors = obj.seasonColors || {};
+    content.specialColors = obj.specialColors || {};
     content.photoSettings = obj.photoSettings || {};
     content.editorStyles = obj.editorStyles || {};
     applyContent();
     applySeasonCovers();
     applySeasonColors();
+    applySpecialColors();
   }
 
   function changePassword() {
@@ -3984,6 +4725,7 @@ function applyEditorStyles() {
     if (override.hiddenSeasons !== undefined) result.hiddenSeasons = override.hiddenSeasons;
     if (override.seasonCovers !== undefined) result.seasonCovers = override.seasonCovers;
     if (override.seasonColors !== undefined) result.seasonColors = override.seasonColors;
+    if (override.specialColors !== undefined) result.specialColors = override.specialColors;
     if (override.photoSettings !== undefined) result.photoSettings = override.photoSettings;
     if (override.editorStyles !== undefined) result.editorStyles = override.editorStyles;
     if (override.passwordHash) result.passwordHash = override.passwordHash;
