@@ -107,9 +107,10 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
+    "#temporadas": "",
+    "#temporadas > div:nth-child(2) > h2:nth-child(2)": "width: 643px; height: 98px;",
     "#catalogo-general": "width: 1532px; background-color: rgb(173, 216, 225);",
     "#batas": "--d: 270ms; --foto-relacion: 1.0000;",
-    "#contacto": "",
     "html > body:nth-child(2) > footer:nth-child(7)": "background-color: rgb(98, 152, 163);"
   }
 };
