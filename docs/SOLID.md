@@ -20,7 +20,7 @@ Este documento explica cómo se aplican (y cómo se **deberían** aplicar) los p
 | `core/catalogo.js` | Categorías y prendas del negocio |
 | `core/disponibilidad.js` | Consulta de disponibilidad y contacto (cliente) |
 | `core/sesion.js` | Gestión de sesión del administrador |
-| `services/sync.js` | Sincronización con Vercel/GitHub |
+| `services/sync.js` | Sincronización con PHP/DreamHost/GitHub |
 | `services/storage.js` | Persistencia local (localStorage / admin-content) |
 | `ui/marquee.js` | Cinta de temporadas |
 | `ui/lightbox.js` | Visualizador de fotos |
@@ -73,7 +73,7 @@ El **panel de administración** (`admin.js`) ya sigue esto: expone una API míni
 > **Depender de abstracciones, no de concreciones. Las clases de alto nivel no deben depender de las de bajo nivel.**
 
 **Estado actual (cumple en el diseño del panel):**
-- El **panel** (`admin.js`) no conoce los detalles internos del backend: depende de una abstracción de red (**`fetch` a `/api/save-content`**). El endpoint concreto (Vercel → GitHub) es **inyectado** por el despliegue, no construido por el panel. Esto respeta la **D**.
+- El **panel** (`admin.js`) no conoce los detalles internos del backend: depende de una abstracción de red (**`fetch` a `/api/save-content`**). El endpoint concreto (PHP → GitHub) es **inyectado** por el despliegue, no construido por el panel. Esto respeta la **D**.
 - Al fallar la red, el panel **degrada con gracia**: encola los cambios en localStorage (`bodegon_pending_sync`) y los reintenta al reconectar, sin romper la edición.
 
 **Objetivo:** en refactor futuro, los casos de uso recibirían sus dependencias (repositorio de datos, servicio de envío) **por parámetro** (inyección de dependencias) en lugar de crearlas internamente, facilitando pruebas (se pueden inyectar versiones "falsas"/mock).

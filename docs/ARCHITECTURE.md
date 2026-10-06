@@ -2,7 +2,7 @@
 
 Este documento explica cómo se aplica **Clean Architecture** (Arquitectura Limpia) al proyecto, cómo se organiza por **capas** y cómo cada módulo respeta la dirección de las dependencias.
 
-El proyecto es una **aplicación web estática** (frontend en `sitio/`) con un panel de administración. Por eso, aquí las "capas" de Clean Architecture se mapean a **conceptos dentro del frontend** y a los **límites del sistema** (frontend ↔ backend/Vercel ↔ GitHub).
+El proyecto es una **aplicación web estática** (frontend en `sitio/`) con un panel de administración. Por eso, aquí las "capas" de Clean Architecture se mapean a **conceptos dentro del frontend** y a los **límites del sistema** (frontend ↔ backend PHP/DreamHost ↔ GitHub).
 
 ---
 
@@ -16,7 +16,7 @@ En este proyecto:
    UI / Presentación          ->  js/* (app.js, admin.js)
    Aplicación / Casos de uso  ->  funciones de negocio (cambiar título, colocar foto, confirmar disponibilidad)
    Datos / Persistencia       ->  data/admin-content.js + data/mensajes.json + data/consultas.json
-                                  + localStorage + sincronización (Vercel/GitHub)
+                                   + localStorage + sincronización (PHP/DreamHost/GitHub)
    Frameworks / Drivers       ->  DOM, fetch, Nginx (Docker), servidor estático
 ```
 
@@ -28,7 +28,7 @@ En este proyecto:
 Es el mundo externo con el que interactúa la app:
 - El **navegador / DOM** y las hojas de estilo (`css/`).
 - El **servidor** estático que sirve `sitio/` (`scripts/dev-server.js`) o **Nginx** en Docker.
-- Las APIs externas: endpoints de Vercel (`/api/save-content`, y los datos de `/api/chat-ask` y `/api/contact` para GitHub) y la API de GitHub.
+- Las APIs externas: endpoints PHP (`/api/save-content`, y los datos de `/api/chat-ask` y `/api/contact` para GitHub) y la API de GitHub.
 - Nada de las capas internas conoce estos detalles directamente; se acceden a través de una pequeña capa de "adaptadores" en `admin.js`.
 
 ### 2. Capa de Interfaces / Adaptadores (puertos)
@@ -55,7 +55,7 @@ Las reglas de negocio esenciales, sin dependencias de framework:
 ## Dirección de las dependencias (en la práctica)
 
 - `app.js`, `admin.js` **usan** `data/` (persistencia) y los adaptadores de API (`/api/*`), nunca al revés.
-- `admin.js` es el único que habla con la nube (Vercel/GitHub) para el contenido; la presentación no lo hace directamente, lo delega.
+- `admin.js` es el único que habla con la nube (PHP/DreamHost → GitHub) para el contenido; la presentación no lo hace directamente, lo delega.
 - **Seguridad:** el panel no expone credenciales ni datos internos al público. La edición se habilita solo cuando la sesión de administrador ya está activa.
 
 ---
@@ -83,7 +83,7 @@ sitio/
 │   │   ├── catalogo.js
 │   │   ├── disponibilidad.js
 │   │   └── sesion.js
-│   ├── services/        # Adaptadores (contact/chat API, sync Vercel, GitHub)
+│   ├── services/        # Adaptadores (contact/chat API, sync PHP, GitHub)
 │   ├── ui/              # Presentación (render, lightbox, marquee)
 │   └── entry/           # Punto de entrada (bootstrap)
 ```

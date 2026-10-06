@@ -15,7 +15,6 @@
   var BACKUP_LOG_KEY = 'bodegon_backup_log';
   var PENDING_SYNC_KEY = 'bodegon_pending_sync';
   var CLOUD_SYNC_API = '/api/save-content';
-  var CLOUD_SYNC_FALLBACK = 'https://el-bodegon-delos-trajes-20265-s5qo.vercel.app/api/save-content';
   var cloudSyncTimer = null;
   var CLOUD_SYNC_DELAY = 2500;
   var cloudSyncRetries = 0;
@@ -23,11 +22,9 @@
   var cloudSyncing = false;
 
   function getCloudUrl() {
-    var isLocal = window.location.protocol === 'file:' ||
-                  window.location.hostname === 'localhost' ||
-                  window.location.hostname === '127.0.0.1' ||
-                  window.location.hostname === '';
-    return isLocal ? CLOUD_SYNC_FALLBACK : CLOUD_SYNC_API;
+    /* Mismo origen siempre: en producción el .htaccess reescribe a
+       api/save-content.php y en local dev-server.js responde no-op. */
+    return CLOUD_SYNC_API;
   }
 
   var content = {
@@ -223,7 +220,7 @@
 /* ---------- notificaciones al administrador (aviso local) ---------- */
   /* Antes estas alertas se enviaban por correo; ahora solo se muestran
      como avisos locales en el panel. Los cambios sí se persisten y
-     sincronizan con GitHub vía la API de Vercel. */
+     sincronizan con GitHub vía el endpoint PHP del servidor. */
 
   /* Notificaciones al admin: ya NO se envían por correo ni por formularios
      externos. Todo se maneja con avisos locales en el
@@ -4183,12 +4180,12 @@ function applyEditorStyles() {
         if (errMsg.indexOf('GITHUB_TOKEN') !== -1 || errMsg.indexOf('no está configurado') !== -1) {
           syncBadge.innerHTML = '<span class="admin-cloud-icon">⚠</span> Token de GitHub no configurado';
           syncBadge.classList.add('is-error');
-          syncBadge.title = 'Ve a Vercel → Settings → Environment Variables y crea GITHUB_TOKEN';
+          syncBadge.title = 'Configura GITHUB_TOKEN en ~/bodegon-config.php en el servidor (ver docs/DEPLOY_DREAMHOST.md)';
           setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 6000);
           notifyAdmin('token-faltante', '⚠️ Token de GitHub no configurado',
-            'La sincronización con GitHub falla: la variable GITHUB_TOKEN no está ' +
-            'configurada. Ve a Vercel → Project → Settings → Environment Variables ' +
-            'y créala con un token de GitHub con permiso repo (ver docs/VERCEL.md).');
+            'La sincronización con GitHub falla: el token GITHUB_TOKEN no está ' +
+            'configurado en el servidor. Edita ~/bodegon-config.php con un token ' +
+            'de GitHub con permiso repo (ver docs/DEPLOY_DREAMHOST.md).');
           return;
         }
 

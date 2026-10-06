@@ -1,0 +1,36 @@
+name: Deploy a DreamHost (rsync por SSH)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: dreamhost
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Preparar clave SSH del servidor
+        env:
+          DREAMHOST_SSH_KEY: ${{ secrets.DREAMHOST_SSH_KEY }}
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DREAMHOST_SSH_KEY" > ~/.ssh/id_dreamhost
+          chmod 600 ~/.ssh/id_dreamhost
+          ssh-keyscan -H "${DREAMHOST_HOST#*@}" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Desplegar sitio/ al servidor
+        env:
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+          DREAMHOST_PATH: ${{ secrets.DREAMHOST_PATH }}
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_dreamhost -o StrictHostKeyChecking=yes" \
+            ./sitio/ "${DREAMHOST_HOST}:${DREAMHOST_PATH}"

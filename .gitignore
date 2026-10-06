@@ -19,11 +19,11 @@ desktop.ini
 
 # Datos locales sensibles / credenciales
 bodegon_admin_session
+sitio/api/config.local.php
+bodegon-config.php
 *.log
 
 # Construcciones / cache
 dist/
 build/
 .cache/
-
-.vercel

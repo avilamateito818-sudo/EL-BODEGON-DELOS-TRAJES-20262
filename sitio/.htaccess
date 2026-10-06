@@ -1,0 +1,9 @@
+Options -Indexes
+DirectoryIndex index.html
+
+RewriteEngine On
+RewriteBase /
+
+# Endpoints con rutas limpias: /api/x -> api/x.php
+# (mismas rutas que usaba Vercel, así el frontend no cambia)
+RewriteRule ^api/(chat-ask|save-content|contact)$ api/$1.php [L,QSA]

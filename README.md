@@ -1,6 +1,6 @@
 # El Bodegón de los Trajes
 
-Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado. El contacto con los clientes es por **WhatsApp** y la persistencia de contenido usan **Vercel + GitHub**.
+Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado. El contacto con los clientes es por **WhatsApp** y la persistencia de contenido usa **DreamHost (endpoints PHP) + GitHub**.
 
 Este repositorio aplica **arquitectura limpia (Clean Architecture)**, principios **SOLID**, convención de ramas **Git Flow** y despliegue contenerizado con **Docker**.
 
@@ -14,19 +14,19 @@ Este repositorio aplica **arquitectura limpia (Clean Architecture)**, principios
 el-bodegon-de-los-trajes/
 ├── sitio/                  # 🌐 WEB FUNCIONAL (HTML/CSS/JS) — raíz que se sirve
 │   ├── index.html          #   Página única
+│   ├── .htaccess           #   Rewrites de /api/x → api/x.php (Apache/DreamHost)
 │   ├── assets/img/         #   Imágenes usadas por el sitio
 │   ├── css/                #   Hojas de estilo por responsabilidad
 │   ├── js/
 │   │   ├── app.js          #     Lógica del frontend (nav, pestañas, lightbox…)
 │   │   └── admin.js        #     Panel de administración (login/edición)
 │   ├── data/admin-content.js  # Contenido administrable persistido
-├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, Vercel)
+│   ├── api/                #   Endpoints PHP (chat-ask, save-content, contact)
+├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, DreamHost)
 ├── docker/                 # 🐳 Dockerfile y configuración de Nginx
-├── api/                    # ☁️ Funciones serverless (Vercel): save-content (y endpoints de datos en GitHub)
 ├── scripts/                # 🔧 Utilidades del proyecto (dev, build, docker…)
-├── .github/workflows/      # ⚙️ (opcional) CI/CD
+├── .github/workflows/      # ⚙️ CI/CD: deploy a DreamHost por rsync/SSH
 ├── docker-compose.yml      # Orquesta el contenedor (sitio estático)
-├── vercel.json             # ☁️ Configuración de despliegue en Vercel
 ├── .gitignore
 └── README.md
 ```
@@ -63,9 +63,13 @@ docker compose up --build
 
 El contenedor sirve el contenido estático de `sitio/` con Nginx (configuración en `docker/nginx.conf`).
 
-### 3) En producción (Vercel)
+### 3) En producción (DreamHost + GitHub Actions)
 
-El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `api/` para la persistencia y la sincronización del panel con GitHub). Ver [`docs/VERCEL.md`](docs/VERCEL.md) para importar el proyecto y configurar la variable `GITHUB_TOKEN`.
+El sitio se publica en **DreamHost (Web Hosting Launch)**: cada `push` a `main`
+dispara el workflow `deploy-dreamhost.yml`, que sincroniza `sitio/` al servidor
+por rsync/SSH. Los endpoints `/api/*` son PHP (`sitio/api/*.php`) y persisten
+datos en GitHub. Ver [`docs/DEPLOY_DREAMHOST.md`](docs/DEPLOY_DREAMHOST.md)
+para configurar el servidor, los secretos de GitHub y el token.
 
 ---
 
@@ -79,7 +83,7 @@ El sitio se publica con **Vercel** (raíz `sitio/` + funciones serverless en `ap
 | Docker / despliegue | [`docs/DOCKER.md`](docs/DOCKER.md) |
 | Estructura de carpetas | [`docs/DIRECTORY_STRUCTURE.md`](docs/DIRECTORY_STRUCTURE.md) |
 | Credenciales de administración | [`docs/ADMIN.md`](docs/ADMIN.md) |
-| Despliegue en Vercel (sincronización con GitHub) | [`docs/VERCEL.md`](docs/VERCEL.md) |
+| Despliegue en DreamHost (Git + Actions) | [`docs/DEPLOY_DREAMHOST.md`](docs/DEPLOY_DREAMHOST.md) |
 
 ---
 
@@ -96,4 +100,4 @@ Ver [`docs/GIT_FLOW.md`](docs/GIT_FLOW.md) para los comandos.
 
 ## Contenido administrable
 
-El panel de administración persiste en `data/admin-content.js`. La edición visual (fotos, títulos, párrafos) se sincroniza en la nube mediante un endpoint serverless (`/api/save-content`) y GitHub. Ver [`docs/ADMIN.md`](docs/ADMIN.md).
+El panel de administración persiste en `data/admin-content.js`. La edición visual (fotos, títulos, párrafos) se sincroniza en la nube mediante el endpoint PHP (`/api/save-content`) y GitHub. Ver [`docs/ADMIN.md`](docs/ADMIN.md).
