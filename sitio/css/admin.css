@@ -513,11 +513,13 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 
 .editor-panel {
   position: fixed;
-  right: -520px;
+  right: -560px;
   top: 50%;
   transform: translateY(-50%);
   width: 500px;
+  max-width: calc(100vw - 20px);
   max-height: 96vh;
+  max-height: 96dvh;
   background: rgba(10, 5, 20, 0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -530,7 +532,18 @@ body.admin-edit-mode .admin-photo-controls { display: flex !important; }
 }
 
 .editor-panel.is-open {
-  right: 20px;
+  right: 10px;
+}
+
+@media (max-width: 600px) {
+  .editor-panel {
+    top: auto;
+    bottom: 10px;
+    transform: none;
+    max-height: calc(100dvh - 20px);
+    width: calc(100vw - 20px);
+    border-radius: 14px;
+  }
 }
 
 .editor-panel-header {

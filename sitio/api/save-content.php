@@ -1,6 +1,5 @@
 <?php
-/* Endpoint: sincronización del panel de administración → sitio/data/admin-content.js en GitHub.
-   Equivalente PHP de la antigua api/save-content.js (Vercel). */
+/* Endpoint: sincronización del panel de administración → sitio/data/admin-content.js en GitHub. */
 
 require __DIR__ . '/_config.php';
 

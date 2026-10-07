@@ -6,6 +6,8 @@ services:
     container_name: el-bodegon-trajes-php
     ports:
       - "8095:80"
+    volumes:
+      - ./sitio:/usr/share/nginx/html
     restart: unless-stopped
     environment:
       # Opcionales: si defines GITHUB_TOKEN aquí (o en un archivo .env junto a

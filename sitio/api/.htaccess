@@ -1,4 +1,0 @@
-# Archivos de configuración: solo include interno, nunca por HTTP
-<FilesMatch "^(config\.local\.php|config\.local\.example\.php|_config\.php)$">
-    Require all denied
-</FilesMatch>

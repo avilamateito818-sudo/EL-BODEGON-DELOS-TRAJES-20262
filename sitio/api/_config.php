@@ -1,7 +1,7 @@
 <?php
 /**
  * Configuración y utilidades compartidas de los endpoints /api/*.php.
- * Requiere PHP 7.4+ con extensión curl (incluida por defecto en DreamHost).
+ * Requiere PHP 7.4+ con extensión curl.
  */
 
 function bodegon_config(): array
@@ -20,7 +20,7 @@ function bodegon_config(): array
 
     /* Orden de búsqueda del archivo de configuración:
        1) variable de entorno BODEGON_CONFIG (ruta absoluta)
-       2) ~/bodegon-config.php  (fuera del docroot en DreamHost, permisos 600)
+       2) ~/bodegon-config.php  (fuera del docroot, permisos 600)
        3) config.local.php junto a este archivo (desarrollo local, gitignored) */
     $candidates = array();
 

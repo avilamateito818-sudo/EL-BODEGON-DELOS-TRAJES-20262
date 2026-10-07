@@ -22,8 +22,8 @@
   var cloudSyncing = false;
 
   function getCloudUrl() {
-    /* Mismo origen siempre: en producción el .htaccess reescribe a
-       api/save-content.php y en local dev-server.js responde no-op. */
+    /* Mismo origen siempre: en Docker/servidor responde la API
+       /api/save-content (save-content.php) y en local dev-server.js responde no-op. */
     return CLOUD_SYNC_API;
   }
 
@@ -4180,12 +4180,12 @@ function applyEditorStyles() {
         if (errMsg.indexOf('GITHUB_TOKEN') !== -1 || errMsg.indexOf('no está configurado') !== -1) {
           syncBadge.innerHTML = '<span class="admin-cloud-icon">⚠</span> Token de GitHub no configurado';
           syncBadge.classList.add('is-error');
-          syncBadge.title = 'Configura GITHUB_TOKEN en ~/bodegon-config.php en el servidor (ver docs/DEPLOY_DREAMHOST.md)';
+          syncBadge.title = 'Configura GITHUB_TOKEN en las variables de entorno del servidor o Docker';
           setTimeout(function () { syncBadge.classList.remove('is-visible', 'is-error'); }, 6000);
           notifyAdmin('token-faltante', '⚠️ Token de GitHub no configurado',
             'La sincronización con GitHub falla: el token GITHUB_TOKEN no está ' +
-            'configurado en el servidor. Edita ~/bodegon-config.php con un token ' +
-            'de GitHub con permiso repo (ver docs/DEPLOY_DREAMHOST.md).');
+            'configurado en el servidor. Agrega GITHUB_TOKEN como variable de entorno ' +
+            'con un token de GitHub con permiso repo (ver docs/DOCKER.md).');
           return;
         }
 

@@ -1,6 +1,6 @@
 # El Bodegón de los Trajes
 
-Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado. El contacto con los clientes es por **WhatsApp** y la persistencia de contenido usa **DreamHost (endpoints PHP) + GitHub**.
+Sitio web de **El Bodegón de los Trajes** (Tunja, Boyacá): disfraces, uniformes, batas y alta costura a la medida. Es una aplicación web **estática** (HTML + CSS + JS) con un panel de administración integrado. El contacto con los clientes es por **WhatsApp** y la persistencia de contenido se realiza mediante la **API (PHP/Docker) + GitHub**.
 
 Este repositorio aplica **arquitectura limpia (Clean Architecture)**, principios **SOLID**, convención de ramas **Git Flow** y despliegue contenerizado con **Docker**.
 
@@ -14,7 +14,6 @@ Este repositorio aplica **arquitectura limpia (Clean Architecture)**, principios
 el-bodegon-de-los-trajes/
 ├── sitio/                  # 🌐 WEB FUNCIONAL (HTML/CSS/JS) — raíz que se sirve
 │   ├── index.html          #   Página única
-│   ├── .htaccess           #   Rewrites de /api/x → api/x.php (Apache/DreamHost)
 │   ├── assets/img/         #   Imágenes usadas por el sitio
 │   ├── css/                #   Hojas de estilo por responsabilidad
 │   ├── js/
@@ -22,10 +21,9 @@ el-bodegon-de-los-trajes/
 │   │   └── admin.js        #     Panel de administración (login/edición)
 │   ├── data/admin-content.js  # Contenido administrable persistido
 │   ├── api/                #   Endpoints PHP (chat-ask, save-content, contact)
-├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, DreamHost)
+├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker)
 ├── docker/                 # 🐳 Docker (Nginx + PHP-FPM, y variante solo estática)
 ├── scripts/                # 🔧 Utilidades del proyecto (dev, build, docker…)
-├── .github/workflows/      # ⚙️ CI/CD: deploy a DreamHost por rsync/SSH
 ├── docker-compose.yml      # Orquesta el contenedor (puerto 8095)
 ├── .gitignore
 └── README.md
@@ -36,7 +34,7 @@ el-bodegon-de-los-trajes/
 ## Requisitos
 
 - **Node.js** 18+ (para servir en desarrollo con un servidor estático sencillo).
-- **Docker** (opcional, para despliegue contenerizado con Nginx).
+- **Docker** (para despliegue contenerizado con Nginx y PHP-FPM).
 - **Git** para el flujo de ramas.
 
 ---
@@ -64,20 +62,11 @@ docker compose up --build
 El contenedor `el-bodegon-trajes-php` (puerto **8095**, propio y sin chocar con
 otros servicios) sirve el sitio con **Nginx** y ejecuta los endpoints PHP
 (`/api/save-content`, `/api/chat-ask`, `/api/contact`) con **php-fpm** — es
-decir, el panel de administración y el asistente funcionan igual que en
-producción. Ver [`docs/DOCKER.md`](docs/DOCKER.md).
+decir, el panel de administración y el asistente funcionan de forma completa. Ver [`docs/DOCKER.md`](docs/DOCKER.md).
 
 > Para sincronizar con GitHub desde Docker, define `GITHUB_TOKEN` en un archivo
 > `.env` junto a `docker-compose.yml` (sin él, el sitio funciona con fallback a
 > WhatsApp).
-
-### 3) En producción (DreamHost + GitHub Actions)
-
-El sitio se publica en **DreamHost (Web Hosting Launch)**: cada `push` a `main`
-dispara el workflow `deploy-dreamhost.yml`, que sincroniza `sitio/` al servidor
-por rsync/SSH. Los endpoints `/api/*` son PHP (`sitio/api/*.php`) y persisten
-datos en GitHub. Ver [`docs/DEPLOY_DREAMHOST.md`](docs/DEPLOY_DREAMHOST.md)
-para configurar el servidor, los secretos de GitHub y el token.
 
 ---
 
@@ -91,7 +80,6 @@ para configurar el servidor, los secretos de GitHub y el token.
 | Docker / despliegue | [`docs/DOCKER.md`](docs/DOCKER.md) |
 | Estructura de carpetas | [`docs/DIRECTORY_STRUCTURE.md`](docs/DIRECTORY_STRUCTURE.md) |
 | Credenciales de administración | [`docs/ADMIN.md`](docs/ADMIN.md) |
-| Despliegue en DreamHost (Git + Actions) | [`docs/DEPLOY_DREAMHOST.md`](docs/DEPLOY_DREAMHOST.md) |
 
 ---
 

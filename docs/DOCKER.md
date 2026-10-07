@@ -107,7 +107,7 @@ Docker build contexto
 
 ### Seguridad dentro del contenedor
 
-- `/api/_config.php`, `/api/config.local.php` y `.htaccess` → **403** (nunca por HTTP).
+- `/api/_config.php` y `/api/config.local.php` → **403** (nunca por HTTP); cualquier archivo `.ht*` también se deniega.
 - `.env`, `config.local.php`, logs y credenciales quedan **fuera de la imagen** (`.dockerignore`).
 - Cabeceras: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`.
 
@@ -115,7 +115,7 @@ Docker build contexto
 
 ## Variante solo estática (sin PHP)
 
-Si solo necesitas el HTML/CSS/JS (por ejemplo, para producción en DreamHost donde el PHP ya corre en el servidor):
+Si solo necesitas el HTML/CSS/JS (por ejemplo, para servir el estático sin la API):
 
 ```bash
 docker build -t el-bodegon-trajes-estatico -f docker/Dockerfile .

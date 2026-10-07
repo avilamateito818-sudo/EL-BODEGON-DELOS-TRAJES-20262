@@ -585,6 +585,7 @@
 #temporadas[data-season="enero"] .enero-hero-photo {
   position: relative;
   width: 380px;
+  max-width: 100%;
   aspect-ratio: var(--foto-relacion, 4 / 3);
   flex-shrink: 0;
   border-radius: 20px;

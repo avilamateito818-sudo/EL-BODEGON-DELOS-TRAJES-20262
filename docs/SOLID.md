@@ -20,7 +20,7 @@ Este documento explica cómo se aplican (y cómo se **deberían** aplicar) los p
 | `core/catalogo.js` | Categorías y prendas del negocio |
 | `core/disponibilidad.js` | Consulta de disponibilidad y contacto (cliente) |
 | `core/sesion.js` | Gestión de sesión del administrador |
-| `services/sync.js` | Sincronización con PHP/DreamHost/GitHub |
+| `services/sync.js` | Sincronización con el servidor/GitHub |
 | `services/storage.js` | Persistencia local (localStorage / admin-content) |
 | `ui/marquee.js` | Cinta de temporadas |
 | `ui/lightbox.js` | Visualizador de fotos |

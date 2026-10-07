@@ -28,9 +28,6 @@ el bodeogn de los trajes20262/
 ├── scripts/                   # # HERRAMIENTAS DE DESARROLLO
 │   └── dev-server.js          #   Servidor estático local (Node, sin dependencias)
 │
-├── .github/                   # # (Opcional) automatización
-│   └── workflows/             #   GitHub Actions (lint, pruebas, despliegue)
-│
 ├── img/                       # Imágenes sueltas/residuales (sin uso en el sitio)
 │
 └── sitio/                     # # EL SITIO FUNCIONAL (no modificar el código)

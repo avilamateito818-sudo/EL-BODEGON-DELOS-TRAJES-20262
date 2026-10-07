@@ -31,7 +31,7 @@ http
   .createServer((req, res) => {
     const p = decodeURIComponent(req.url.split('?')[0]);
 
-    /* En local los endpoints que en producción (PHP/DreamHost) persisten
+    /* En local los endpoints que en producción persisten
        datos (el guardado del panel y el registro de consultas del asistente)
        responden con éxito (no-op) para que el sitio no genere errores 404. */
     if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask)\/?$/.test(p))) {

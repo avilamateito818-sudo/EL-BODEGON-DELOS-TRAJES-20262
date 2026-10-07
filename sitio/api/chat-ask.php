@@ -1,6 +1,5 @@
 <?php
-/* Endpoint: consultas del asistente → data/consultas.json en GitHub.
-   Equivalente PHP de la antigua api/chat-ask.js (Vercel). */
+/* Endpoint: consultas del asistente → data/consultas.json en GitHub. */
 
 require __DIR__ . '/_config.php';
 

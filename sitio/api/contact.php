@@ -1,6 +1,5 @@
 <?php
-/* Endpoint: mensajes del formulario de contacto → data/mensajes.json en GitHub.
-   Equivalente PHP de la antigua api/contact.js (Vercel). */
+/* Endpoint: mensajes del formulario de contacto → data/mensajes.json en GitHub. */
 
 require __DIR__ . '/_config.php';
 

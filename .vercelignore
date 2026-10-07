@@ -1,4 +1,0 @@
-# Archivos solo para servidores PHP (DreamHost/Docker): en Vercel la API
-# corre como funciones serverless api/*.js, así que estos no deben publicarse.
-sitio/api/*.php
-sitio/api/.htaccess

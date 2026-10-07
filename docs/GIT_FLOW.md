@@ -114,7 +114,7 @@ docs: documentar arquitectura y Git Flow
 
 - **No hacer `push` directo a `main`**; todo pasa por `develop` y ramas de soporte (o un PR con revisión en GitHub).
 - Mantener `main` y `develop` **siempre verdes** (que no rompan build/despliegue).
-- Para automatizar, se puede usar GitHub Actions (ver `.github/workflows/`).
+- El despliegue a producción se realiza a partir de la rama `main` estable.
 
 ---
 
