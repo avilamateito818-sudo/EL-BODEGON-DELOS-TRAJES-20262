@@ -33,6 +33,21 @@ $waText = 'Mensaje del sitio (' . $record['tipo'] . '): '
     . ($record['correo'] !== '' ? $record['correo'] : $record['whatsapp']);
 $waLink = 'https://wa.me/' . $cfg['CONTACT_PHONE'] . '?text=' . rawurlencode($waText);
 
+/* Intento de envío por correo nativo si el servidor lo tiene configurado */
+if (!empty($cfg['CONTACT_EMAIL']) && function_exists('mail')) {
+    $to = $cfg['CONTACT_EMAIL'];
+    $subject = 'Nuevo mensaje web: ' . ($record['nombre'] !== '' ? $record['nombre'] : 'Cliente');
+    $body = "Nombre: " . $record['nombre'] . "\n"
+          . "Contacto: " . ($record['correo'] !== '' ? $record['correo'] : $record['whatsapp']) . "\n"
+          . "Tipo: " . $record['tipo'] . "\n\n"
+          . "Mensaje:\n" . $record['mensaje'];
+    $headers = "From: webmaster@" . ($_SERVER['SERVER_NAME'] ?? 'elbodegondelostrajes.com') . "\r\n";
+    if (!empty($record['correo'])) {
+        $headers .= "Reply-To: " . $record['correo'] . "\r\n";
+    }
+    @mail($to, $subject, $body, $headers);
+}
+
 /* Sin token: responder OK con el enlace de WhatsApp para no romper la UX */
 if ($cfg['GITHUB_TOKEN'] === '') {
     api_send(200, array('ok' => true, 'fallback' => true, 'waLink' => $waLink));

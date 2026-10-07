@@ -234,28 +234,64 @@
       wrap.querySelector('.lead-form').addEventListener('submit', function (e) {
         e.preventDefault();
         var f = wrap.querySelector('.lead-form');
+        var submitBtn = f.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Enviando...';
+        }
         var nombre = f.nombre.value.trim();
         var contacto = f.contacto.value.trim();
         var mensaje = f.mensaje.value.trim();
-        var base = f.mensaje.value.trim() + (initialMsg ? ('\nTema: ' + initialMsg.trim()) : '');
+        var base = mensaje + (initialMsg ? ('\nTema inicial: ' + initialMsg.trim()) : '');
 
         var waText = 'Hola, soy ' + nombre + '. ' + mensaje.replace(/[.\s]+$/, '') + '.' + (contacto ? ' Me pueden escribir a: ' + contacto : '');
         leadOpen = false;
         wrap.classList.add('lead-done');
         var conf = addMsg([
           '✅ ¡Listo, ' + nombre + '!',
-          'Tu mensaje se envió a ' + EMAIL + '.',
+          'Tu mensaje se envió directamente a ' + EMAIL + '.',
           '• Contacto: ' + contacto,
           '• Mensaje: ' + mensaje
         ].join('\n'), 'bot');
         linkWa(waText);
-        saveConsulta(base, nombre, contacto);
+
+        /* Envío directo por correo a elbodegondelostrajes@gmail.com */
+        var emailPayload = {
+          nombre: nombre,
+          contacto: contacto,
+          mensaje: base,
+          _subject: 'Nueva solicitud desde el Asistente Web (' + nombre + ')',
+          _template: 'table',
+          _captcha: 'false'
+        };
+        if (/@/.test(contacto)) {
+          emailPayload._replyto = contacto;
+        }
+
+        try {
+          fetch('https://formsubmit.co/ajax/' + EMAIL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(emailPayload)
+          }).catch(function () {});
+        } catch (err) {}
+
+        /* Guardar copia en backend */
+        try {
+          navigator.sendBeacon(API, JSON.stringify({
+            categoria: 'solicitud asistente',
+            consulta: base,
+            nombre: nombre,
+            whatsapp: contacto
+          }));
+        } catch (err) {}
       });
 
       setTimeout(function () { input.focus(); }, 100);
     }
 
     function saveConsulta(q, nombre, contacto) {
+      if (!q) return;
       try {
         navigator.sendBeacon(API, JSON.stringify({
           categoria: 'consulta libre',
@@ -264,22 +300,6 @@
           whatsapp: contacto || ''
         }));
       } catch (e) {}
-      if (q) {
-        try {
-          fetch('https://formsubmit.co/ajax/' + EMAIL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-              nombre: nombre || 'Consulta del asistente',
-              contacto: contacto || '',
-              mensaje: 'Consulta del asistente: ' + q,
-              _subject: 'Consulta desde el asistente del sitio',
-              _template: 'table',
-              _captcha: 'false'
-            })
-          });
-        } catch (e) {}
-      }
     }
 
     function ask(text) {

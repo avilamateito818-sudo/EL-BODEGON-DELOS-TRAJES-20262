@@ -16,6 +16,7 @@ function bodegon_config(): array
         'GITHUB_REPO'   => 'avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262',
         'GITHUB_BRANCH' => 'main',
         'CONTACT_PHONE' => '573107706615',
+        'CONTACT_EMAIL' => 'elbodegondelostrajes@gmail.com',
     );
 
     /* Orden de búsqueda del archivo de configuración:

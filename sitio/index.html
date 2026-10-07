@@ -1304,7 +1304,9 @@
       </div>
       <div class="contact-form-container">
         <h3>Envíanos tu solicitud</h3>
-        <form id="contact-form" class="contact-form" novalidate>
+        <form id="contact-form" class="contact-form" action="https://formsubmit.co/elbodegondelostrajes@gmail.com" method="POST" novalidate>
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
           <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <label for="contact-name">Tu nombre</label>
           <input id="contact-name" name="nombre" type="text" placeholder="Nombre y apellido" required>
@@ -1397,10 +1399,30 @@
         }
         btn.disabled = true;
         btn.textContent = 'Enviando...';
-        data._subject = 'Nuevo mensaje desde El Bodegón de los Trajes';
+        data._subject = 'Nuevo mensaje desde El Bodegón de los Trajes (' + data.nombre + ')';
         data._template = 'table';
         data._captcha = 'false';
+        if (/@/.test(data.contacto)) {
+          data._replyto = data.contacto;
+        }
         status.hidden = true;
+
+        /* Guardar copia en el backend si está activo */
+        try {
+          fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre: data.nombre,
+              whatsapp: data.contacto,
+              correo: /@/.test(data.contacto) ? data.contacto : '',
+              mensaje: data.mensaje,
+              tipo: 'formulario_contacto'
+            })
+          }).catch(function () {});
+        } catch (e) {}
+
+        /* Envío directo al correo elbodegondelostrajes@gmail.com */
         fetch('https://formsubmit.co/ajax/elbodegondelostrajes@gmail.com', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -1408,7 +1430,7 @@
         }).then(function (r) { return r.json(); }).then(function (res) {
           var ok = res && res.success && String(res.success).toLowerCase() === 'true';
           status.textContent = ok
-            ? '¡Mensaje enviado! Te responderemos pronto.'
+            ? '¡Mensaje enviado a elbodegondelostrajes@gmail.com! Te responderemos pronto.'
             : 'No se pudo enviar. Pruébalo de nuevo o escríbenos por WhatsApp.';
           status.className = 'contact-status ' + (ok ? 'ok' : 'err');
           status.hidden = false;
