@@ -5,7 +5,7 @@ Estructura organizada **alrededor** del sitio funcional (sin modificar su códig
 ```
 el bodeogn de los trajes20262/
 ├── README.md                  # Vista general, cómo ejecutar, índices de documentación
-├── docker-compose.yml         # Orquesta el contenedor Nginx
+├── docker-compose.yml         # Orquesta el contenedor (Nginx + PHP-FPM, puerto 8095)
 ├── .dockerignore              # Exclusiones para la imagen Docker
 ├── .gitignore                 # Archivos que no se versionan
 ├── .gitattributes             # Normalización de saltos de línea / binarios
@@ -18,9 +18,12 @@ el bodeogn de los trajes20262/
 │   ├── DIRECTORY_STRUCTURE.md #   Este documento
 │   └── ADMIN.md               #   Panel de administración y sincronización
 │
-├── docker/                    # # CONTENEDOR (sirve el sitio de forma estática)
-│   ├── Dockerfile             #   Imagen Nginx con sitio/ como raíz
-│   └── nginx.conf             #   Configuración de Nginx
+├── docker/                    # # CONTENEDOR (Nginx + PHP-FPM: sitio y API)
+│   ├── Dockerfile.php         #   Imagen principal (php-fpm + nginx + supervisord)
+│   ├── Dockerfile             #   Variante opcional solo estática (Nginx)
+│   ├── nginx-php.conf         #   Configuración de Nginx (estático + PHP + rewrites)
+│   ├── nginx.conf             #   Configuración de Nginx (solo estático)
+│   └── supervisord.conf       #   Levanta nginx y php-fpm en el mismo contenedor
 │
 ├── scripts/                   # # HERRAMIENTAS DE DESARROLLO
 │   └── dev-server.js          #   Servidor estático local (Node, sin dependencias)

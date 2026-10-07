@@ -27,3 +27,4 @@ bodegon-config.php
 dist/
 build/
 .cache/
+.vercel

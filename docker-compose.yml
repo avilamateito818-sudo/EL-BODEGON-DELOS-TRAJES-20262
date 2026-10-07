@@ -2,8 +2,15 @@ services:
   web:
     build:
       context: .
-      dockerfile: docker/Dockerfile
-    container_name: el-bodegon-trajes
+      dockerfile: docker/Dockerfile.php
+    container_name: el-bodegon-trajes-php
     ports:
-      - "8080:80"
+      - "8095:80"
     restart: unless-stopped
+    environment:
+      # Opcionales: si defines GITHUB_TOKEN aquí (o en un archivo .env junto a
+      # este compose) el panel de administración y el asistente sincronizan
+      # con GitHub. Sin token, el sitio sigue funcionando (fallback WhatsApp).
+      GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+      GITHUB_REPO: "${GITHUB_REPO:-}"
+      GITHUB_BRANCH: "${GITHUB_BRANCH:-}"

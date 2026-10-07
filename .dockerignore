@@ -12,3 +12,14 @@ README.md
 .gcloudignore
 .DS_Store
 Thumbs.db
+
+# Secretos y credenciales: nunca dentro de la imagen
+.env
+.env.*
+sitio/api/config.local.php
+bodegon-config.php
+subir_sitio.ps1
+*.log
+server.log
+server-err.log
+data

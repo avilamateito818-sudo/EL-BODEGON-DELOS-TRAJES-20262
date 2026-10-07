@@ -23,10 +23,10 @@ el-bodegon-de-los-trajes/
 │   ├── data/admin-content.js  # Contenido administrable persistido
 │   ├── api/                #   Endpoints PHP (chat-ask, save-content, contact)
 ├── docs/                   # 📘 Documentación (arquitectura, SOLID, Git Flow, Docker, DreamHost)
-├── docker/                 # 🐳 Dockerfile y configuración de Nginx
+├── docker/                 # 🐳 Docker (Nginx + PHP-FPM, y variante solo estática)
 ├── scripts/                # 🔧 Utilidades del proyecto (dev, build, docker…)
 ├── .github/workflows/      # ⚙️ CI/CD: deploy a DreamHost por rsync/SSH
-├── docker-compose.yml      # Orquesta el contenedor (sitio estático)
+├── docker-compose.yml      # Orquesta el contenedor (puerto 8095)
 ├── .gitignore
 └── README.md
 ```
@@ -54,14 +54,22 @@ node scripts/dev-server.js sitio
 
 > Las rutas del sitio son **relativas a `sitio/`** (`css/…`, `js/…`), por lo que la web debe servirse con `sitio/` como raíz del documento.
 
-### 2) Con Docker (Nginx)
+### 2) Con Docker (Nginx + PHP)
 
 ```bash
 docker compose up --build
-# -> http://localhost:8080
+# -> http://localhost:8095
 ```
 
-El contenedor sirve el contenido estático de `sitio/` con Nginx (configuración en `docker/nginx.conf`).
+El contenedor `el-bodegon-trajes-php` (puerto **8095**, propio y sin chocar con
+otros servicios) sirve el sitio con **Nginx** y ejecuta los endpoints PHP
+(`/api/save-content`, `/api/chat-ask`, `/api/contact`) con **php-fpm** — es
+decir, el panel de administración y el asistente funcionan igual que en
+producción. Ver [`docs/DOCKER.md`](docs/DOCKER.md).
+
+> Para sincronizar con GitHub desde Docker, define `GITHUB_TOKEN` en un archivo
+> `.env` junto a `docker-compose.yml` (sin él, el sitio funciona con fallback a
+> WhatsApp).
 
 ### 3) En producción (DreamHost + GitHub Actions)
 

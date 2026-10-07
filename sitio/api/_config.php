@@ -44,12 +44,30 @@ function bodegon_config(): array
             $loaded = include $file;
             if (is_array($loaded)) {
                 $cfg = array_merge($defaults, $loaded);
-                return $cfg;
+                break;
             }
         }
     }
 
-    $cfg = $defaults;
+    if ($cfg === null) {
+        $cfg = $defaults;
+    }
+
+    /* Variables de entorno (Docker / hosting): solo las no vacías mandan.
+       Permiten configurar el token sin escribir archivos dentro de la imagen. */
+    $envMap = array(
+        'GITHUB_TOKEN'  => 'GITHUB_TOKEN',
+        'GITHUB_REPO'   => 'GITHUB_REPO',
+        'GITHUB_BRANCH' => 'GITHUB_BRANCH',
+        'CONTACT_PHONE' => 'CONTACT_PHONE',
+    );
+    foreach ($envMap as $key => $envVar) {
+        $val = getenv($envVar);
+        if (is_string($val) && $val !== '') {
+            $cfg[$key] = $val;
+        }
+    }
+
     return $cfg;
 }
 
