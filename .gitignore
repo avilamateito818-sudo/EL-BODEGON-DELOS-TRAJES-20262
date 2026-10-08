@@ -30,8 +30,10 @@ data/consultas.json
 sitio/data/mensajes.json
 sitio/data/consultas.json
 
-# Construcciones / cache
+# Construcciones / cache / respaldos
 dist/
 build/
 .cache/
 .vercel
+*.bundle
+*.zip
