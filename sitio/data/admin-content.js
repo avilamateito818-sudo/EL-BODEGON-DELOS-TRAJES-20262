@@ -30,6 +30,10 @@ window.ADMIN_CONTENT = {
     {
       "sel": "#sec_mtxfk3ot > p:nth-child(2)",
       "html": "MATRIMONIOS, FIESTAS, COMUNIONES, OCACIONES ESPCIALES"
+    },
+    {
+      "sel": "#uniformes > div:nth-child(2) > ul:nth-child(3) > li:nth-child(3)",
+      "html": "Corbata para colegios"
     }
   ],
   "images": [
@@ -100,6 +104,8 @@ window.ADMIN_CONTENT = {
     "hero": "assets/img/admin-media/hero.webp",
     "noviembre": "assets/img/admin-media/noviembre.webp"
   },
+  "seasonColors": [],
+  "specialColors": [],
   "photoSettings": {
     "enero": {
       "width": 341,
@@ -107,10 +113,9 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "#temporadas": "",
     "#temporadas > div:nth-child(2) > h2:nth-child(2)": "width: 1029px; height: 157px;",
     "#catalogo-general": "width: 1532px; background-color: rgb(173, 216, 225);",
     "#batas": "--d: 270ms; --foto-relacion: 1.0000;",
-    "html > body:nth-child(2) > footer:nth-child(7)": "background-color: rgb(98, 152, 163);"
+    "body[data-season=\"enero\"] > footer:nth-child(7)": "background-color: rgb(98, 152, 163);"
   }
 };
