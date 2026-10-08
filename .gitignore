@@ -23,6 +23,13 @@ sitio/api/config.local.php
 bodegon-config.php
 *.log
 
+# Datos privados de clientes y leads (Habeas Data / Privacidad)
+sitio/data/leads/
+data/mensajes.json
+data/consultas.json
+sitio/data/mensajes.json
+sitio/data/consultas.json
+
 # Construcciones / cache
 dist/
 build/

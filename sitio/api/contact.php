@@ -1,74 +1,71 @@
 <?php
-/* Endpoint: mensajes del formulario de contacto → data/mensajes.json en GitHub. */
+/**
+ * Endpoint de Formulario de Contacto — El Bodegón de los Trajes.
+ * Arquitectura Limpia: Controlador HTTP / Capa de Adaptadores de Interfaz.
+ * 
+ * Desacoplado de Git: Persiste mediante LeadRepository en almacenamiento protegido.
+ */
 
-require __DIR__ . '/_config.php';
+require_once __DIR__ . '/_config.php';
+require_once __DIR__ . '/leads.php';
 
 api_cors();
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     api_send(200, array('ok' => true));
 }
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    api_send(405, array('ok' => false, 'error' => 'Método no permitido'));
+    api_send(405, array('ok' => false, 'error' => 'Método no permitido. Use POST.'));
 }
 
-$p = api_read_json_body();
-if ($p === null) {
-    api_send(400, array('ok' => false, 'error' => 'JSON inválido'));
+$payload = api_read_json_body();
+if ($payload === null) {
+    api_send(400, array('ok' => false, 'error' => 'JSON inválido o ausente.'));
 }
 
-$cfg = bodegon_config();
+$nombre   = trim(strip_tags(strval($payload['nombre'] ?? '')));
+$correo   = trim(strip_tags(strval($payload['correo'] ?? '')));
+$whatsapp = trim(strip_tags(strval($payload['whatsapp'] ?? '')));
+$mensaje  = trim(strip_tags(strval($payload['mensaje'] ?? '')));
+$tipo     = trim(strip_tags(strval($payload['tipo'] ?? 'contacto')));
+
+if ($mensaje === '' && $nombre === '' && $correo === '' && $whatsapp === '') {
+    api_send(422, array('ok' => false, 'error' => 'Los datos de contacto están vacíos'));
+}
+
+if ($mensaje === '') {
+    api_send(422, array('ok' => false, 'error' => 'El mensaje es obligatorio'));
+}
+
+if ($correo === '' && $whatsapp === '') {
+    api_send(422, array('ok' => false, 'error' => 'Se requiere al menos un medio de contacto (WhatsApp o correo)'));
+}
 
 $record = array(
-    'fecha'    => gmdate('c'),
-    'tipo'     => strval($p['tipo'] ?? 'contacto'),
-    'nombre'   => strval($p['nombre'] ?? ''),
-    'correo'   => strval($p['correo'] ?? ''),
-    'whatsapp' => strval($p['whatsapp'] ?? ''),
-    'mensaje'  => strval($p['mensaje'] ?? ''),
+    'tipo'     => $tipo !== '' ? $tipo : 'contacto',
+    'nombre'   => $nombre,
+    'correo'   => $correo,
+    'whatsapp' => $whatsapp,
+    'mensaje'  => $mensaje,
 );
+
+// Persistencia en LeadRepository (desacoplada de Git)
+$saved = LeadRepository::saveContact($record);
+
+$cfg = bodegon_config();
+$waPhone = !empty($cfg['CONTACT_PHONE']) ? $cfg['CONTACT_PHONE'] : '573107706615';
 
 $waText = 'Mensaje del sitio (' . $record['tipo'] . '): '
     . ($record['mensaje'] !== '' ? $record['mensaje'] . '. ' : '')
-    . 'Nombre: ' . $record['nombre'] . '. Correo/WhatsApp: '
+    . 'Nombre: ' . ($record['nombre'] !== '' ? $record['nombre'] : 'Cliente') . '. Contacto: '
     . ($record['correo'] !== '' ? $record['correo'] : $record['whatsapp']);
-$waLink = 'https://wa.me/' . $cfg['CONTACT_PHONE'] . '?text=' . rawurlencode($waText);
 
-/* Intento de envío por correo nativo si el servidor lo tiene configurado */
-if (!empty($cfg['CONTACT_EMAIL']) && function_exists('mail')) {
-    $to = $cfg['CONTACT_EMAIL'];
-    $subject = 'Nuevo mensaje web: ' . ($record['nombre'] !== '' ? $record['nombre'] : 'Cliente');
-    $body = "Nombre: " . $record['nombre'] . "\n"
-          . "Contacto: " . ($record['correo'] !== '' ? $record['correo'] : $record['whatsapp']) . "\n"
-          . "Tipo: " . $record['tipo'] . "\n\n"
-          . "Mensaje:\n" . $record['mensaje'];
-    $headers = "From: webmaster@" . ($_SERVER['SERVER_NAME'] ?? 'elbodegondelostrajes.com') . "\r\n";
-    if (!empty($record['correo'])) {
-        $headers .= "Reply-To: " . $record['correo'] . "\r\n";
-    }
-    @mail($to, $subject, $body, $headers);
-}
+$waLink = 'https://wa.me/' . $waPhone . '?text=' . rawurlencode($waText);
 
-/* Sin token: responder OK con el enlace de WhatsApp para no romper la UX */
-if ($cfg['GITHUB_TOKEN'] === '') {
-    api_send(200, array('ok' => true, 'fallback' => true, 'waLink' => $waLink));
-}
-
-try {
-    $file = 'data/mensajes.json';
-    $read = gh_read_json($cfg['GITHUB_REPO'], $file, $cfg['GITHUB_BRANCH'], $cfg['GITHUB_TOKEN']);
-    $data = $read['data'];
-    array_unshift($data, $record);
-    $data = array_slice($data, 0, 500);
-    gh_write_file(
-        $cfg['GITHUB_REPO'],
-        $file,
-        $cfg['GITHUB_BRANCH'],
-        $cfg['GITHUB_TOKEN'],
-        api_json_pretty($data) . "\n",
-        'Nuevo mensaje del formulario de contacto'
-    );
-} catch (Throwable $e) {
-    /* no bloquear la UX */
-}
-
-api_send(200, array('ok' => true, 'waLink' => $waLink));
+api_send(200, array(
+    'ok'      => true,
+    'saved'   => $saved,
+    'waLink'  => $waLink,
+    'message' => 'Mensaje recibido exitosamente.'
+));

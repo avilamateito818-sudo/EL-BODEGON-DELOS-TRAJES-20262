@@ -15,6 +15,8 @@
   var BACKUP_LOG_KEY = 'bodegon_backup_log';
   var PENDING_SYNC_KEY = 'bodegon_pending_sync';
   var CLOUD_SYNC_API = '/api/save-content';
+  var AUTH_API = '/api/auth';
+  var adminCsrfToken = '';
   var cloudSyncTimer = null;
   var CLOUD_SYNC_DELAY = 2500;
   var cloudSyncRetries = 0;
@@ -25,6 +27,37 @@
     /* Mismo origen siempre: en Docker/servidor responde la API
        /api/save-content (save-content.php) y en local dev-server.js responde no-op. */
     return CLOUD_SYNC_API;
+  }
+
+  function checkServerAuth() {
+    fetch(AUTH_API + '?action=status', { credentials: 'same-origin' })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.authenticated) {
+          authed = true;
+          adminCsrfToken = data.csrf_token || '';
+          enableEditMode();
+          updateFabState();
+        } else {
+          authed = false;
+          try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+          updateFabState();
+        }
+      })
+      .catch(function () {});
+  }
+
+  function performLogout() {
+    fetch(AUTH_API + '?action=logout', {
+      method: 'POST',
+      credentials: 'same-origin'
+    }).catch(function () {});
+    authed = false;
+    adminCsrfToken = '';
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    disableEditMode();
+    updateFabState();
+    toast('Sesión cerrada.');
   }
 
   var content = {
@@ -135,24 +168,39 @@
 
   function cssPath(el) {
     if (!el) return '';
+    // 1. Identificadores semánticos unívocos directos (máxima resiliencia y desacoplamiento del DOM)
+    if (el.getAttribute && el.getAttribute('data-field')) {
+      return '[data-field="' + CSS.escape(el.getAttribute('data-field')) + '"]';
+    }
+    if (el.getAttribute && el.getAttribute('data-card-id')) {
+      return '[data-card-id="' + CSS.escape(el.getAttribute('data-card-id')) + '"]';
+    }
+    if (el.getAttribute && el.getAttribute('data-cms-id')) {
+      return '[data-cms-id="' + CSS.escape(el.getAttribute('data-cms-id')) + '"]';
+    }
     if (el.id) return '#' + CSS.escape(el.id);
     if (el === document.body) return 'body';
+
     var parts = [];
     var node = el;
     while (node && node.nodeType === 1) {
+      // Si un ancestro tiene data-card-id o data-field, anclar la ruta a él
+      if (node !== el && node.getAttribute && node.getAttribute('data-card-id')) {
+        parts.unshift('[data-card-id="' + CSS.escape(node.getAttribute('data-card-id')) + '"]');
+        break;
+      }
+      if (node !== el && node.getAttribute && node.getAttribute('data-field')) {
+        parts.unshift('[data-field="' + CSS.escape(node.getAttribute('data-field')) + '"]');
+        break;
+      }
       if (node.id) {
         parts.unshift('#' + CSS.escape(node.id));
         break;
       }
-      /* La ruta se acota al bloque de la temporada. Las 12 temporadas repiten
-         la misma estructura, asi que sin este dato un ":nth-child" guardado
-         para enero terminaria apuntando a otra mes al cambiar de temporada. */
-      var mes = node.getAttribute && (node.getAttribute('data-landing') || node.getAttribute('data-season'));
+      /* La ruta se acota al bloque de la temporada o panel */
+      var mes = node.getAttribute && (node.getAttribute('data-landing') || node.getAttribute('data-season') || node.getAttribute('data-panel') || node.getAttribute('data-cat-panel'));
       if (mes) {
-        var attr = node.hasAttribute('data-landing') ? 'data-landing' : 'data-season';
-        /* Se ignoran las clases que el panel se pone y quita (admin-edit-mode,
-           editor-selected, reveal...): no existen al volver a cargar y
-           dejarian el estilo sin aplicar. */
+        var attr = node.hasAttribute('data-landing') ? 'data-landing' : (node.hasAttribute('data-panel') ? 'data-panel' : (node.hasAttribute('data-cat-panel') ? 'data-cat-panel' : 'data-season'));
         var clase = '';
         if (node.classList) {
           for (var c = 0; c < node.classList.length; c++) {
@@ -178,12 +226,13 @@
     return parts.join(' > ');
   }
 
-  /* Clave con la que se guarda el estilo de un elemento. Se prefiere un id o
-     una clase que pertenezca a un solo elemento, porque la ruta con
-     nth-child de cssPath() cambia cuando la pagina se reconstruye (por
-     ejemplo al cambiar de temporada) y el color guardado se perdia. */
+  /* Clave con la que se guarda el estilo de un elemento.
+     Prioriza identificadores semánticos data-field y data-card-id para desacoplar del DOM. */
   function editorKey(el) {
     if (!el) return '';
+    if (el.getAttribute && el.getAttribute('data-field')) return '[data-field="' + CSS.escape(el.getAttribute('data-field')) + '"]';
+    if (el.getAttribute && el.getAttribute('data-card-id')) return '[data-card-id="' + CSS.escape(el.getAttribute('data-card-id')) + '"]';
+    if (el.getAttribute && el.getAttribute('data-cms-id')) return '[data-cms-id="' + CSS.escape(el.getAttribute('data-cms-id')) + '"]';
     if (el.id) return '#' + CSS.escape(el.id);
     var clases = String(el.className || '').trim().split(/\s+/).filter(function (c) {
       return c && c !== 'editor-selected' && c.indexOf('reveal') !== 0;
@@ -198,7 +247,20 @@
   }
 
   function q(path) {
-    try { return document.querySelector(path); } catch (e) { return null; }
+    if (!path) return null;
+    try {
+      var target = document.querySelector(path);
+      if (target) return target;
+      // Soporte de tolerancia para data-field sin corchetes
+      if (/^[a-zA-Z0-9_\-\.]+$/.test(path)) {
+        return document.querySelector('[data-field="' + CSS.escape(path) + '"]')
+          || document.querySelector('[data-card-id="' + CSS.escape(path) + '"]')
+          || document.getElementById(path);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   function qa(path) {
@@ -2955,11 +3017,7 @@ function applyEditorStyles() {
     fab.addEventListener('click', function () {
       if (!authed) { openLogin(); return; }
       if (window.confirm('¿Cerrar sesión de administrador?')) {
-        authed = false;
-        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
-        disableEditMode();
-        updateFabState();
-        toast('Sesión cerrada.');
+        performLogout();
       }
     });
     document.body.appendChild(fab);
@@ -2971,11 +3029,7 @@ function applyEditorStyles() {
     function onAdminEntryClick() {
       if (!authed) { openLogin(); return; }
       if (window.confirm('¿Cerrar sesión de administrador?')) {
-        authed = false;
-        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
-        disableEditMode();
-        updateFabState();
-        toast('Sesión cerrada.');
+        performLogout();
       }
     }
     fab.__adminEntry = onAdminEntryClick;
@@ -3075,27 +3129,68 @@ function applyEditorStyles() {
 
     function tryLogin() {
       if (loginAttempts >= 5) return;
-      var expectedU = content.usernameHash || hash(DEFAULT_USERNAME);
-      var expectedP = content.passwordHash || hash(DEFAULT_PASSWORD);
-      if (hash(userInp.value) === expectedU && hash(inp.value) === expectedP) {
-        authed = true;
-        loginAttempts = 0;
-        lockUntil = 0;
-        try { localStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
-        clearInterval(timer);
-        closeModal();
-        enableEditMode();
-        updateFabState();
-        toast('Bienvenido, administrador.');
-      } else {
-        loginAttempts++;
-        var left = 5 - loginAttempts;
-        if (left <= 0) {
-          lockNow();
-        } else {
-          hint.textContent = 'Error, intenta de nuevo. Te quedan ' + left + ' intento' + (left === 1 ? '' : 's') + '.';
-        }
+      var uVal = userInp.value.trim();
+      var pVal = inp.value;
+      if (!uVal || !pVal) {
+        hint.textContent = 'Por favor ingresa usuario y contraseña.';
+        return;
       }
+
+      hint.textContent = 'Verificando credenciales...';
+
+      fetch(AUTH_API + '?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ user: uVal, pass: pVal })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.authenticated) {
+            authed = true;
+            adminCsrfToken = data.csrf_token || '';
+            loginAttempts = 0;
+            lockUntil = 0;
+            try { localStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+            clearInterval(timer);
+            closeModal();
+            enableEditMode();
+            updateFabState();
+            toast(data.message || 'Bienvenido, administrador.');
+          } else {
+            loginAttempts++;
+            var left = 5 - loginAttempts;
+            if (left <= 0) {
+              lockNow();
+            } else {
+              hint.textContent = (data && data.error) ? data.error : ('Error, intenta de nuevo. Te quedan ' + left + ' intento' + (left === 1 ? '' : 's') + '.');
+            }
+          }
+        })
+        .catch(function () {
+          /* Fallback local en caso de desconexión o entorno estático sin backend */
+          var expectedU = content.usernameHash || hash(DEFAULT_USERNAME);
+          var expectedP = content.passwordHash || hash(DEFAULT_PASSWORD);
+          if (hash(uVal) === expectedU && hash(pVal) === expectedP) {
+            authed = true;
+            loginAttempts = 0;
+            lockUntil = 0;
+            try { localStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+            clearInterval(timer);
+            closeModal();
+            enableEditMode();
+            updateFabState();
+            toast('Bienvenido, administrador.');
+          } else {
+            loginAttempts++;
+            var left = 5 - loginAttempts;
+            if (left <= 0) {
+              lockNow();
+            } else {
+              hint.textContent = 'Error, intenta de nuevo. Te quedan ' + left + ' intento' + (left === 1 ? '' : 's') + '.';
+            }
+          }
+        });
     }
     box.querySelector('[data-role="ok"]').addEventListener('click', tryLogin);
     inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryLogin(); });
@@ -3384,11 +3479,7 @@ function applyEditorStyles() {
     b.title = 'Cerrar sesión';
     b.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
     b.addEventListener('click', function () {
-      authed = false;
-      try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
-      disableEditMode();
-      updateFabState();
-      toast('Sesión cerrada.');
+      performLogout();
     });
     document.body.appendChild(b);
   }
@@ -4138,11 +4229,18 @@ function applyEditorStyles() {
       timeoutId = setTimeout(function () { controller.abort(); }, 15000);
     }
 
+    var syncHeaders = { 'Content-Type': 'application/json' };
+    if (adminCsrfToken) {
+      syncHeaders['X-CSRF-Token'] = adminCsrfToken;
+    }
+
     fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: syncHeaders,
+      credentials: 'same-origin',
       body: JSON.stringify({
         content: data,
+        csrf_token: adminCsrfToken,
         message: 'Admin update (' + new Date().toLocaleString() + ')'
       }),
       signal: controller ? controller.signal : undefined
@@ -4266,10 +4364,17 @@ function applyEditorStyles() {
     var pending = localStorage.getItem(PENDING_SYNC_KEY);
     if (!pending || !navigator.sendBeacon) return;
     try {
-      navigator.sendBeacon(getCloudUrl(), JSON.stringify({
+      var payload = {
         content: pending,
+        csrf_token: adminCsrfToken,
         message: 'Admin update (cierre de pestaña ' + new Date().toLocaleString() + ')'
-      }));
+      };
+      if (window.Blob) {
+        var blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+        navigator.sendBeacon(getCloudUrl(), blob);
+      } else {
+        navigator.sendBeacon(getCloudUrl(), JSON.stringify(payload));
+      }
     } catch (e) {}
   }
   window.addEventListener('beforeunload', flushBeforeUnload);
@@ -4301,10 +4406,14 @@ function applyEditorStyles() {
     var timeoutId = null;
     if (controller) timeoutId = setTimeout(function () { controller.abort(); }, 12000);
 
+    var testHeaders = { 'Content-Type': 'application/json' };
+    if (adminCsrfToken) testHeaders['X-CSRF-Token'] = adminCsrfToken;
+
     fetch(getCloudUrl(), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ test: true, message: 'Test connection' }),
+      headers: testHeaders,
+      credentials: 'same-origin',
+      body: JSON.stringify({ test: true, csrf_token: adminCsrfToken, message: 'Test connection' }),
       signal: controller ? controller.signal : undefined
     })
       .then(function (res) { if (timeoutId) clearTimeout(timeoutId); return res.json(); })
@@ -4688,11 +4797,7 @@ function applyEditorStyles() {
 
     setTimeout(applySeasonCovers, 150);
 
-    try {
-      if (localStorage.getItem(SESSION_KEY)) {
-        localStorage.removeItem(SESSION_KEY);
-      }
-    } catch (e) {}
+    checkServerAuth();
 
     document.addEventListener('click', function (e) {
       var img = e.target.closest ? e.target.closest('img') : null;

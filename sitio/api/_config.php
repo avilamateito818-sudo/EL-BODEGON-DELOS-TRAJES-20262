@@ -12,8 +12,8 @@ function bodegon_config(): array
     }
 
     $defaults = array(
-        'GITHUB_TOKEN'  => '',
-        'GITHUB_REPO'   => 'avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262',
+        'GITHUB_TOKEN' => '',
+        'GITHUB_REPO' => 'avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262',
         'GITHUB_BRANCH' => 'main',
         'CONTACT_PHONE' => '573107706615',
         'CONTACT_EMAIL' => 'elbodegondelostrajes@gmail.com',
@@ -57,8 +57,8 @@ function bodegon_config(): array
     /* Variables de entorno (Docker / hosting): solo las no vacías mandan.
        Permiten configurar el token sin escribir archivos dentro de la imagen. */
     $envMap = array(
-        'GITHUB_TOKEN'  => 'GITHUB_TOKEN',
-        'GITHUB_REPO'   => 'GITHUB_REPO',
+        'GITHUB_TOKEN' => 'GITHUB_TOKEN',
+        'GITHUB_REPO' => 'GITHUB_REPO',
         'GITHUB_BRANCH' => 'GITHUB_BRANCH',
         'CONTACT_PHONE' => 'CONTACT_PHONE',
     );
@@ -74,9 +74,97 @@ function bodegon_config(): array
 
 function api_cors(): void
 {
-    header('Access-Control-Allow-Origin: *');
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origin !== '') {
+        header('Access-Control-Allow-Origin: ' . $origin);
+        header('Access-Control-Allow-Credentials: true');
+    } else {
+        header('Access-Control-Allow-Origin: *');
+    }
     header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type');
+    header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token, Authorization');
+}
+
+/** Inicia la sesión PHP con parámetros de cookie seguros (HttpOnly, SameSite=Lax). */
+function auth_session_start(): void
+{
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        return;
+    }
+    if (!headers_sent()) {
+        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        session_name('BODEGON_SESSID');
+        session_set_cookie_params(array(
+            'lifetime' => 86400 * 7, // 7 días
+            'path'     => '/',
+            'domain'   => '',
+            'secure'   => $isSecure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ));
+        session_start();
+    } else {
+        @session_start();
+    }
+}
+
+/** Genera o devuelve el token CSRF para la sesión activa. */
+function auth_get_csrf_token(): string
+{
+    auth_session_start();
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return strval($_SESSION['csrf_token']);
+}
+
+/** Valida credenciales contra variables de entorno o configuración del servidor. */
+function auth_validate_credentials(string $user, string $pass): bool
+{
+    $envUser = getenv('ADMIN_USER');
+    $expectedUser = (is_string($envUser) && $envUser !== '') ? $envUser : 'Ana Avila';
+
+    $envHash = getenv('ADMIN_PASSWORD_HASH');
+    $envPass = getenv('ADMIN_PASS');
+
+    if (!hash_equals($expectedUser, $user)) {
+        return false;
+    }
+
+    if (is_string($envHash) && $envHash !== '') {
+        return password_verify($pass, $envHash);
+    }
+
+    $expectedPass = (is_string($envPass) && $envPass !== '') ? $envPass : 'ANAISABEL2026';
+    return hash_equals($expectedPass, $pass);
+}
+
+/** Middleware: Exige sesión activa de administrador y valida CSRF en peticiones mutantes. */
+function auth_require_admin(): array
+{
+    auth_session_start();
+    if (empty($_SESSION['admin_logged_in'])) {
+        api_send(401, array('ok' => false, 'error' => 'No autorizado. Se requiere sesión activa de administrador.'));
+    }
+
+    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    if (in_array($method, array('POST', 'PUT', 'DELETE'), true)) {
+        $csrfSent = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if ($csrfSent === '') {
+            $body = api_read_json_body();
+            $csrfSent = strval($body['csrf_token'] ?? '');
+        }
+        $expectedCsrf = strval($_SESSION['csrf_token'] ?? '');
+        if ($expectedCsrf === '' || !hash_equals($expectedCsrf, $csrfSent)) {
+            api_send(403, array('ok' => false, 'error' => 'Token CSRF inválido o ausente.'));
+        }
+    }
+
+    return array(
+        'user'       => strval($_SESSION['admin_user'] ?? 'admin'),
+        'csrf_token' => strval($_SESSION['csrf_token'] ?? ''),
+    );
 }
 
 function api_send(int $status, array $body): void
@@ -89,15 +177,21 @@ function api_send(int $status, array $body): void
 
 function api_read_json_body(): ?array
 {
+    static $cachedBody = null;
+    if ($cachedBody !== null) {
+        return $cachedBody;
+    }
     $raw = file_get_contents('php://input');
     if (is_string($raw) && trim($raw) !== '') {
         $decoded = json_decode($raw, true);
         if (is_array($decoded)) {
-            return $decoded;
+            $cachedBody = $decoded;
+            return $cachedBody;
         }
     }
     if (!empty($_POST)) {
-        return $_POST;
+        $cachedBody = $_POST;
+        return $cachedBody;
     }
     return null;
 }
@@ -130,11 +224,11 @@ function gh_http(string $method, string $url, ?string $token, ?string $jsonBody 
     }
 
     curl_setopt_array($ch, array(
-        CURLOPT_CUSTOMREQUEST  => $method,
+        CURLOPT_CUSTOMREQUEST => $method,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 15,
+        CURLOPT_TIMEOUT => 15,
         CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_HTTPHEADER     => $headers,
+        CURLOPT_HTTPHEADER => $headers,
     ));
     if ($jsonBody !== null) {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
@@ -143,15 +237,14 @@ function gh_http(string $method, string $url, ?string $token, ?string $jsonBody 
     $out = curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     curl_close($ch);
-
     if (!is_string($out)) {
         return null;
     }
     $decoded = json_decode($out, true);
     return array(
         'status' => $status,
-        'json'   => is_array($decoded) ? $decoded : null,
-        'raw'    => $out,
+        'json' => is_array($decoded) ? $decoded : null,
+        'raw' => $out,
     );
 }
 
@@ -194,7 +287,7 @@ function gh_write_file(
     $payload = array(
         'message' => $message,
         'content' => base64_encode($content),
-        'branch'  => $branch,
+        'branch' => $branch,
     );
     if ($head !== null && $head['status'] === 200 && is_array($head['json']) && isset($head['json']['sha'])) {
         $payload['sha'] = strval($head['json']['sha']);

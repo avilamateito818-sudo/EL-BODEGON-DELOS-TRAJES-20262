@@ -31,10 +31,29 @@ http
   .createServer((req, res) => {
     const p = decodeURIComponent(req.url.split('?')[0]);
 
+    /* Manejador de autenticación en desarrollo local */
+    if (/^\/api\/auth\/?$/.test(p)) {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const action = urlObj.searchParams.get('action') || '';
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      if (action === 'logout') {
+        res.end(JSON.stringify({ ok: true, authenticated: false, message: 'Sesión cerrada exitosamente.' }));
+      } else {
+        res.end(JSON.stringify({
+          ok: true,
+          authenticated: true,
+          user: 'Ana Avila',
+          csrf_token: 'dev-local-csrf-token-64chars-development-environment-mock-token-ok',
+          local: true
+        }));
+      }
+      return;
+    }
+
     /* En local los endpoints que en producción persisten
-       datos (el guardado del panel y el registro de consultas del asistente)
+       datos (el guardado del panel, consultas del asistente y formulario de contacto)
        responden con éxito (no-op) para que el sitio no genere errores 404. */
-    if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask)\/?$/.test(p))) {
+    if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask|contact)\/?$/.test(p))) {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ ok: true, local: true }));
       return;

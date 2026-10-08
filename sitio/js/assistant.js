@@ -102,6 +102,16 @@
     }
   ];
 
+  function escapeHtml(s) {
+    if (!s) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function normalize(s) {
     return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
   }
@@ -219,8 +229,8 @@
       wrap.innerHTML =
         '<div class="lead-card-inner">' +
         '<div class="lead-card-title">📨 Formulario de contacto</div>' +
-        '<p class="lead-card-sub">Tu mensaje se envía a ' + EMAIL + '</p>' +
-        (userMsg ? '<div class="lead-prefill">Tema: ' + userMsg.replace(/</g, '&lt;') + '</div>' : '') +
+        '<p class="lead-card-sub">Tu mensaje se envía a ' + escapeHtml(EMAIL) + '</p>' +
+        (userMsg ? '<div class="lead-prefill">Tema: ' + escapeHtml(userMsg) + '</div>' : '') +
         '<form class="lead-form" id="lead-form">' +
         '<label>Nombre *<input type="text" name="nombre" required placeholder="Tu nombre completo"></label>' +
         '<label>Correo o WhatsApp *<input type="text" name="contacto" required placeholder="tucorreo@mail.com o +57 300 000 0000"></label>' +
@@ -248,10 +258,10 @@
         leadOpen = false;
         wrap.classList.add('lead-done');
         var conf = addMsg([
-          '✅ ¡Listo, ' + nombre + '!',
-          'Tu mensaje se envió directamente a ' + EMAIL + '.',
-          '• Contacto: ' + contacto,
-          '• Mensaje: ' + mensaje
+          '✅ ¡Listo, ' + escapeHtml(nombre) + '!',
+          'Tu mensaje se envió directamente a ' + escapeHtml(EMAIL) + '.',
+          '• Contacto: ' + escapeHtml(contacto),
+          '• Mensaje: ' + escapeHtml(mensaje)
         ].join('\n'), 'bot');
         linkWa(waText);
 
@@ -305,7 +315,7 @@
     function ask(text) {
       input.value = '';
       if (!text) return;
-      var safe = text.replace(/</g, '&lt;');
+      var safe = escapeHtml(text);
       addMsg(safe, 'user');
       if (isSolicitud(text)) {
         leadForm(text);

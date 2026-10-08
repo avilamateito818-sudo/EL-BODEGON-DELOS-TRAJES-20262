@@ -1,58 +1,61 @@
 <?php
-/* Endpoint: consultas del asistente → data/consultas.json en GitHub. */
+/**
+ * Endpoint de Consultas del Asistente Virtual — El Bodegón de los Trajes.
+ * Arquitectura Limpia: Controlador HTTP / Capa de Adaptadores de Interfaz.
+ * 
+ * Desacoplado de Git: Persiste mediante LeadRepository en almacenamiento protegido.
+ */
 
-require __DIR__ . '/_config.php';
+require_once __DIR__ . '/_config.php';
+require_once __DIR__ . '/leads.php';
 
 api_cors();
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     api_send(200, array('ok' => true));
 }
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    api_send(405, array('ok' => false, 'error' => 'Método no permitido'));
+    api_send(405, array('ok' => false, 'error' => 'Método no permitido. Use POST.'));
 }
 
-$p = api_read_json_body();
-if ($p === null) {
-    api_send(400, array('ok' => false, 'error' => 'JSON inválido'));
+$payload = api_read_json_body();
+if ($payload === null) {
+    api_send(400, array('ok' => false, 'error' => 'JSON inválido o ausente.'));
 }
 
-$cfg = bodegon_config();
+$consulta  = trim(strip_tags(strval($payload['consulta'] ?? '')));
+$nombre    = trim(strip_tags(strval($payload['nombre'] ?? '')));
+$whatsapp  = trim(strip_tags(strval($payload['whatsapp'] ?? '')));
+$categoria = trim(strip_tags(strval($payload['categoria'] ?? 'consulta libre')));
+
+if ($consulta === '' && $nombre === '' && $whatsapp === '') {
+    api_send(422, array('ok' => false, 'error' => 'La consulta no contiene información válida'));
+}
 
 $record = array(
-    'fecha'    => gmdate('c'),
-    'categoria'=> strval($p['categoria'] ?? 'consulta libre'),
-    'consulta' => strval($p['consulta'] ?? ''),
-    'nombre'   => strval($p['nombre'] ?? ''),
-    'whatsapp' => strval($p['whatsapp'] ?? ''),
+    'categoria' => $categoria !== '' ? $categoria : 'consulta libre',
+    'consulta'  => $consulta,
+    'nombre'    => $nombre,
+    'whatsapp'  => $whatsapp,
 );
+
+// Persistencia en LeadRepository (desacoplada de Git)
+$saved = LeadRepository::saveChatQuery($record);
+
+$cfg = bodegon_config();
+$waPhone = !empty($cfg['CONTACT_PHONE']) ? $cfg['CONTACT_PHONE'] : '573107706615';
 
 $waText = 'Nueva consulta en El Bodegón: ' . $record['categoria']
     . ($record['consulta'] !== '' ? '. Mensaje: ' . $record['consulta'] . '. ' : '')
-    . 'Nombre: ' . $record['nombre'] . '. WhatsApp: ' . $record['whatsapp'];
-$waLink = 'https://wa.me/' . $cfg['CONTACT_PHONE'] . '?text=' . rawurlencode($waText);
+    . 'Nombre: ' . ($record['nombre'] !== '' ? $record['nombre'] : 'Cliente')
+    . ($record['whatsapp'] !== '' ? '. WhatsApp: ' . $record['whatsapp'] : '');
 
-/* Sin token: responder OK con el enlace de WhatsApp para no romper la UX */
-if ($cfg['GITHUB_TOKEN'] === '') {
-    api_send(200, array('ok' => true, 'fallback' => true, 'waLink' => $waLink));
-}
+$waLink = 'https://wa.me/' . $waPhone . '?text=' . rawurlencode($waText);
 
-try {
-    $file = 'data/consultas.json';
-    $read = gh_read_json($cfg['GITHUB_REPO'], $file, $cfg['GITHUB_BRANCH'], $cfg['GITHUB_TOKEN']);
-    $data = $read['data'];
-    array_unshift($data, $record);
-    $data = array_slice($data, 0, 500);
-    /* Si la escritura falla no bloqueamos la UX */
-    gh_write_file(
-        $cfg['GITHUB_REPO'],
-        $file,
-        $cfg['GITHUB_BRANCH'],
-        $cfg['GITHUB_TOKEN'],
-        api_json_pretty($data) . "\n",
-        'Nueva consulta del asistente'
-    );
-} catch (Throwable $e) {
-    /* no bloquear la UX */
-}
-
-api_send(200, array('ok' => true, 'waLink' => $waLink));
+api_send(200, array(
+    'ok'      => true,
+    'saved'   => $saved,
+    'waLink'  => $waLink,
+    'message' => 'Consulta registrada exitosamente.'
+));
