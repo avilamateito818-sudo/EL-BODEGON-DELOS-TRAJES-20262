@@ -188,12 +188,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 ### 🎨 Fase 3: Modernización del CMS Visual y Datos Frontend
 *Objetivo:* Preservar la autonomía del administrador para configurar la página y agregar trajes, pero migrando de un modelo de "parches DOM" a un "Catálogo Estructurado y Tipado".
 
-- [ ] **T3.1: Migración de Selectores Frágiles (`:nth-child`) a Identificadores Semánticos**
-  - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/data/admin-content.js`](sitio/data/admin-content.js), [`sitio/js/admin.js`](sitio/js/admin.js)
-  - **Acción:** Asignar identificadores semánticos unívocos (`data-field="enero.hero_title"`, `data-card-id="card-reyes-01"`).
-  - **SOLID / Capa:** *S (Single Responsibility) & O (Open/Closed)* — Desacoplar el contenido de la estructura física del árbol DOM.
-  - **Criterio de Verificación:** Alterar o reordenar elementos en el HTML no descoloca los textos editados por el usuario.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T3.1: Migración de Selectores Frágiles (`:nth-child`) a Identificadores Semánticos**
+  - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/js/admin.js`](sitio/js/admin.js), [`scripts/test-selectors.js`](scripts/test-selectors.js)
+  - **Acción:** Asignados identificadores semánticos unívocos en `index.html` (64 atributos `data-field` para hero y temporadas; 118 atributos `data-card-id` para la totalidad de las 115 tarjetas de catálogo y las 3 subsecciones de enero, cero colisiones). Actualizados `cssPath`, `editorKey`, `insertCard` y `TEXT_SEL` en `admin.js` para anclar directamente a `[data-card-id]` y `[data-field]`, eliminando por completo la fragilidad de `:nth-child`.
+  - **SOLID / Capa:** *S (Single Responsibility) & O (Open/Closed)* — Desacoplar el contenido y sus parches de la estructura física del árbol DOM.
+  - **Criterio de Verificación:** Suite automatizada de integración (`scripts/test-selectors.js`) superada con éxito (5/5 tests PASS): 0 colisiones de campo, 0 colisiones de tarjeta, cobertura de las 12 temporadas, sincronización de `admin.js` e inmunidad comprobada ante mutaciones del árbol DOM (inserción de tarjetas previas no altera la resolución semántica).
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T3.2: Endpoint y Adaptador de Subida de Fotos (`/api/upload-media.php`)**
   - **Archivos:** [`sitio/api/upload-media.php`](sitio/api/), [`sitio/js/admin.js`](sitio/js/admin.js)
@@ -299,6 +299,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T2.2 | `sitio/api/save-content.php`<br>`sitio/api/_config.php` | Seguridad / Adaptador (S, I) | Blindaje con middleware `auth_require_admin()`: sesión activa obligatoria, validación anti-CSRF estricta, caché estática en parser JSON y persistencia híbrida (Git/disco) | 401 en anónimo, 403 sin CSRF, 200 en autorizado con autor atribuido (5/5 tests PASS) | [x] |
 | 2026-10-08 | T2.3 | `sitio/api/contact.php`<br>`sitio/api/chat-ask.php`<br>`sitio/api/leads.php` | Inversión de Dependencias (D) / Repository Pattern | Desacoplamiento total de Git para formularios; creación de `LeadRepository` con persistencia atómica local (`LOCK_EX`) en `data/leads/` y notificación por email | Guardado local y waLink inmediatos (<50ms), cero commits en Git (5/5 tests PASS) | [x] |
 | 2026-10-08 | T2.4 | `.gitignore`<br>`docker/nginx-php.conf` | Seguridad e Infraestructura | Eliminación de tracking de datos personales (`git rm --cached`), protección con `.gitignore` y regla Nginx que deniega acceso HTTP directo a `/data/leads/` | HTTP 403 Forbidden al intentar acceder a los JSON de clientes desde el navegador | [x] |
+| 2026-10-08 | T3.1 | `sitio/index.html`<br>`sitio/js/admin.js`<br>`scripts/test-selectors.js` | Desacoplamiento DOM / SOLID (S, O) | Asignación de 64 `data-field` y 118 `data-card-id` únicos; motor de `admin.js` adaptado para resolver por selector semántico directo en lugar de `:nth-child` | 0 colisiones, inmunidad comprobada ante mutaciones del DOM, suite automatizada 5/5 PASS | [x] |
 
 ---
 

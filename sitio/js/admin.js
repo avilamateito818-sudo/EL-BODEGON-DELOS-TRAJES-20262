@@ -179,6 +179,13 @@
       return '[data-cms-id="' + CSS.escape(el.getAttribute('data-cms-id')) + '"]';
     }
     if (el.id) return '#' + CSS.escape(el.id);
+
+    // 2. Anclaje semántico directo para elementos internos de tarjetas de catálogo
+    var cardHost = el.closest ? el.closest('[data-card-id]') : null;
+    if (cardHost && cardHost !== el) {
+      return '[data-card-id="' + CSS.escape(cardHost.getAttribute('data-card-id')) + '"] ' + el.tagName.toLowerCase();
+    }
+
     if (el === document.body) return 'body';
 
     var parts = [];
@@ -234,6 +241,10 @@
     if (el.getAttribute && el.getAttribute('data-card-id')) return '[data-card-id="' + CSS.escape(el.getAttribute('data-card-id')) + '"]';
     if (el.getAttribute && el.getAttribute('data-cms-id')) return '[data-cms-id="' + CSS.escape(el.getAttribute('data-cms-id')) + '"]';
     if (el.id) return '#' + CSS.escape(el.id);
+    var cardHost = el.closest ? el.closest('[data-card-id]') : null;
+    if (cardHost && cardHost !== el) {
+      return '[data-card-id="' + CSS.escape(cardHost.getAttribute('data-card-id')) + '"] ' + el.tagName.toLowerCase();
+    }
     var clases = String(el.className || '').trim().split(/\s+/).filter(function (c) {
       return c && c !== 'editor-selected' && c.indexOf('reveal') !== 0;
     });
@@ -329,12 +340,17 @@
     '.season-tab .tab-label',
     '.season-tab .tab-desc',
     '.dropdown-grid a',
-    '.season-quick-nav a'
+    '.season-quick-nav a',
+    '[data-field]',
+    '[data-card-id] h3',
+    '[data-card-id] p'
   ].join(',');
 
   function isEditableText(el) {
     if (!el || el.closest('.admin-ui')) return false;
     if (el.closest('.season-tab-clone')) return false;
+    if (el.getAttribute && el.getAttribute('data-field')) return true;
+    if (el.closest && el.closest('[data-card-id]') && (el.matches('h3') || el.matches('p'))) return true;
     return !!el.closest(TEXT_SEL);
   }
 
@@ -1589,6 +1605,7 @@
     var card = document.createElement('div');
     card.className = 'card-ghost admin-added';
     card.dataset.adminId = entry.id;
+    card.dataset.cardId = 'card-' + entry.id;
     card.innerHTML =
       '<div class="img-ghost"><img loading="lazy" decoding="async" src="' + esc(entry.img) + '" alt="' + esc(entry.title) + '"></div>' +
       '<div class="card-body-haunted"><h3>' + esc(entry.title) + '</h3><p>' + esc(entry.desc) + '</p></div>';
