@@ -209,12 +209,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-admin-content-clean.js`) superada con éxito (5/5 tests PASS): cero mojibake, cero anchos destructivos, cero Base64 incrustado, ortografía saneada y compatibilidad responsive móvil 100% fluida.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T3.4: Corrección de Persistencia de Sesión del Administrador**
-  - **Archivos:** [`sitio/js/admin.js`](sitio/js/admin.js)
-  - **Acción:** Retirar `localStorage.removeItem(SESSION_KEY)` incondicional en el arranque; sincronizar el estado contra la sesión HTTP del backend.
-  - **SOLID / Capa:** *Capa de Presentación / Estado de Sesión*.
-  - **Criterio de Verificación:** Recargar la página mantiene la sesión y herramientas del administrador activas.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T3.4: Corrección de Persistencia de Sesión del Administrador**
+  - **Archivos:** [`sitio/js/admin.js`](sitio/js/admin.js), [`scripts/test-session-persistence.js`](scripts/test-session-persistence.js)
+  - **Acción:** Implementada hidratación optimista en `init()` leyendo `SESSION_KEY` para activación inmediata de la interfaz administrativa sin parpadeos ni retardos; sincronización asíncrona robusta en `checkServerAuth()` contra `/api/auth?action=status` para obtener el token CSRF y validar cookies de servidor; revocación defensiva de estado si el backend expira la sesión; y destrucción limpia de credenciales tanto en backend como en cliente en `performLogout()`.
+  - **SOLID / Capa:** *Capa de Presentación / Estado de Sesión y Patrón Optimistic UI*.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-session-persistence.js`) superada con éxito (5/5 tests PASS): 0 borrados incondicionales al arrancar, hidratación instantánea verificada, captura de CSRF, revocación limpia y logout sincronizado. Recargar la página mantiene la sesión activa de inmediato.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T3.5: Modularización Arquitectónica de `admin.js`**
   - **Archivos:** [`sitio/js/admin.js`](sitio/js/) (o submódulos `admin/`)
@@ -302,6 +302,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T3.1 | `sitio/index.html`<br>`sitio/js/admin.js`<br>`scripts/test-selectors.js` | Desacoplamiento DOM / SOLID (S, O) | Asignación de 64 `data-field` y 118 `data-card-id` únicos; motor de `admin.js` adaptado para resolver por selector semántico directo en lugar de `:nth-child` | 0 colisiones, inmunidad comprobada ante mutaciones del DOM, suite automatizada 5/5 PASS | [x] |
 | 2026-10-08 | T3.2 | `sitio/api/upload-media.php`<br>`sitio/js/admin.js`<br>`docker/nginx-php.conf` | Adaptador (ImageProcessor) / Infraestructura | Endpoint seguro de subida WebP con validación MIME `fileinfo` y token anti-CSRF; `uploadMediaFile` en cliente para erradicar Base64; bloqueo Nginx contra ejecución de PHP en uploads | 401 en anónimo, 403 sin CSRF, 422 en no-imágenes, 200 en WebP válido con guardado físico (5/5 tests PASS) | [x] |
 | 2026-10-08 | T3.3 | `sitio/data/admin-content.js`<br>`sitio/js/admin.js`<br>`scripts/test-admin-content-clean.js` | Dominio de Datos / Presentación Responsiva | Saneamiento de mojibake UTF-8 (`AÑO`, `Operación`), corrección de typos (`VESTIDOS`), eliminación de anchos destructivos (1532px/1029px), reemplazo de Base64 por WebP relativo y guarda defensiva en `applyEditorStyles()` | 0 caracteres corruptos, 0 anchos fijos destructivos, 0 Base64, diseño 100% fluido (5/5 tests PASS) | [x] |
+| 2026-10-08 | T3.4 | `sitio/js/admin.js`<br>`scripts/test-session-persistence.js` | Presentación / Estado de Sesión | Hidratación optimista de sesión en arranque para eliminar parpadeo/layout shift al recargar (F5); sincronización asíncrona contra backend PHP y revocación defensiva; logout sincronizado | Persistencia confirmada entre recargas, captura de CSRF y logout limpio (5/5 tests PASS) | [x] |
 
 ---
 

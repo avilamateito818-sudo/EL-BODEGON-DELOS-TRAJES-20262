@@ -36,15 +36,27 @@
         if (data && data.authenticated) {
           authed = true;
           adminCsrfToken = data.csrf_token || '';
+          try { localStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
           enableEditMode();
           updateFabState();
         } else {
           authed = false;
+          adminCsrfToken = '';
           try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+          disableEditMode();
           updateFabState();
         }
       })
-      .catch(function () {});
+      .catch(function () {
+        /* En caso de desconexión o fallo de red, si ya estaba autenticado localmente, conservar estado */
+        try {
+          if (localStorage.getItem(SESSION_KEY) === '1') {
+            authed = true;
+            enableEditMode();
+            updateFabState();
+          }
+        } catch (e) {}
+      });
   }
 
   function performLogout() {
@@ -4922,7 +4934,22 @@ function applyEditorStyles() {
        GitHub cuando el administrador abra el panel. */
     remoteBaseSnapshot = base;
 
+    /* Hidratación optimista de sesión: si el administrador ya estaba autenticado,
+       activamos el modo de edición de inmediato al arrancar para evitar parpadeos
+       o retardos visuales en la carga. Luego checkServerAuth() confirma con el servidor. */
+    try {
+      if (localStorage.getItem(SESSION_KEY) === '1') {
+        authed = true;
+      }
+    } catch (e) {}
+
     buildFab();
+    updateFabState();
+
+    if (authed) {
+      enableEditMode();
+    }
+
     reCompressOld();
 
     setTimeout(applySeasonCovers, 150);
