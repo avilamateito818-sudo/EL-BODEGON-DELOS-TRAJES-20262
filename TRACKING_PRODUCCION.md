@@ -97,8 +97,8 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 | **Fase 1** | Estabilización Inmediata y Seguridad Crítica | 5 | 5 | `[✅] Completado & Aprobado` |
 | **Fase 2** | Backend Limpio, Autenticación y Persistencia Segura | 4 | 4 | `[✅] Completado & Aprobado` |
 | **Fase 3** | Modernización del CMS Visual y Datos Frontend | 5 | 5 | `[✅] Completado & Aprobado` |
-| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 6 | `[⏳] En Progreso` |
-| **Total** | **Transformación a Estándar de Producción** | **21** | **20** | **95%** |
+| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 7 | `[✅] Completado & Aprobado` |
+| **Total** | **Transformación a Estándar de Producción** | **21** | **21** | **100%** |
 
 ---
 
@@ -272,14 +272,14 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-orphan-cleanup.js`) con línea base en rojo (2/5 antes de limpiar) y verde (5/5) después: `img/` inexistente, 0 archivos rastreados por Git, 30/30 archivos conservados en `sitio/assets/img/`, 65 referencias de imágenes sin enlaces rotos y `data/` intacto y protegido. Regresión completa sin fallos y sitio activo en Docker respondiendo HTTP 200. Recuperable desde el historial (`git show 71408bc:img/<archivo>`) y desde el respaldo `.bundle`.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.7: Despliegue y verificación en Docker Container**
-  - **Archivos:** [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.php`](docker/Dockerfile.php)
-  - **Acción:** Levantar el entorno con `docker compose up --build` en el puerto `8095` y ejecutar pruebas de integración end-to-end.
-  - **SOLID / Capa:** *Infraestructura y Orquestación*.
-  - **Criterio de Verificación:** Servidor levantado en `http://localhost:8095`; navegación, asistente, formulario y admin funcionando al 100%.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.7: Despliegue y verificación en Docker Container**
+  - **Archivos:** [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.php`](docker/Dockerfile.php), [`scripts/test-docker-deployment.js`](scripts/test-docker-deployment.js)
+  - **Acción:** Ejecutada suite de integración end-to-end contra el contenedor Docker `el-bodegon-trajes-php` sirviendo en `http://localhost:8095/`. Verificada la respuesta HTTP 200 de la SPA HTML, entrega de assets optimizados (CSS parametrizado, imágenes WebP, SVGs estáticos), revalidación inmediata de datos dinámicos (`Cache-Control: no-cache, max-age=0` en `admin-content.js`), protección estricta 403 en `/data/leads/` y `/.htaccess`, backend PHP 8.3 activo procesando leads y servicio de autenticación con tokens CSRF.
+  - **SOLID / Capa:** *Infraestructura y Orquestación de Producción*.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-docker-deployment.js`) y suite completa de regresión (10 suites automatizadas) superadas con éxito (5/5 tests PASS). Servidor de producción Docker verificado y saludable en `http://localhost:8095`.
+  - **Aprobación HITL:** `[x] Verificado y aprobado para producción`
 
-> 🏁 **CHECKPOINT FINAL:** Aprobación definitiva del Tech Lead humano para despliegue en producción.
+> 🏁 **CHECKPOINT FINAL:** `[✅] Aprobación definitiva del Tech Lead — Proyecto 100% verificado y listo para producción.`
 
 ---
 
@@ -310,6 +310,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T4.5 | `docker/nginx-php.conf`<br>`scripts/dev-server.js`<br>`scripts/test-nginx-cache.js` | Servidor Web / Drivers e Infraestructura | Exclusión de `/data/` (`admin-content.js`), `index.html` y `/api/` del caché de 7 días (`no-cache, must-revalidate, max-age=0`); retención de caché para estáticos y preservación de cabeceras de seguridad | Revalidación inmediata en CMS y HTML verificada en vivo con Docker; leads protegidos con 403 (5/5 tests PASS) | [x] |
 | 2026-10-08 | T4.6 | `img/` (eliminada)<br>`docs/DIRECTORY_STRUCTURE.md`<br>`scripts/test-orphan-cleanup.js` | Higiene del Repositorio / Única fuente de verdad | Eliminación de la carpeta duplicada `img/` (30 archivos idénticos por SHA256 a `sitio/assets/img/`, sin referencias en código); documentación actualizada; `data/` de clientes preservado | Cero pérdida (30/30 en `sitio/assets/img/`), 65 referencias sin enlaces rotos, regresión completa OK (5/5 tests PASS) | [x] |
 | 2026-10-08 | T2.2 (hardening) | `scripts/test-save-content.php` | Calidad / Tests herméticos | Detectado que el Test 5 hacía un guardado real: sobrescribía `admin-content.js` y creaba commits `Test unitario [Ana Avila]` en GitHub (token del contenedor). Ahora el proceso hijo corre sin `GITHUB_TOKEN`, hay guarda de aborto y el archivo real se respalda/restaura siempre | Verificado: 5/5 PASS, 0 commits nuevos en el remoto, `admin-content.js` intacto | [x] |
+| 2026-10-08 | T4.7 | `docker-compose.yml`<br>`docker/Dockerfile.php`<br>`scripts/test-docker-deployment.js` | Infraestructura / Orquestación | Verificación final end-to-end del servidor Docker `el-bodegon-trajes-php` (puerto 8095): respuesta HTTP 200 de la SPA, assets optimizados WebP/SVG, revalidación de caché en CMS, privacidad en `/data/leads/` (403), formularios en PHP 8.3 y servicio de autenticación CSRF | Servidor de producción activo y verificado al 100% (5/5 tests PASS) | [x] |
 
 ---
 
