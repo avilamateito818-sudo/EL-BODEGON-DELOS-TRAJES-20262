@@ -97,8 +97,8 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 | **Fase 1** | Estabilización Inmediata y Seguridad Crítica | 5 | 5 | `[✅] Completado & Aprobado` |
 | **Fase 2** | Backend Limpio, Autenticación y Persistencia Segura | 4 | 4 | `[✅] Completado & Aprobado` |
 | **Fase 3** | Modernización del CMS Visual y Datos Frontend | 5 | 5 | `[✅] Completado & Aprobado` |
-| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 4 | `[⏳] En Progreso` |
-| **Total** | **Transformación a Estándar de Producción** | **21** | **18** | **86%** |
+| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 5 | `[⏳] En Progreso` |
+| **Total** | **Transformación a Estándar de Producción** | **21** | **19** | **90%** |
 
 ---
 
@@ -258,12 +258,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-css-refactor.js`) superada con éxito (5/5 tests PASS): reducción de `seasons.css` de 75.4 KB (2.473 líneas) a 25.0 KB (930 líneas) — un ahorro directo del 66.1% (50.4 KB eliminados; 5.4 KB comprimido en GZIP). Idéntica fidelidad visual e integridad de los 15 componentes esenciales.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.5: Ajuste de directivas de caché en Nginx para datos dinámicos**
-  - **Archivos:** [`docker/nginx-php.conf`](docker/nginx-php.conf)
-  - **Acción:** Excluir archivos de configuración/datos editables del caché de 7 días, asignándoles `Cache-Control: no-cache, must-revalidate`.
-  - **SOLID / Capa:** *Capa de Servidor Web (Drivers)*.
-  - **Criterio de Verificación:** Al guardar un cambio en el admin, los clientes ven el contenido actualizado de inmediato.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.5: Ajuste de directivas de caché en Nginx para datos dinámicos**
+  - **Archivos:** [`docker/nginx-php.conf`](docker/nginx-php.conf), [`scripts/dev-server.js`](scripts/dev-server.js), [`scripts/test-nginx-cache.js`](scripts/test-nginx-cache.js)
+  - **Acción:** Excluido el directorio de datos editables `/data/` (y en particular `admin-content.js`), el documento base `index.html` y los endpoints `/api/` del caché de 7 días, asignándoles directivas estrictas de revalidación inmediata (`Cache-Control: no-cache, must-revalidate, max-age=0` y `Pragma: no-cache`). Mantenido el caché público de 7 días (`Cache-Control: public, max-age=604800`) para assets estáticos inmutables (CSS, imágenes, tipografías) y preservadas todas las cabeceras de seguridad globales (`nosniff`, `SAMEORIGIN`, `strict-origin-when-cross-origin`) en cada bloque de ubicación de Nginx.
+  - **SOLID / Capa:** *Capa de Servidor Web (Drivers & Infraestructura)* — Desacoplar la estrategia de almacenamiento en caché según la volatilidad del recurso.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-nginx-cache.js`) superada con éxito (5/5 tests PASS): `admin-content.js` responde con `no-cache, must-revalidate, max-age=0`; `index.html` revalida de inmediato; `/data/leads/` mantiene bloqueo de privacidad HTTP 403; `seasons.css` conserva caché de 7 días; y todas las cabeceras de seguridad se propagan correctamente.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T4.6: Limpieza de directorios huérfanos**
   - **Archivos:** Carpeta raíz `img/`.
@@ -307,6 +307,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T4.2 | `sitio/index.html`<br>`sitio/assets/img/` | Rendimiento Web / Core Web Vitals | Sustitución de `horror_bg.png` (867 KB) por `horror_bg.webp` (84 KB) y 10 imágenes pesadas de catálogo por sus versiones WebP pre-optimizadas | 1.24 MB ahorrados netos en imágenes locales (64.9% reducción de peso) (5/5 tests PASS) | [x] |
 | 2026-10-08 | T4.3 | `sitio/index.html`<br>`sitio/assets/img/ph-*.svg`<br>`scripts/extract-svg-placeholders.js` | Presentación / Optimización DOM | Extracción de 65 Data-URIs SVG incrustados hacia 9 archivos estáticos `ph-*.svg` cacheados por HTTP | index.html reducido de 188.4 KB a 107.3 KB (41.7% / 78.5 KB ahorrados) (5/5 tests PASS) | [x] |
 | 2026-10-08 | T4.4 | `sitio/css/seasons.css`<br>`sitio/css/season-colors.css`<br>`scripts/test-css-refactor.js` | Arquitectura CSS / Open-Closed (O) | Erradicación de duplicación repetitiva de 12 meses; parametrización con variables CSS Custom Properties (`--season-accent`, `--m-*`) y preservación de variantes visuales específicas | seasons.css reducido de 75.4 KB (2.473 líneas) a 25.0 KB (930 líneas) — 66.1% ahorro (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.5 | `docker/nginx-php.conf`<br>`scripts/dev-server.js`<br>`scripts/test-nginx-cache.js` | Servidor Web / Drivers e Infraestructura | Exclusión de `/data/` (`admin-content.js`), `index.html` y `/api/` del caché de 7 días (`no-cache, must-revalidate, max-age=0`); retención de caché para estáticos y preservación de cabeceras de seguridad | Revalidación inmediata en CMS y HTML verificada en vivo con Docker; leads protegidos con 403 (5/5 tests PASS) | [x] |
 
 ---
 

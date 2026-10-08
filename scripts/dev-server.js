@@ -63,9 +63,18 @@ http
       return;
     }
 
-    if (p === '/') {
+    if (p.startsWith('/data/leads/')) {
+      res.writeHead(403);
+      res.end('forbidden');
+      return;
+    }
+
+    if (p === '/' || p === '/index.html') {
       const fp = path.join(root, 'index.html');
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache, must-revalidate, max-age=0'
+      });
       fs.createReadStream(fp).pipe(res);
       return;
     }
@@ -83,7 +92,13 @@ http
         res.end('not found');
         return;
       }
-      res.writeHead(200, { 'Content-Type': types[path.extname(fp)] || 'application/octet-stream' });
+      const headers = { 'Content-Type': types[path.extname(fp)] || 'application/octet-stream' };
+      if (p.startsWith('/data/')) {
+        headers['Cache-Control'] = 'no-cache, must-revalidate, max-age=0';
+      } else {
+        headers['Cache-Control'] = 'public, max-age=604800';
+      }
+      res.writeHead(200, headers);
       fs.createReadStream(fp).pipe(res);
     });
   })
