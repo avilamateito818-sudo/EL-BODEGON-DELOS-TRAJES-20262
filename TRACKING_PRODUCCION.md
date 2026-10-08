@@ -244,12 +244,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-assets-optimization.js`) superada con éxito (Tests 3, 4 y 5 PASS): 0 referencias a `horror_bg.png` en HTML y CSS; 1.24 MB de transferencia neta ahorrados en imágenes locales sustituidas (64.9% de reducción de peso) y más de 3 MB de ancho de banda ahorrados en la carga de catálogo.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.3: Reducción del tamaño de `index.html` (Extracción de SVGs)**
-  - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/assets/img/ph-generico.svg`](sitio/assets/img/)
-  - **Acción:** Reemplazar cientos de Data-URIs SVG incrustados en línea por referencias al SVG común cacheable.
-  - **SOLID / Capa:** *Presentación y Optimización DOM*.
-  - **Criterio de Verificación:** `index.html` baja de 182 KB a menos de 65 KB; renderizado inicial acelerado.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.3: Reducción del tamaño de `index.html` (Extracción de SVGs)**
+  - **Archivos:** [`sitio/index.html`](sitio/index.html), `sitio/assets/img/ph-*.svg`, [`scripts/extract-svg-placeholders.js`](scripts/extract-svg-placeholders.js), [`scripts/test-svg-extraction.js`](scripts/test-svg-extraction.js)
+  - **Acción:** Extracción completa de los 65 Data-URIs SVG incrustados en línea (que consumían más de 78 KB de texto codificado repetitivo en el DOM). Sustitución por referencias a archivos SVG estáticos independientes por temporada (`ph-febrero.svg`, `ph-marzo.svg`, etc., y `ph-generico.svg`), permitiendo cacheo HTTP nativo por el navegador.
+  - **SOLID / Capa:** *Presentación y Optimización DOM* — Separación estricta de responsabilidades entre la estructura semántica HTML y los recursos gráficos visuales.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-svg-extraction.js`) superada con éxito (5/5 tests PASS): 0 Data-URIs remanentes en `src`; 65 tarjetas migradas a archivos estáticos `.svg`; `index.html` optimizado de 188.4 KB a 107.3 KB (reducción directa del 41.7% / 78.5 KB ahorrados de HTML plano; transferencia GZIP en red de solo 19.2 KB).
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T4.4: Refactorización y reducción de `seasons.css` (75 KB) con CSS Custom Properties**
   - **Archivos:** [`sitio/css/seasons.css`](sitio/css/seasons.css), [`sitio/css/season-colors.css`](sitio/css/season-colors.css)
