@@ -150,6 +150,85 @@
     });
   }
 
+  /* Sube un archivo de imagen al endpoint /api/upload-media optimizado en WebP.
+     Retorna una Promesa con la URL relativa limpia (assets/img/uploads/img_....webp). */
+  function uploadMediaFile(file) {
+    if (!file) return Promise.reject(new Error('No se seleccionó ningún archivo'));
+
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        var canvas = document.createElement('canvas');
+        var maxDim = 1600;
+        var w = img.width;
+        var h = img.height;
+        var maxOriginal = Math.max(w, h);
+        if (maxOriginal > maxDim) {
+          var ratio = maxDim / maxOriginal;
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
+        }
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        function sendBlob(blob) {
+          var fd = new FormData();
+          fd.append('file', blob, 'upload.webp');
+          if (currentCsrfToken) fd.append('csrf_token', currentCsrfToken);
+
+          fetch('/api/upload-media', {
+            method: 'POST',
+            body: fd,
+            headers: currentCsrfToken ? { 'X-CSRF-Token': currentCsrfToken } : {}
+          })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            if (!data.ok || !data.url) throw new Error(data.error || 'Error al subir la imagen');
+            resolve(data.url);
+          })
+          .catch(function (err) {
+            console.warn('Fallo en /api/upload-media, fallback local:', err);
+            compressImage(canvas.toDataURL('image/jpeg', 0.70), 1000, 0.55).then(resolve).catch(reject);
+          });
+        }
+
+        if (canvas.toBlob) {
+          canvas.toBlob(function (blob) {
+            if (blob) sendBlob(blob);
+            else sendBlob(file);
+          }, 'image/webp', 0.85);
+        } else {
+          sendBlob(file);
+        }
+      };
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+        var fd = new FormData();
+        fd.append('file', file);
+        if (currentCsrfToken) fd.append('csrf_token', currentCsrfToken);
+        fetch('/api/upload-media', {
+          method: 'POST',
+          body: fd,
+          headers: currentCsrfToken ? { 'X-CSRF-Token': currentCsrfToken } : {}
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.ok && data.url) resolve(data.url);
+          else reject(new Error((data && data.error) || 'Error al subir'));
+        })
+        .catch(reject);
+      };
+      img.src = url;
+    });
+  }
+
   function hash(s) {
     var h = 5381;
     for (var i = 0; i < s.length; i++) {
@@ -459,26 +538,36 @@
     var fileInp = box.querySelector('[data-role="file"]');
     var urlInp = box.querySelector('[data-role="url"]');
     var preview = box.querySelector('[data-role="preview"] img');
-    var pendingData = null;
+    var selectedFile = null;
 
     fileInp.addEventListener('change', function () {
       var f = fileInp.files[0];
       if (!f) return;
-      var rd = new FileReader();
-      rd.onload = function () {
-        pendingData = rd.result;
-        preview.src = pendingData;
-      };
-      rd.readAsDataURL(f);
+      selectedFile = f;
+      try {
+        preview.src = URL.createObjectURL(f);
+      } catch (e) {
+        var rd = new FileReader();
+        rd.onload = function () { preview.src = rd.result; };
+        rd.readAsDataURL(f);
+      }
     });
     urlInp.addEventListener('input', function () {
-      if (urlInp.value.trim()) preview.src = urlInp.value.trim();
+      if (urlInp.value.trim()) {
+        selectedFile = null;
+        preview.src = urlInp.value.trim();
+      }
     });
     if (autoOpen) fileInp.click();
 
     box.querySelector('[data-role="ok"]').addEventListener('click', function () {
-      var src = pendingData || urlInp.value.trim();
-      if (!src) { toast('Elige una imagen o pega una URL.'); return; }
+      var urlVal = urlInp.value.trim();
+      if (!selectedFile && !urlVal) { toast('Elige una imagen o pega una URL.'); return; }
+
+      var okBtn = box.querySelector('[data-role="ok"]');
+      okBtn.disabled = true;
+      okBtn.textContent = 'Subiendo...';
+
       function applyImage(finalSrc) {
         img.src = finalSrc;
         if (entry) {
@@ -487,7 +576,14 @@
         } else {
           var path = cssPath(img);
           for (var i = 0; i < content.images.length; i++) {
-            if (content.images[i].sel === path) { content.images[i].src = finalSrc; closeModal(box); autoSave(); toast('Foto actualizada.'); if (onDone) onDone(); return; }
+            if (content.images[i].sel === path) {
+              content.images[i].src = finalSrc;
+              closeModal(box);
+              autoSave();
+              toast('Foto actualizada.');
+              if (onDone) onDone();
+              return;
+            }
           }
           content.images.push({ sel: path, src: finalSrc });
         }
@@ -496,11 +592,17 @@
         toast('Foto actualizada.');
         if (onDone) onDone();
       }
-      if (src.indexOf('data:') === 0) {
-        compressImage(src, 1000, 0.55).then(applyImage);
-      } else {
-        applyImage(src);
-      }
+
+      var uploadPromise = selectedFile ? uploadMediaFile(selectedFile) : Promise.resolve(urlVal);
+      uploadPromise
+        .then(function (finalSrc) {
+          applyImage(finalSrc);
+        })
+        .catch(function (err) {
+          okBtn.disabled = false;
+          okBtn.textContent = 'Aplicar';
+          toast('Error al subir imagen: ' + (err.message || 'error'));
+        });
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -686,32 +788,31 @@
         input.addEventListener('change', function () {
           var f = input.files[0];
           if (!f) return;
-          var rd = new FileReader();
-          rd.onload = function () {
-            compressImage(rd.result, 1000, 0.55).then(function (compressed) {
-              if (month === 'enero-hero') {
-                var img = landing.querySelector('img');
-                if (img) {
-                  img.src = compressed;
-                  img.style.width = '100%';
-                  img.style.height = '100%';
-                  img.style.objectFit = 'cover';
-                }
-                content.seasonCovers[month] = compressed;
-                autoSave();
-                toast('Foto de enero actualizada.');
-              } else {
-                landing.classList.add('has-cover-photo');
-                landing.style.backgroundImage = 'url(' + compressed + ')';
-                landing.style.backgroundSize = 'cover';
-                landing.style.backgroundPosition = 'center';
-                content.seasonCovers[month] = compressed;
-                autoSave();
-                toast('Portada de ' + month + ' actualizada.');
+          toast('Subiendo y optimizando foto de portada...');
+          uploadMediaFile(f).then(function (cleanUrl) {
+            if (month === 'enero-hero') {
+              var img = landing.querySelector('img');
+              if (img) {
+                img.src = cleanUrl;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
               }
-            });
-          };
-          rd.readAsDataURL(f);
+              content.seasonCovers[month] = cleanUrl;
+              autoSave();
+              toast('Foto de enero actualizada.');
+            } else {
+              landing.classList.add('has-cover-photo');
+              landing.style.backgroundImage = 'url(' + cleanUrl + ')';
+              landing.style.backgroundSize = 'cover';
+              landing.style.backgroundPosition = 'center';
+              content.seasonCovers[month] = cleanUrl;
+              autoSave();
+              toast('Portada de ' + month + ' actualizada.');
+            }
+          }).catch(function (err) {
+            toast('Error al subir portada: ' + (err.message || 'error'));
+          });
         });
         input.click();
       });
@@ -1550,20 +1651,22 @@
       '<button type="button" class="admin-btn" data-role="cancel">Cancelar</button>' +
       '</div>'
     );
-    var pending = null;
+    var selectedFile = null;
     box.querySelector('[data-role="file"]').addEventListener('change', function () {
       var f = box.querySelector('[data-role="file"]').files[0];
       if (!f) return;
-      var rd = new FileReader();
-      rd.onload = function () { pending = rd.result; };
-      rd.readAsDataURL(f);
+      selectedFile = f;
     });
 
     box.querySelector('[data-role="ok"]').addEventListener('click', function () {
-      var src = pending || box.querySelector('[data-role="url"]').value.trim();
+      var urlVal = box.querySelector('[data-role="url"]').value.trim();
       var title = box.querySelector('[data-role="title"]').value.trim();
       var desc = box.querySelector('[data-role="desc"]').value.trim();
-      if (!src || !title) { toast('La foto y el título son obligatorios.'); return; }
+      if ((!selectedFile && !urlVal) || !title) { toast('La foto y el título son obligatorios.'); return; }
+
+      var okBtn = box.querySelector('[data-role="ok"]');
+      okBtn.disabled = true;
+      okBtn.textContent = 'Subiendo...';
 
       function saveCard(imgSrc) {
         var entry = { id: uid(), _type: 'card', container: cssPath(grid || section), img: imgSrc, title: title, desc: desc };
@@ -1574,11 +1677,16 @@
         toast('Tarjeta publicada.');
       }
 
-      if (src.indexOf('data:') === 0) {
-        compressImage(src, 1000, 0.55).then(saveCard);
-      } else {
-        saveCard(src);
-      }
+      var uploadPromise = selectedFile ? uploadMediaFile(selectedFile) : Promise.resolve(urlVal);
+      uploadPromise
+        .then(function (imgSrc) {
+          saveCard(imgSrc);
+        })
+        .catch(function (err) {
+          okBtn.disabled = false;
+          okBtn.textContent = 'Publicar';
+          toast('Error al subir foto del traje: ' + (err.message || 'error'));
+        });
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -2972,17 +3080,16 @@ function applyEditorStyles() {
     input.addEventListener('change', function () {
       var f = input.files[0];
       if (!f) return;
-      var rd = new FileReader();
-      rd.onload = function () {
-        compressImage(rd.result, 1000, 0.55).then(function (compressed) {
-          if (!content.seasonCovers) content.seasonCovers = {};
-          content.seasonCovers[coverKey] = compressed;
-          applySeasonCovers();
-          autoSave();
-          toast('Portada actualizada.');
-        });
-      };
-      rd.readAsDataURL(f);
+      toast('Subiendo y optimizando portada...');
+      uploadMediaFile(f).then(function (cleanUrl) {
+        if (!content.seasonCovers) content.seasonCovers = {};
+        content.seasonCovers[coverKey] = cleanUrl;
+        applySeasonCovers();
+        autoSave();
+        toast('Portada actualizada.');
+      }).catch(function (err) {
+        toast('Error al subir portada: ' + (err.message || 'error'));
+      });
     });
     input.click();
   }

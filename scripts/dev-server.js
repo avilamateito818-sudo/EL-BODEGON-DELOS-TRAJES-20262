@@ -53,9 +53,13 @@ http
     /* En local los endpoints que en producción persisten
        datos (el guardado del panel, consultas del asistente y formulario de contacto)
        responden con éxito (no-op) para que el sitio no genere errores 404. */
-    if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask|contact)\/?$/.test(p))) {
+    if (req.method === 'POST' && (/^\/api\/(save-content|chat-ask|contact|upload-media)\/?$/.test(p))) {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({ ok: true, local: true }));
+      if (p.includes('upload-media')) {
+        res.end(JSON.stringify({ ok: true, url: 'assets/img/reyes_magos.webp', local: true }));
+      } else {
+        res.end(JSON.stringify({ ok: true, local: true }));
+      }
       return;
     }
 

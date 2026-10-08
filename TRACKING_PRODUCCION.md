@@ -195,12 +195,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada de integración (`scripts/test-selectors.js`) superada con éxito (5/5 tests PASS): 0 colisiones de campo, 0 colisiones de tarjeta, cobertura de las 12 temporadas, sincronización de `admin.js` e inmunidad comprobada ante mutaciones del árbol DOM (inserción de tarjetas previas no altera la resolución semántica).
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T3.2: Endpoint y Adaptador de Subida de Fotos (`/api/upload-media.php`)**
-  - **Archivos:** [`sitio/api/upload-media.php`](sitio/api/), [`sitio/js/admin.js`](sitio/js/admin.js)
-  - **Acción:** Endpoint que procesa la imagen, valida tipo MIME, comprime a `.webp` en servidor y la guarda en `sitio/assets/img/uploads/`.
-  - **SOLID / Capa:** *Adapter Pattern (ImageProcessor)* — El cliente solo envía el binario; el servidor gestiona el almacenamiento optimizado.
-  - **Criterio de Verificación:** Las fotos subidas se almacenan como archivos `.webp` limpios; se elimina el almacenamiento de megabytes en Base64.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T3.2: Endpoint y Adaptador de Subida de Fotos (`/api/upload-media.php`)**
+  - **Archivos:** [`sitio/api/upload-media.php`](sitio/api/upload-media.php), [`sitio/js/admin.js`](sitio/js/admin.js), [`docker/nginx-php.conf`](docker/nginx-php.conf), [`scripts/dev-server.js`](scripts/dev-server.js), [`scripts/test-upload-media.php`](scripts/test-upload-media.php), `sitio/assets/img/uploads/`
+  - **Acción:** Creado endpoint `/api/upload-media` protegido con middleware `auth_require_admin()` y token anti-CSRF. Validación de tipos MIME con `fileinfo` (`image/webp`, `image/jpeg`, `image/png`, `image/gif`) y límite de 10 MB. Almacenamiento seguro en disco con nombres criptográficos únicos (`img_[hash].webp`) y conversión a WebP. Cableado `uploadMediaFile` en `admin.js` para `editImage`, `publishCard`, `changeSeasonPhotos` y `changeCoverPhoto`. Blindada la carpeta `uploads` en Nginx contra ejecución de PHP (HTTP 403 en scripts).
+  - **SOLID / Capa:** *Adapter Pattern (ImageProcessor)* — El cliente envía el binario; el servidor gestiona el almacenamiento optimizado y devuelve URLs relativas limpias, erradicando por completo el almacenamiento destructivo de Base64.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-upload-media.php` ejecutada en Docker) superada con éxito (5/5 tests PASS): 401 en anónimo, 403 sin CSRF, 422 en campos faltantes, 422 en archivos no permitidos (PHP/texto), y 200 en subida autorizada con persistencia física verificada en disco. Acceso directo a scripts en `/assets/img/uploads/` denegado con 403 en Nginx.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T3.3: Saneamiento de Datos Corruptos y Eliminación de Anchos Destructivos**
   - **Archivos:** [`sitio/data/admin-content.js`](sitio/data/admin-content.js)
@@ -300,6 +300,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T2.3 | `sitio/api/contact.php`<br>`sitio/api/chat-ask.php`<br>`sitio/api/leads.php` | Inversión de Dependencias (D) / Repository Pattern | Desacoplamiento total de Git para formularios; creación de `LeadRepository` con persistencia atómica local (`LOCK_EX`) en `data/leads/` y notificación por email | Guardado local y waLink inmediatos (<50ms), cero commits en Git (5/5 tests PASS) | [x] |
 | 2026-10-08 | T2.4 | `.gitignore`<br>`docker/nginx-php.conf` | Seguridad e Infraestructura | Eliminación de tracking de datos personales (`git rm --cached`), protección con `.gitignore` y regla Nginx que deniega acceso HTTP directo a `/data/leads/` | HTTP 403 Forbidden al intentar acceder a los JSON de clientes desde el navegador | [x] |
 | 2026-10-08 | T3.1 | `sitio/index.html`<br>`sitio/js/admin.js`<br>`scripts/test-selectors.js` | Desacoplamiento DOM / SOLID (S, O) | Asignación de 64 `data-field` y 118 `data-card-id` únicos; motor de `admin.js` adaptado para resolver por selector semántico directo en lugar de `:nth-child` | 0 colisiones, inmunidad comprobada ante mutaciones del DOM, suite automatizada 5/5 PASS | [x] |
+| 2026-10-08 | T3.2 | `sitio/api/upload-media.php`<br>`sitio/js/admin.js`<br>`docker/nginx-php.conf` | Adaptador (ImageProcessor) / Infraestructura | Endpoint seguro de subida WebP con validación MIME `fileinfo` y token anti-CSRF; `uploadMediaFile` en cliente para erradicar Base64; bloqueo Nginx contra ejecución de PHP en uploads | 401 en anónimo, 403 sin CSRF, 422 en no-imágenes, 200 en WebP válido con guardado físico (5/5 tests PASS) | [x] |
 
 ---
 
