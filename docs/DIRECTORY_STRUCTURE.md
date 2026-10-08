@@ -28,8 +28,6 @@ el bodeogn de los trajes20262/
 ├── scripts/                   # # HERRAMIENTAS DE DESARROLLO
 │   └── dev-server.js          #   Servidor estático local (Node, sin dependencias)
 │
-├── img/                       # Imágenes sueltas/residuales (sin uso en el sitio)
-│
 └── sitio/                     # # EL SITIO FUNCIONAL (no modificar el código)
     ├── index.html             #   Página única (SPA estática)
     ├── assets/img/            #   Fotografías del catálogo
@@ -44,5 +42,5 @@ el bodeogn de los trajes20262/
 
 - **`sitio/` es la raíz web.** El servidor (Node local o Nginx/Docker) sirve **`sitio/`** como documento raíz, por lo que `index.html` se carga en `/`.
 - **No mover los archivos de `sitio/`**: cambiar su ubicación rompería las rutas que ya conectan la SPA (CSS, JS, imágenes y datos). Por eso la organización se hace en **capas alrededor** de `sitio/` (docos, docker, scripts), no reordenando el sitio mismo.
-- **`img/` (raíz)** contiene imágenes residuales/sueltas que **no** se usan en el sitio actual; se conservan hasta decidir su destino (mover a `assets/img/` o eliminar) — ver [`ARCHITECTURE.md`](ARCHITECTURE.md).
+- **Imágenes:** todas las fotografías viven únicamente en `sitio/assets/img/`. La carpeta duplicada `img/` de la raíz fue eliminada (T4.6) tras verificar por hash SHA256 que sus 30 archivos eran copias idénticas; si hiciera falta recuperarla, está en el historial de Git (`git show 71408bc:img/<archivo>`).
 - La documentación se centraliza en `docs/` y el despliegue reproducible en `docker/` + `docker-compose.yml`.

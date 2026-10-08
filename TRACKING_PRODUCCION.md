@@ -97,8 +97,8 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 | **Fase 1** | Estabilización Inmediata y Seguridad Crítica | 5 | 5 | `[✅] Completado & Aprobado` |
 | **Fase 2** | Backend Limpio, Autenticación y Persistencia Segura | 4 | 4 | `[✅] Completado & Aprobado` |
 | **Fase 3** | Modernización del CMS Visual y Datos Frontend | 5 | 5 | `[✅] Completado & Aprobado` |
-| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 5 | `[⏳] En Progreso` |
-| **Total** | **Transformación a Estándar de Producción** | **21** | **19** | **90%** |
+| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 6 | `[⏳] En Progreso` |
+| **Total** | **Transformación a Estándar de Producción** | **21** | **20** | **95%** |
 
 ---
 
@@ -265,12 +265,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-nginx-cache.js`) superada con éxito (5/5 tests PASS): `admin-content.js` responde con `no-cache, must-revalidate, max-age=0`; `index.html` revalida de inmediato; `/data/leads/` mantiene bloqueo de privacidad HTTP 403; `seasons.css` conserva caché de 7 días; y todas las cabeceras de seguridad se propagan correctamente.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.6: Limpieza de directorios huérfanos**
-  - **Archivos:** Carpeta raíz `img/`.
-  - **Acción:** Eliminar el directorio duplicado en la raíz tras validar que todos los assets requeridos están en `sitio/assets/img/`.
-  - **SOLID / Capa:** *Higiene y Mantenimiento del Repositorio*.
-  - **Criterio de Verificación:** Repositorio limpio y libre de activos duplicados o abandonados.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.6: Limpieza de directorios huérfanos**
+  - **Archivos:** Carpeta raíz `img/` (eliminada), [`docs/DIRECTORY_STRUCTURE.md`](docs/DIRECTORY_STRUCTURE.md), [`scripts/test-orphan-cleanup.js`](scripts/test-orphan-cleanup.js)
+  - **Acción:** Auditoría previa por hash SHA256: los 30 archivos de `img/` (≈4.5 MB, incluidos `horror_bg.png` de 867 KB y un PNG de 2.6 MB) eran copias **idénticas** de `sitio/assets/img/`; ninguna referencia en HTML, CSS, JS, PHP, Docker ni Nginx apuntaba a la carpeta raíz. Eliminada con `git rm -r img` y actualizada la documentación de estructura. La carpeta raíz `data/` (consultas y mensajes reales de clientes) **no se tocó**: sigue fuera de Git por Habeas Data.
+  - **SOLID / Capa:** *Higiene y Mantenimiento del Repositorio* — una única fuente de verdad para los assets (`sitio/assets/img/`).
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-orphan-cleanup.js`) con línea base en rojo (2/5 antes de limpiar) y verde (5/5) después: `img/` inexistente, 0 archivos rastreados por Git, 30/30 archivos conservados en `sitio/assets/img/`, 65 referencias de imágenes sin enlaces rotos y `data/` intacto y protegido. Regresión completa sin fallos y sitio activo en Docker respondiendo HTTP 200. Recuperable desde el historial (`git show 71408bc:img/<archivo>`) y desde el respaldo `.bundle`.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T4.7: Despliegue y verificación en Docker Container**
   - **Archivos:** [`docker-compose.yml`](docker-compose.yml), [`docker/Dockerfile.php`](docker/Dockerfile.php)
@@ -308,6 +308,8 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T4.3 | `sitio/index.html`<br>`sitio/assets/img/ph-*.svg`<br>`scripts/extract-svg-placeholders.js` | Presentación / Optimización DOM | Extracción de 65 Data-URIs SVG incrustados hacia 9 archivos estáticos `ph-*.svg` cacheados por HTTP | index.html reducido de 188.4 KB a 107.3 KB (41.7% / 78.5 KB ahorrados) (5/5 tests PASS) | [x] |
 | 2026-10-08 | T4.4 | `sitio/css/seasons.css`<br>`sitio/css/season-colors.css`<br>`scripts/test-css-refactor.js` | Arquitectura CSS / Open-Closed (O) | Erradicación de duplicación repetitiva de 12 meses; parametrización con variables CSS Custom Properties (`--season-accent`, `--m-*`) y preservación de variantes visuales específicas | seasons.css reducido de 75.4 KB (2.473 líneas) a 25.0 KB (930 líneas) — 66.1% ahorro (5/5 tests PASS) | [x] |
 | 2026-10-08 | T4.5 | `docker/nginx-php.conf`<br>`scripts/dev-server.js`<br>`scripts/test-nginx-cache.js` | Servidor Web / Drivers e Infraestructura | Exclusión de `/data/` (`admin-content.js`), `index.html` y `/api/` del caché de 7 días (`no-cache, must-revalidate, max-age=0`); retención de caché para estáticos y preservación de cabeceras de seguridad | Revalidación inmediata en CMS y HTML verificada en vivo con Docker; leads protegidos con 403 (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.6 | `img/` (eliminada)<br>`docs/DIRECTORY_STRUCTURE.md`<br>`scripts/test-orphan-cleanup.js` | Higiene del Repositorio / Única fuente de verdad | Eliminación de la carpeta duplicada `img/` (30 archivos idénticos por SHA256 a `sitio/assets/img/`, sin referencias en código); documentación actualizada; `data/` de clientes preservado | Cero pérdida (30/30 en `sitio/assets/img/`), 65 referencias sin enlaces rotos, regresión completa OK (5/5 tests PASS) | [x] |
+| 2026-10-08 | T2.2 (hardening) | `scripts/test-save-content.php` | Calidad / Tests herméticos | Detectado que el Test 5 hacía un guardado real: sobrescribía `admin-content.js` y creaba commits `Test unitario [Ana Avila]` en GitHub (token del contenedor). Ahora el proceso hijo corre sin `GITHUB_TOKEN`, hay guarda de aborto y el archivo real se respalda/restaura siempre | Verificado: 5/5 PASS, 0 commits nuevos en el remoto, `admin-content.js` intacto | [x] |
 
 ---
 
