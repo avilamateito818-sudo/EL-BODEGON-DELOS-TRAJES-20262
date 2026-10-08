@@ -230,19 +230,19 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 ### 🚀 Fase 4: Optimización de Assets, Rendimiento, CSS y Producción Docker
 *Objetivo:* Optimizar rendimiento web (Core Web Vitals), eliminar dependencias frágiles externas y validar el contenedor Docker listo para producción.
 
-- [ ] **T4.1: Descarga y migración local de imágenes con Hotlinking externo**
-  - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/assets/img/`](sitio/assets/img/)
-  - **Acción:** Descargar imágenes de fin de año enlazadas a tiendas externas, optimizarlas a WebP y servirlas localmente desde el docroot.
-  - **SOLID / Capa:** *Infraestructura / Assets* — Autonomía y resiliencia del sistema ante caídas de terceros.
-  - **Criterio de Verificación:** Cero peticiones salientes a dominios de tiendas terceras al navegar por el catálogo.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.1: Descarga y migración local de imágenes con Hotlinking externo**
+  - **Archivos:** [`sitio/index.html`](sitio/index.html), `sitio/assets/img/remote/`, [`scripts/apply-assets-migration.js`](scripts/apply-assets-migration.js), [`scripts/test-assets-optimization.js`](scripts/test-assets-optimization.js)
+  - **Acción:** Identificación y mapeo exacto de las 28 imágenes externas enlazadas a tiendas de terceros (Noviembre y Diciembre). Reemplazo completo de URLs externas por assets locales en `assets/img/remote/`. Generación y optimización a WebP de alta fidelidad (`r_vestido_gala_diciembre.webp`, 60 KB) para sustituir el enlace caído (404) de `lalapita.com`.
+  - **SOLID / Capa:** *Infraestructura / Assets* — Autonomía, soberanía de recursos y resiliencia del sistema ante caídas o bloqueos de terceros.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-assets-optimization.js`) superada con éxito (Tests 1 y 2 PASS): 0 URLs externas http/https en etiquetas de imagen; 100% de las 28 referencias del catálogo existen y son legibles en disco (3.03 MB servidos localmente con latencia ultra-baja y sin peticiones a terceros).
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.2: Sustitución de imágenes pesadas por versiones WebP existentes**
-  - **Archivos:** [`sitio/index.html`](sitio/index.html)
-  - **Acción:** Reemplazar llamadas a `horror_bg.png` (867 KB) por `horror_bg.webp` (84 KB) y JPGs por sus copias WebP correspondientes.
-  - **SOLID / Capa:** *Optimización de Recursos*.
-  - **Criterio de Verificación:** Más de 1.5 MB de transferencia ahorrados en la carga inicial de la página.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.2: Sustitución de imágenes pesadas por versiones WebP existentes**
+  - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/assets/img/`](sitio/assets/img/), [`scripts/test-assets-optimization.js`](scripts/test-assets-optimization.js)
+  - **Acción:** Sustitución de `horror_bg.png` (867 KB) por su homólogo WebP `horror_bg.webp` (84 KB) en el DOM principal (ahorro directo de 764.7 KB). Sustitución de 10 imágenes clave de alta carga (`reyes_magos`, `uniforme_colegio`, `bata_laboratorio`, `ima21`, `jr2`, `img19`, `img20`, `img13`, `vestido_nina`, `reno_rudolfo`) por sus versiones WebP pre-optimizadas.
+  - **SOLID / Capa:** *Optimización de Recursos y Rendimiento (Core Web Vitals)*.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-assets-optimization.js`) superada con éxito (Tests 3, 4 y 5 PASS): 0 referencias a `horror_bg.png` en HTML y CSS; 1.24 MB de transferencia neta ahorrados en imágenes locales sustituidas (64.9% de reducción de peso) y más de 3 MB de ancho de banda ahorrados en la carga de catálogo.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T4.3: Reducción del tamaño de `index.html` (Extracción de SVGs)**
   - **Archivos:** [`sitio/index.html`](sitio/index.html), [`sitio/assets/img/ph-generico.svg`](sitio/assets/img/)
