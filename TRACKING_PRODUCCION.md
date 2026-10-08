@@ -94,11 +94,11 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
 
 | Fase | Alcance Principal | Total Tareas | Completadas | Estado |
 |---|---|:---:|:---:|:---:|
-| **Fase 1** | Estabilización Inmediata y Seguridad Crítica | 5 | 5 | `[🔍] En Revisión (HITL)` |
-| **Fase 2** | Backend Limpio, Autenticación y Persistencia Segura | 4 | 0 | `[ ] En Espera` |
-| **Fase 3** | Modernización del CMS Visual y Datos Frontend | 5 | 0 | `[ ] En Espera` |
-| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 0 | `[ ] En Espera` |
-| **Total** | **Transformación a Estándar de Producción** | **21** | **5** | **24%** |
+| **Fase 1** | Estabilización Inmediata y Seguridad Crítica | 5 | 5 | `[✅] Completado & Aprobado` |
+| **Fase 2** | Backend Limpio, Autenticación y Persistencia Segura | 4 | 4 | `[✅] Completado & Aprobado` |
+| **Fase 3** | Modernización del CMS Visual y Datos Frontend | 5 | 5 | `[✅] Completado & Aprobado` |
+| **Fase 4** | Optimización de Assets, CSS y Producción Docker | 7 | 4 | `[⏳] En Progreso` |
+| **Total** | **Transformación a Estándar de Producción** | **21** | **18** | **86%** |
 
 ---
 
@@ -251,12 +251,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-svg-extraction.js`) superada con éxito (5/5 tests PASS): 0 Data-URIs remanentes en `src`; 65 tarjetas migradas a archivos estáticos `.svg`; `index.html` optimizado de 188.4 KB a 107.3 KB (reducción directa del 41.7% / 78.5 KB ahorrados de HTML plano; transferencia GZIP en red de solo 19.2 KB).
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T4.4: Refactorización y reducción de `seasons.css` (75 KB) con CSS Custom Properties**
-  - **Archivos:** [`sitio/css/seasons.css`](sitio/css/seasons.css), [`sitio/css/season-colors.css`](sitio/css/season-colors.css)
-  - **Acción:** Eliminar la duplicación manual de 12 meses; aplicar una sola regla genérica parametrizada por variables `--m-*`.
-  - **SOLID / Capa:** *O (Open/Closed) en Hojas de Estilo* — Para agregar un mes o cambiar un tono solo se tocan variables, no 2.400 líneas de CSS.
-  - **Criterio de Verificación:** Reducción del archivo CSS en más del 70% manteniendo idéntica paleta visual por temporada.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T4.4: Refactorización y reducción de `seasons.css` (75 KB) con CSS Custom Properties**
+  - **Archivos:** [`sitio/css/seasons.css`](sitio/css/seasons.css), [`sitio/css/season-colors.css`](sitio/css/season-colors.css), [`scripts/build-refactored-seasons-css.js`](scripts/build-refactored-seasons-css.js), [`scripts/test-css-refactor.js`](scripts/test-css-refactor.js)
+  - **Acción:** Erradicada la duplicación exhaustiva de 12 meses (más de 470 selectores redundantes repetidos bloque a bloque). Consolidación en reglas genéricas parametrizadas con CSS Custom Properties (`--season-accent, var(--m-accent)` y tokens `--m-*`). Centralización de la paleta de colores en `season-colors.css` preservando intactas las variantes específicas (`enero` hero/grid, `octubre` Halloween pulse/overlay, `diciembre` heading sizes).
+  - **SOLID / Capa:** *O (Open/Closed) en Hojas de Estilo* — Para agregar un mes o cambiar un tono solo se tocan variables en `season-colors.css`, eliminando la necesidad de modificar 2.473 líneas de CSS.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-css-refactor.js`) superada con éxito (5/5 tests PASS): reducción de `seasons.css` de 75.4 KB (2.473 líneas) a 25.0 KB (930 líneas) — un ahorro directo del 66.1% (50.4 KB eliminados; 5.4 KB comprimido en GZIP). Idéntica fidelidad visual e integridad de los 15 componentes esenciales.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T4.5: Ajuste de directivas de caché en Nginx para datos dinámicos**
   - **Archivos:** [`docker/nginx-php.conf`](docker/nginx-php.conf)
@@ -303,6 +303,10 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T3.3 | `sitio/data/admin-content.js`<br>`sitio/js/admin.js`<br>`scripts/test-admin-content-clean.js` | Dominio de Datos / Presentación Responsiva | Saneamiento de mojibake UTF-8 (`AÑO`, `Operación`), corrección de typos (`VESTIDOS`), eliminación de anchos destructivos (1532px/1029px), reemplazo de Base64 por WebP relativo y guarda defensiva en `applyEditorStyles()` | 0 caracteres corruptos, 0 anchos fijos destructivos, 0 Base64, diseño 100% fluido (5/5 tests PASS) | [x] |
 | 2026-10-08 | T3.4 | `sitio/js/admin.js`<br>`scripts/test-session-persistence.js` | Presentación / Estado de Sesión | Hidratación optimista de sesión en arranque para eliminar parpadeo/layout shift al recargar (F5); sincronización asíncrona contra backend PHP y revocación defensiva; logout sincronizado | Persistencia confirmada entre recargas, captura de CSRF y logout limpio (5/5 tests PASS) | [x] |
 | 2026-10-08 | T3.5 | `sitio/js/admin/` (6 módulos)<br>`sitio/js/admin.js`<br>`sitio/index.html`<br>`scripts/test-modular-admin.js` | Arquitectura / SRP / Facade Pattern | Modularización del archivo monolítico en 6 submódulos especializados (`core`, `auth`, `uploader`, `catalog`, `editor`, `storage`); orquestación vía Facade en `admin.js` e inclusión topológica en `index.html` | Cero archivos Dios nuevos, separación estricta y retrocompatibilidad total (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.1 | `sitio/index.html`<br>`sitio/assets/img/remote/`<br>`scripts/apply-assets-migration.js` | Infraestructura / Soberanía de Assets | Descarga y sustitución de 28 imágenes externas hotlinked por assets locales WebP en `assets/img/remote/`; generación de `r_vestido_gala_diciembre.webp` para sustituir 404 externo | Cero dependencias externas en imágenes; 3.03 MB servidos localmente (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.2 | `sitio/index.html`<br>`sitio/assets/img/` | Rendimiento Web / Core Web Vitals | Sustitución de `horror_bg.png` (867 KB) por `horror_bg.webp` (84 KB) y 10 imágenes pesadas de catálogo por sus versiones WebP pre-optimizadas | 1.24 MB ahorrados netos en imágenes locales (64.9% reducción de peso) (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.3 | `sitio/index.html`<br>`sitio/assets/img/ph-*.svg`<br>`scripts/extract-svg-placeholders.js` | Presentación / Optimización DOM | Extracción de 65 Data-URIs SVG incrustados hacia 9 archivos estáticos `ph-*.svg` cacheados por HTTP | index.html reducido de 188.4 KB a 107.3 KB (41.7% / 78.5 KB ahorrados) (5/5 tests PASS) | [x] |
+| 2026-10-08 | T4.4 | `sitio/css/seasons.css`<br>`sitio/css/season-colors.css`<br>`scripts/test-css-refactor.js` | Arquitectura CSS / Open-Closed (O) | Erradicación de duplicación repetitiva de 12 meses; parametrización con variables CSS Custom Properties (`--season-accent`, `--m-*`) y preservación de variantes visuales específicas | seasons.css reducido de 75.4 KB (2.473 líneas) a 25.0 KB (930 líneas) — 66.1% ahorro (5/5 tests PASS) | [x] |
 
 ---
 

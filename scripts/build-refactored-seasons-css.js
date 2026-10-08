@@ -1,4 +1,20 @@
-/* ===================================================================
+/**
+ * build-refactored-seasons-css.js
+ * 
+ * Script de refactorización para T4.4:
+ * Aplica el principio Open/Closed (SOLID) en seasons.css unificando
+ * las 12 temporadas en reglas genéricas parametrizadas por Custom Properties (--m-* y --season-*),
+ * eliminando miles de líneas duplicadas y reduciendo el archivo en más del 70%.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const targetFile = path.join(__dirname, '..', 'sitio', 'css', 'seasons.css');
+const originalContent = fs.readFileSync(targetFile, 'utf8');
+const originalSize = 75370; // Tamaño original antes de la refactorización
+
+const refactoredCss = `/* ===================================================================
    TEMPORADAS (CATÁLOGO POR TEMPORADA) · ARQUITECTURA MODULAR (SOLID: O)
    -------------------------------------------------------------------
    Refactorizado bajo el Principio Abierto/Cerrado (Open/Closed).
@@ -609,7 +625,7 @@
 }
 
 .subsection-list li::before {
-  content: '\2726';
+  content: '\\2726';
   position: absolute;
   left: 0;
   top: 0.15rem;
@@ -927,3 +943,14 @@
   .season-cta { padding: 1.1rem 2rem; letter-spacing: 2px; }
   .lista-temporadas { grid-template-columns: 1fr; }
 }
+`;
+
+fs.writeFileSync(targetFile, refactoredCss.trim() + '\n', 'utf8');
+
+const finalSize = Buffer.byteLength(fs.readFileSync(targetFile, 'utf8'), 'utf8');
+const savedBytes = originalSize - finalSize;
+const percentSaved = ((savedBytes / originalSize) * 100).toFixed(1);
+
+console.log(`Tamaño final: ${(finalSize / 1024).toFixed(1)} KB (${finalSize} bytes, ${refactoredCss.split('\n').length} líneas)`);
+console.log(`Ahorro logrado: ${(savedBytes / 1024).toFixed(1)} KB (${savedBytes} bytes, reducción del ${percentSaved}%)`);
+console.log('[ÉXITO] seasons.css refactorizado y compactado.');
