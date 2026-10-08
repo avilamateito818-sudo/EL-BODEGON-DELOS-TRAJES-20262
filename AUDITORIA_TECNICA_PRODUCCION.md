@@ -98,10 +98,10 @@ Aquellas vulnerabilidades o bugs que provocan caídas del sistema, comprometen l
 - **Ubicación:** Archivo `.env` en la raíz y presencia de tokens `ghp_...` en el historial previo de Git.
 - **Descripción:**
   El archivo `.env` contiene un Personal Access Token (PAT) con permisos de escritura al repositorio:  
-  `GITHUB_TOKEN=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`.
+  `GITHUB_TOKEN=ghp_REDACTED_TOKEN_SECURITY_AUDIT`."
 - **Impacto:** Aunque `.env` esté en `.gitignore`, tokens de GitHub han sido registrados en commits históricos del repositorio. Cualquier persona con acceso de lectura puede clonar el repo, extraer el token y tomar control total del repositorio de GitHub.
 - **Acción requerida:**
-  1. Revocar de inmediato el token `ghp_Tfn6qZ1...` en los ajustes de GitHub.
+  1. Revocar de inmediato el token en los ajustes de GitHub (Security -> Personal Access Tokens).
   2. Generar un nuevo token restringido si se requiere, o prescindir de tokens en favor de autenticación interna en servidor.
   3. Limpiar el historial con `git filter-repo` o BFG Repo-Cleaner antes de publicar el repositorio.
 
