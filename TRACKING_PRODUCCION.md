@@ -202,12 +202,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-upload-media.php` ejecutada en Docker) superada con éxito (5/5 tests PASS): 401 en anónimo, 403 sin CSRF, 422 en campos faltantes, 422 en archivos no permitidos (PHP/texto), y 200 en subida autorizada con persistencia física verificada en disco. Acceso directo a scripts en `/assets/img/uploads/` denegado con 403 en Nginx.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T3.3: Saneamiento de Datos Corruptos y Eliminación de Anchos Destructivos**
-  - **Archivos:** [`sitio/data/admin-content.js`](sitio/data/admin-content.js)
-  - **Acción:** Corregir caracteres corruptos (mojibake UTF-8) y suprimir estilos fijos en píxeles (`width: 1532px`) sustituyéndolos por reglas fluidas responsivas.
-  - **SOLID / Capa:** *Dominio de Datos y Presentación*.
-  - **Criterio de Verificación:** Caracteres especiales (`ñ`, tildes) se visualizan correctamente; cero scroll horizontal en celulares.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T3.3: Saneamiento de Datos Corruptos y Eliminación de Anchos Destructivos**
+  - **Archivos:** [`sitio/data/admin-content.js`](sitio/data/admin-content.js), [`sitio/js/admin.js`](sitio/js/admin.js), [`scripts/test-admin-content-clean.js`](scripts/test-admin-content-clean.js)
+  - **Acción:** Erradicados mojibake UTF-8 (`A├æO` -> `AÑO`, `Operaci├│n` -> `Operación`); corregidos errores ortográficos y textos duplicados en secciones y títulos (`VESITDOS` -> `VESTIDOS`, `CABELLARO` -> `CABALLERO`); eliminados anchos fijos destructivos (`width: 1532px` y `width: 1029px`) preservando los colores de fondo y aplicando `max-width: 100%`; reemplazado residuo Base64 por archivo WebP relativo (`assets/img/admin-media/card3.webp`); añadida guarda defensiva permanente en `applyEditorStyles()` de `admin.js` para descartar anchos fijos mayores a 400px en secciones y cabeceras.
+  - **SOLID / Capa:** *Dominio de Datos, Higiene de Presentación y Robustez Defensiva*.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-admin-content-clean.js`) superada con éxito (5/5 tests PASS): cero mojibake, cero anchos destructivos, cero Base64 incrustado, ortografía saneada y compatibilidad responsive móvil 100% fluida.
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 - [ ] **T3.4: Corrección de Persistencia de Sesión del Administrador**
   - **Archivos:** [`sitio/js/admin.js`](sitio/js/admin.js)
@@ -301,6 +301,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T2.4 | `.gitignore`<br>`docker/nginx-php.conf` | Seguridad e Infraestructura | Eliminación de tracking de datos personales (`git rm --cached`), protección con `.gitignore` y regla Nginx que deniega acceso HTTP directo a `/data/leads/` | HTTP 403 Forbidden al intentar acceder a los JSON de clientes desde el navegador | [x] |
 | 2026-10-08 | T3.1 | `sitio/index.html`<br>`sitio/js/admin.js`<br>`scripts/test-selectors.js` | Desacoplamiento DOM / SOLID (S, O) | Asignación de 64 `data-field` y 118 `data-card-id` únicos; motor de `admin.js` adaptado para resolver por selector semántico directo en lugar de `:nth-child` | 0 colisiones, inmunidad comprobada ante mutaciones del DOM, suite automatizada 5/5 PASS | [x] |
 | 2026-10-08 | T3.2 | `sitio/api/upload-media.php`<br>`sitio/js/admin.js`<br>`docker/nginx-php.conf` | Adaptador (ImageProcessor) / Infraestructura | Endpoint seguro de subida WebP con validación MIME `fileinfo` y token anti-CSRF; `uploadMediaFile` en cliente para erradicar Base64; bloqueo Nginx contra ejecución de PHP en uploads | 401 en anónimo, 403 sin CSRF, 422 en no-imágenes, 200 en WebP válido con guardado físico (5/5 tests PASS) | [x] |
+| 2026-10-08 | T3.3 | `sitio/data/admin-content.js`<br>`sitio/js/admin.js`<br>`scripts/test-admin-content-clean.js` | Dominio de Datos / Presentación Responsiva | Saneamiento de mojibake UTF-8 (`AÑO`, `Operación`), corrección de typos (`VESTIDOS`), eliminación de anchos destructivos (1532px/1029px), reemplazo de Base64 por WebP relativo y guarda defensiva en `applyEditorStyles()` | 0 caracteres corruptos, 0 anchos fijos destructivos, 0 Base64, diseño 100% fluido (5/5 tests PASS) | [x] |
 
 ---
 

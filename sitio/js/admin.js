@@ -2073,6 +2073,12 @@ function applyEditorStyles() {
           el.style.removeProperty('min-height');
           el.style.removeProperty('max-height');
         }
+        /* Ni secciones, contenedores ni cabeceras pueden quedar con ancho fijo destructivo
+           en píxeles que cause desbordamiento horizontal en pantallas móviles. */
+        if (el.matches('section, footer, header, main, h1, h2, h3, h4, .season-root, .catalogo-general') || (el.style.width && parseInt(el.style.width, 10) > 400)) {
+          el.style.removeProperty('width');
+          el.style.maxWidth = '100%';
+        }
       }
     });
   }
