@@ -216,13 +216,12 @@ Cada cambio aplicado en este proyecto debe satisfacer obligatoriamente los sigui
   - **Criterio de Verificación:** Suite automatizada (`scripts/test-session-persistence.js`) superada con éxito (5/5 tests PASS): 0 borrados incondicionales al arrancar, hidratación instantánea verificada, captura de CSRF, revocación limpia y logout sincronizado. Recargar la página mantiene la sesión activa de inmediato.
   - **Aprobación HITL:** `[x] Verificado y aprobado`
 
-- [ ] **T3.5: Modularización Arquitectónica de `admin.js`**
-  - **Archivos:** [`sitio/js/admin.js`](sitio/js/) (o submódulos `admin/`)
-  - **Acción:** Dividir el monolito de 4.805 líneas en módulos cohesivos: `admin/auth.js`, `admin/uploader.js`, `admin/editor.js`, `admin/catalog.js`.
-  - **SOLID / Capa:** *S (Single Responsibility) & I (Interface Segregation)*.
-  - **Patrón:** *Facade Pattern / Module Pattern*.
-  - **Criterio de Verificación:** Cada módulo tiene una sola responsabilidad; cero dependencias cruzadas desordenadas; funcionalidad idéntica o superior.
-  - **Aprobación HITL:** `[ ] Pendiente`
+- [✅] **T3.5: Modularización Arquitectónica de `admin.js`**
+  - **Archivos:** [`sitio/js/admin/core.js`](sitio/js/admin/core.js), [`sitio/js/admin/auth.js`](sitio/js/admin/auth.js), [`sitio/js/admin/uploader.js`](sitio/js/admin/uploader.js), [`sitio/js/admin/catalog.js`](sitio/js/admin/catalog.js), [`sitio/js/admin/editor.js`](sitio/js/admin/editor.js), [`sitio/js/admin/storage.js`](sitio/js/admin/storage.js), [`sitio/js/admin.js`](sitio/js/admin.js), [`sitio/index.html`](sitio/index.html), [`scripts/test-modular-admin.js`](scripts/test-modular-admin.js)
+  - **Acción:** Creación de arquitectura modular estructurada bajo el patrón Facade y principios SOLID (S, I). División del monolito en 6 submódulos con responsabilidades únicas acotadas: `core.js` (utilidades base, helpers DOM, toasts y modales), `auth.js` (sesiones, CSRF, login, logout y mitigación de fuerza bruta), `uploader.js` (compresión canvas WebP, adaptador `/api/upload-media`), `catalog.js` (CRUD de tarjetas, selectores semánticos, secciones y fotos), `editor.js` (inspector visual, guías, snapping, rejilla y estilos fluidos), y `storage.js` (autoSave, backups y sync remoto). `admin.js` actúa como fachada orquestadora delegando el ciclo de vida sin romper retrocompatibilidad.
+  - **SOLID / Capa:** *S (Single Responsibility), I (Interface Segregation) & Facade Pattern*.
+  - **Criterio de Verificación:** Suite automatizada (`scripts/test-modular-admin.js`) superada con éxito (5/5 tests PASS): 6 módulos verificados, namespaces montados bajo `window.BodegonAdmin`, orden topológico estricto en `index.html` e inmunidad total en tests de persistencia y selectores (25/25 tests totales PASS).
+  - **Aprobación HITL:** `[x] Verificado y aprobado`
 
 > 🛑 **CHECKPOINT 3:** El humano entra al panel, cambia un texto, sube una foto en WebP, agrega un traje nuevo y verifica que el diseño se mantiene impecable en móvil.
 
@@ -303,6 +302,7 @@ Cada vez que ejecutemos una tarea, registraremos aquí el cambio con su verifica
 | 2026-10-08 | T3.2 | `sitio/api/upload-media.php`<br>`sitio/js/admin.js`<br>`docker/nginx-php.conf` | Adaptador (ImageProcessor) / Infraestructura | Endpoint seguro de subida WebP con validación MIME `fileinfo` y token anti-CSRF; `uploadMediaFile` en cliente para erradicar Base64; bloqueo Nginx contra ejecución de PHP en uploads | 401 en anónimo, 403 sin CSRF, 422 en no-imágenes, 200 en WebP válido con guardado físico (5/5 tests PASS) | [x] |
 | 2026-10-08 | T3.3 | `sitio/data/admin-content.js`<br>`sitio/js/admin.js`<br>`scripts/test-admin-content-clean.js` | Dominio de Datos / Presentación Responsiva | Saneamiento de mojibake UTF-8 (`AÑO`, `Operación`), corrección de typos (`VESTIDOS`), eliminación de anchos destructivos (1532px/1029px), reemplazo de Base64 por WebP relativo y guarda defensiva en `applyEditorStyles()` | 0 caracteres corruptos, 0 anchos fijos destructivos, 0 Base64, diseño 100% fluido (5/5 tests PASS) | [x] |
 | 2026-10-08 | T3.4 | `sitio/js/admin.js`<br>`scripts/test-session-persistence.js` | Presentación / Estado de Sesión | Hidratación optimista de sesión en arranque para eliminar parpadeo/layout shift al recargar (F5); sincronización asíncrona contra backend PHP y revocación defensiva; logout sincronizado | Persistencia confirmada entre recargas, captura de CSRF y logout limpio (5/5 tests PASS) | [x] |
+| 2026-10-08 | T3.5 | `sitio/js/admin/` (6 módulos)<br>`sitio/js/admin.js`<br>`sitio/index.html`<br>`scripts/test-modular-admin.js` | Arquitectura / SRP / Facade Pattern | Modularización del archivo monolítico en 6 submódulos especializados (`core`, `auth`, `uploader`, `catalog`, `editor`, `storage`); orquestación vía Facade en `admin.js` e inclusión topológica en `index.html` | Cero archivos Dios nuevos, separación estricta y retrocompatibilidad total (5/5 tests PASS) | [x] |
 
 ---
 

@@ -166,6 +166,7 @@
      Retorna una Promesa con la URL relativa limpia (assets/img/uploads/img_....webp). */
   function uploadMediaFile(file) {
     if (!file) return Promise.reject(new Error('No se seleccionó ningún archivo'));
+    var currentCsrfToken = adminCsrfToken;
 
     return new Promise(function (resolve, reject) {
       var img = new Image();
@@ -5055,6 +5056,16 @@ function applyEditorStyles() {
       }
     };
   }
+
+  window.BodegonAdmin = window.BodegonAdmin || {};
+  window.BodegonAdmin.content = content;
+  window.BodegonAdmin.init = init;
+  window.BodegonAdmin.enableEditMode = enableEditMode;
+  window.BodegonAdmin.disableEditMode = disableEditMode;
+  window.BodegonAdmin.isAuthed = function () { return authed; };
+  window.BodegonAdmin.performLogout = performLogout;
+  window.BodegonAdmin.openLogin = openLogin;
+  window.BodegonAdmin.autoSave = autoSave;
 
   exposeAdminApi();
 
