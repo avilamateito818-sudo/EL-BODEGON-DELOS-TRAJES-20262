@@ -2,7 +2,21 @@
 /**
  * Test de Integración Automatizado para T2.2: Blindaje de /api/save-content.php
  * Verifica que el endpoint rechaza peticiones no autorizadas y valida sesión y CSRF token.
+ *
+ * HERMETICIDAD: este test NUNCA debe tocar datos reales.
+ *  - Los procesos hijos se lanzan con GITHUB_TOKEN/GITHUB_REPO vacíos (la config ignora
+ *    variables vacías), por lo que no se crean commits en GitHub.
+ *  - El contenido real de data/admin-content.js se respalda antes del Test 5 y se restaura
+ *    siempre al terminar (incluso si el test falla).
  */
+
+const CONTENT_FILE = '/var/www/html/data/admin-content.js';
+$GLOBALS['content_backup'] = file_exists(CONTENT_FILE) ? file_get_contents(CONTENT_FILE) : null;
+register_shutdown_function(function () {
+    if ($GLOBALS['content_backup'] !== null) {
+        file_put_contents(CONTENT_FILE, $GLOBALS['content_backup'], LOCK_EX);
+    }
+});
 
 function test_save_call(string $method, array $sessionData = [], array $headers = [], array $body = []): array {
     $code = '
@@ -22,7 +36,8 @@ function test_save_call(string $method, array $sessionData = [], array $headers 
         $_POST = ' . var_export($body, true) . ';
         require "/var/www/html/api/save-content.php";
     ';
-    $cmd = 'php -r ' . escapeshellarg($code) . ' 2>&1';
+    // Entorno hermético: sin token de GitHub en el proceso hijo (evita commits reales en el remoto)
+    $cmd = 'GITHUB_TOKEN= GITHUB_REPO= GITHUB_BRANCH= php -r ' . escapeshellarg($code) . ' 2>&1';
     $out = shell_exec($cmd);
     return json_decode(trim($out), true) ?? [];
 }
@@ -72,17 +87,27 @@ if (($t4["ok"] ?? null) !== true || ($t4["test"] ?? null) !== true) {
     echo "✔ Test 4 PASS: Petición autorizada con sesión y token CSRF válido responde 200 OK (test mode)\n";
 }
 
-// Test 5: Petición autenticada guardando contenido válido en disco local
+// Guarda de seguridad: abortar si el entorno hijo aún pudiera alcanzar GitHub
+$guard = trim((string) shell_exec(
+    'GITHUB_TOKEN= GITHUB_REPO= GITHUB_BRANCH= php -r ' .
+    escapeshellarg('require "/var/www/html/api/_config.php"; echo bodegon_config()["GITHUB_TOKEN"];')
+));
+if ($guard !== '') {
+    echo "\n⛔ ABORTADO: el entorno de test aún expone un GITHUB_TOKEN; no se ejecuta el guardado real.\n";
+    exit(2);
+}
+
+// Test 5: Petición autenticada guardando contenido válido en disco local (sin GitHub)
 $t5 = test_save_call(
     "POST",
     ["admin_logged_in" => true, "admin_user" => "Ana Avila", "csrf_token" => $fakeCsrf],
     ["HTTP_X_CSRF_TOKEN" => $fakeCsrf],
     ["content" => ["texts" => [], "images" => []], "message" => "Test unitario"]
 );
-if (($t5["ok"] ?? null) !== true || ($t5["user"] ?? "") !== "Ana Avila") {
+if (($t5["ok"] ?? null) !== true || ($t5["user"] ?? "") !== "Ana Avila" || ($t5["github_saved"] ?? null) !== false) {
     $errors[] = "Test 5 Falló: Guardado autorizado falló. Respuesta: " . json_encode($t5);
 } else {
-    echo "✔ Test 5 PASS: Guardado autorizado exitoso con atribución de autor ('Ana Avila')\n";
+    echo "✔ Test 5 PASS: Guardado autorizado exitoso con atribución de autor ('Ana Avila'), sin tocar GitHub\n";
 }
 
 if (!empty($errors)) {
