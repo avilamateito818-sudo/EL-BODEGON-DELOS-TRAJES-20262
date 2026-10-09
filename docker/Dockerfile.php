@@ -10,7 +10,10 @@ COPY docker/nginx-php.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 
 COPY sitio/ /usr/share/nginx/html/
-RUN chmod -R a+rX /usr/share/nginx/html
+RUN chmod -R a+rX /usr/share/nginx/html \
+    && mkdir -p /usr/share/nginx/html/data/leads /usr/share/nginx/html/assets/img/uploads \
+    && chmod -R a+rwX /usr/share/nginx/html/data /usr/share/nginx/html/assets/img/uploads \
+    && chown -R www-data:www-data /usr/share/nginx/html/data /usr/share/nginx/html/assets/img/uploads
 
 EXPOSE 80
 

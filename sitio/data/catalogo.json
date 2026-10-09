@@ -1,0 +1,2154 @@
+{
+    "version": 1,
+    "ultima_actualizacion": "2026-10-09T16:15:12Z",
+    "temporada_activa": "octubre",
+    "hero_general": {
+        "tag": "El Bodegón de los Trajes · Tunja",
+        "titulo": "Disfraces, Uniformes y Vestidos a la Medida",
+        "subtitulo": "Colección exclusiva de alta costura, trajes de fiesta y disfraces para todas las temporadas del año en Tunja, Boyacá.",
+        "whatsapp_cta": "https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20un%20traje."
+    },
+    "temporadas": {
+        "enero": {
+            "id": "enero",
+            "nombre": "Enero",
+            "hito": "Hito Colombiano · Reyes Magos y regreso a clases",
+            "titulo": "Enero · Reyes Magos, Uniformes y Batas",
+            "subtitulo": "Celebra el Día de Reyes con nuestros trajes y prepárate para el nuevo año escolar con uniformes y batas ajustados a la medida. Elige una categoría y te llevamos a su sección.",
+            "foto_hero": "assets/img/reyes_magos.webp"
+        },
+        "febrero": {
+            "id": "febrero",
+            "nombre": "Febrero",
+            "hito": "Carnaval de Negros y Blancos · 12 y 13 de febrero",
+            "titulo": "Febrero · Carnaval, San Valentín y bodas",
+            "subtitulo": "Comparsas con plumas, disfraces de carnaval y conjuntos para San Valentín y para las bodas que se agendan en el mes más frío del año.",
+            "foto_hero": "assets/img/remote/rFqZS1qb3JvcG8tcGFyZWphLmpwZw.webp"
+        },
+        "marzo": {
+            "id": "marzo",
+            "nombre": "Marzo",
+            "hito": "Cuaresma, Semana Santa y Día de la Mujer",
+            "titulo": "Marzo · Efecto Ejecutivo",
+            "subtitulo": "La Cuaresma pide túnicas y sotanas; el resto del mes, conjuntos de oficina a la medida y el Día de la Mujer.",
+            "foto_hero": "assets/img/remote/rA2NDEuanBnP3Y9MTc1MTQ0OTk2MA.webp"
+        },
+        "abril": {
+            "id": "abril",
+            "nombre": "Abril",
+            "hito": "Feria de Abril · Día de la Tierra",
+            "titulo": "Abril · Feria y Renovación",
+            "subtitulo": "Temporada de prenda nueva: ropa de primavera, conjuntos para la feria y uniformes de ingreso de las aulas.",
+            "foto_hero": "assets/img/abril_hero.jpg"
+        },
+        "mayo": {
+            "id": "mayo",
+            "nombre": "Mayo",
+            "hito": "Día de las Madres · 10 de mayo",
+            "titulo": "Mayo · Día de las Madres",
+            "subtitulo": "Vestidos, conjuntos y prendas para regalar a mamá, y lo que la familia entera estrene para la fecha.",
+            "foto_hero": "assets/img/mayo_hero.jpg"
+        },
+        "junio": {
+            "id": "junio",
+            "nombre": "Junio",
+            "hito": "Bodas, Quinceañeras y Día del Padre",
+            "titulo": "Junio · Bodas y Quinceañeras",
+            "subtitulo": "La temporada alta del año: vestidos de quinceañera, de novia y los trajes de quien acompaña.",
+            "foto_hero": "assets/img/remote/rJsRHJlc3MtMDAzMV84MDB4LmpwZw.webp"
+        },
+        "julio": {
+            "id": "julio",
+            "nombre": "Julio",
+            "hito": "20 de julio · Fiestas Patrias",
+            "titulo": "Julio · Fiestas Patrias",
+            "subtitulo": "La fecha del 20, el veraneo y la semana de vacaciones: ropa para el desfile y para el clima de Tunja.",
+            "foto_hero": "assets/img/remote/rlamEtUmVnaW9uLUFuZGluYS5qcGc.webp"
+        },
+        "agosto": {
+            "id": "agosto",
+            "nombre": "Agosto",
+            "hito": "Aniversario de Tunja · 6 de agosto",
+            "titulo": "Agosto · Celebraciones de Gala",
+            "subtitulo": "El aniversario de Tunja y la temporada de matrimonios: ropa de gala para eventos y conjuntos para la fiesta.",
+            "foto_hero": "assets/img/remote/ryMDI2LzA3L1NNT0stQkxVRS5wbmc.png"
+        },
+        "septiembre": {
+            "id": "septiembre",
+            "nombre": "Septiembre",
+            "hito": "Aniversarios, Día de la Raza y regreso a clases",
+            "titulo": "Septiembre · Amor y Amistad",
+            "subtitulo": "Aniversarios de pareja, Día de la Raza y el regreso a las aulas: cada prenda con su fecha y su talla.",
+            "foto_hero": "assets/img/remote/r_vestido_gala_diciembre.webp"
+        },
+        "octubre": {
+            "id": "octubre",
+            "nombre": "Octubre",
+            "hito": "Temporada de Halloween · Exclusivo",
+            "titulo": "El Bodegón de los Trajes te trae los mejores disfraces para Halloween",
+            "subtitulo": "Viste tu imaginación, vive tu historia.",
+            "foto_hero": "assets/img/horror_bg.webp"
+        },
+        "noviembre": {
+            "id": "noviembre",
+            "nombre": "Noviembre",
+            "hito": "Grados, clausuras y ceremonias",
+            "titulo": "Noviembre · Grados y Clausuras",
+            "subtitulo": "Tocas, birretes, smokings y el traje completo de grado, y para la clausura los trajes típicos de Colombia: cumbia, sanjuanero, joropo, bambuco, currulao y bullerengue. Todo se corta a la medida en el taller de Tunja.",
+            "foto_hero": "assets/img/remote/rUQ18wMDU5LWNjLXNjYWxlZC5qcGc.jpg"
+        },
+        "diciembre": {
+            "id": "diciembre",
+            "nombre": "Diciembre",
+            "hito": "Navidad, Fin de Año y la Noche de Ratas y Muertos",
+            "titulo": "Diciembre · Navidad &amp; Fin de Año",
+            "subtitulo": "Es el mes más brillante del año: trajes para grados y clausuras, vestidos de gala para bailes y cenas navideñas, y disfraces de Papá Noel, duendes, renos y el Grinch, todo con la alta costura que nos caracteriza.",
+            "foto_hero": "assets/img/navidad_hero.jpg"
+        }
+    },
+    "trajes": [
+        {
+            "id": "card-octubre-princesa-pich",
+            "temporada": "octubre",
+            "categoria": "Princesas y Cuentos de Hadas",
+            "grupo": "Princesas y Cuentos de Hadas",
+            "titulo": "PRINCESA PICH",
+            "descripcion": "VESTIDO DE PRINCESA",
+            "foto": "assets/img/princesa_peach.jpg",
+            "formato_foto": "carta",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L"
+            ],
+            "destacado": false,
+            "activo": true,
+            "creado_en": "2026-10-09T14:20:30Z"
+        },
+        {
+            "id": "card-octubre-parca-muerte",
+            "temporada": "octubre",
+            "grupo": "terror",
+            "titulo": "PARCA(muerte)",
+            "descripcion": "tunica  negra \nMascara\nguadaña",
+            "foto": "assets/img/uploads/img_20261009_013458_2e54791152c8.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true,
+            "creado_en": "2026-10-09T01:36:33Z"
+        },
+        {
+            "id": "card-enero-reyes-magos",
+            "temporada": "enero",
+            "grupo": "General",
+            "titulo": "Reyes Magos",
+            "descripcion": "Los Reyes Magos llegan el 6 de enero. Confeccionamos sus trajes tal como los deseas: con túnica, manto y corona, o de acuerdo a la foto que nos compartas se te arma el conjunto completo.",
+            "foto": "assets/img/reyes_magos.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-enero-uniformes",
+            "temporada": "enero",
+            "grupo": "General",
+            "titulo": "Uniformes Escolares",
+            "descripcion": "Confección completa de uniformes de colegio para niña y niño, con el entalle y los escudos bordados de cada institución de Tunja y Boyacá.",
+            "foto": "assets/img/uniforme_colegio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-enero-batas",
+            "temporada": "enero",
+            "grupo": "General",
+            "titulo": "Batas",
+            "descripcion": "Batas de laboratorio para colegio y universidad, confeccionadas a la medida con telas lavables y durables.",
+            "foto": "assets/img/bata_laboratorio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-traje-de-comparsa-negro",
+            "temporada": "febrero",
+            "grupo": "Carnaval de Negros y Blancos",
+            "titulo": "Traje de comparsa «Negro»",
+            "descripcion": "Mono entallado de dos piezas con chaqueta y sombrero, para los Negros del Carnaval de Tunja.",
+            "foto": "assets/img/carnaval_comparsa.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-traje-de-comparsa-blanco",
+            "temporada": "febrero",
+            "grupo": "Carnaval de Negros y Blancos",
+            "titulo": "Traje de comparsa «Blanco»",
+            "descripcion": "Conjunto claro con volantes, encaje y el detalle que pidas, para los Blancos.",
+            "foto": "assets/img/carnaval_comparsa.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-disfraces-de-carnaval",
+            "temporada": "febrero",
+            "grupo": "Carnaval de Negros y Blancos",
+            "titulo": "Disfraces de Carnaval",
+            "descripcion": "Figuras de comparsa y disfraces sueltos para quien va sin traje completo.",
+            "foto": "assets/img/carnaval_comparsa.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-plumas-y-maquillaje",
+            "temporada": "febrero",
+            "grupo": "Carnaval de Negros y Blancos",
+            "titulo": "Plumas y Maquillaje",
+            "descripcion": "Plumería, pintura facial y accesorios para terminar el atuendo el día del carnaval.",
+            "foto": "assets/img/carnaval_comparsa.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-vestido-de-san-valentin",
+            "temporada": "febrero",
+            "grupo": "San Valentín y Bodas",
+            "titulo": "Vestido de San Valentín",
+            "descripcion": "Corto o largo, en satín rojo o rosa, con los colores de la fecha.",
+            "foto": "assets/img/san_valentin_novia.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-conjunto-de-pareja",
+            "temporada": "febrero",
+            "grupo": "San Valentín y Bodas",
+            "titulo": "Conjunto de Pareja",
+            "descripcion": "Los dos looks de San Valentín hechos con la misma tela y el mismo tono.",
+            "foto": "assets/img/san_valentin_novia.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-vestido-de-novia-civil",
+            "temporada": "febrero",
+            "grupo": "San Valentín y Bodas",
+            "titulo": "Vestido de Novia Civil",
+            "descripcion": "Modelo recto o de sirena, con el encaje y el bordado que quieras.",
+            "foto": "assets/img/san_valentin_novia.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-febrero-madrina-y-padrino",
+            "temporada": "febrero",
+            "grupo": "San Valentín y Bodas",
+            "titulo": "Madrina y Padrino",
+            "descripcion": "Los trajes formales de quienes acompañan a los novios en la ceremonia.",
+            "foto": "assets/img/carnaval_comparsa.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-traje-de-nazareno",
+            "temporada": "marzo",
+            "grupo": "Cuaresma y Semana Santa",
+            "titulo": "Traje de Nazareno",
+            "descripcion": "Capucha, túnica y cíngulo con las medidas de quien lo va a usar.",
+            "foto": "assets/img/nazareno_cuaresma.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-sotana-de-semana-santa",
+            "temporada": "marzo",
+            "grupo": "Cuaresma y Semana Santa",
+            "titulo": "Sotana de Semana Santa",
+            "descripcion": "Sotana larga con faja, para las procesiones de Tunja y los municipios vecinos.",
+            "foto": "assets/img/nazareno_cuaresma.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-tunica-de-jesus",
+            "temporada": "marzo",
+            "grupo": "Cuaresma y Semana Santa",
+            "titulo": "Túnica de Jesús",
+            "descripcion": "Túnica larga con capa, para el Domingo Santo.",
+            "foto": "assets/img/nazareno_cuaresma.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-capa-y-sandalias",
+            "temporada": "marzo",
+            "grupo": "Cuaresma y Semana Santa",
+            "titulo": "Capa y Sandalias",
+            "descripcion": "Los complementos para cerrar el traje de nazareno.",
+            "foto": "assets/img/nazareno_cuaresma.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-conjunto-ejecutivo",
+            "temporada": "marzo",
+            "grupo": "Ejecutivos y Día de la Mujer",
+            "titulo": "Conjunto Ejecutivo",
+            "descripcion": "Saco, camisa y pantalón con el corte que pide tu empresa o tu evento.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-blazer-a-medida",
+            "temporada": "marzo",
+            "grupo": "Ejecutivos y Día de la Mujer",
+            "titulo": "Blazer a Medida",
+            "descripcion": "Cazadora con forro y ajuste al cuerpo, para usar todo el año.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-vestido-formal",
+            "temporada": "marzo",
+            "grupo": "Ejecutivos y Día de la Mujer",
+            "titulo": "Vestido Formal",
+            "descripcion": "Para el Día de la Mujer, cenas de negocio y eventos de trabajo.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-marzo-accesorios-de-oficio",
+            "temporada": "marzo",
+            "grupo": "Ejecutivos y Día de la Mujer",
+            "titulo": "Accesorios de Oficio",
+            "descripcion": "Cinturones, pañuelos y corbatas para cerrar el look.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-vestido-de-primavera",
+            "temporada": "abril",
+            "grupo": "Prenda Nueva de Primavera",
+            "titulo": "Vestido de Primavera",
+            "descripcion": "Ligero y fresco, largo, midi o corto, con el corte que quieras.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-conjunto-de-dos-piezas",
+            "temporada": "abril",
+            "grupo": "Prenda Nueva de Primavera",
+            "titulo": "Conjunto de Dos Piezas",
+            "descripcion": "Saco o blusa con falda o pantalón, todo en el mismo tono.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-blusa-y-falda",
+            "temporada": "abril",
+            "grupo": "Prenda Nueva de Primavera",
+            "titulo": "Blusa y Falda",
+            "descripcion": "El conjunto de todos los días, con la tela que elijas.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-abrigo-de-entretiempo",
+            "temporada": "abril",
+            "grupo": "Prenda Nueva de Primavera",
+            "titulo": "Abrigo de Entretiempo",
+            "descripcion": "Para las tardes frías de Tunja, en paño o piel sintética.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-outfit-de-feria",
+            "temporada": "abril",
+            "grupo": "Feria y Uniformes",
+            "titulo": "Outfit de Feria",
+            "descripcion": "El conjunto completo para la feria, con los colores de tu municipio.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-uniforme-de-ingreso",
+            "temporada": "abril",
+            "grupo": "Feria y Uniformes",
+            "titulo": "Uniforme de Ingreso",
+            "descripcion": "El primer uniforme del año, con el escudo bordado.",
+            "foto": "assets/img/uniforme_colegio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-uniforme-de-diario",
+            "temporada": "abril",
+            "grupo": "Feria y Uniformes",
+            "titulo": "Uniforme de Diario",
+            "descripcion": "Camisas, pylintones, suéteres y el babero del colegio.",
+            "foto": "assets/img/uniforme_colegio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-abril-traje-para-desfiles",
+            "temporada": "abril",
+            "grupo": "Feria y Uniformes",
+            "titulo": "Traje para Desfiles",
+            "descripcion": "Para los desfiles de la feria y los eventos culturales.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-vestido-de-fiesta",
+            "temporada": "mayo",
+            "grupo": "Para Regalar a Mamá",
+            "titulo": "Vestido de Fiesta",
+            "descripcion": "Largo o corto, en satín o encaje, para la comida o la celebración familiar.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-conjunto-floral",
+            "temporada": "mayo",
+            "grupo": "Para Regalar a Mamá",
+            "titulo": "Conjunto Floral",
+            "descripcion": "Blusa con falda o pantalón, en el tono que ella prefiere.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-bata-de-seda",
+            "temporada": "mayo",
+            "grupo": "Para Regalar a Mamá",
+            "titulo": "Bata de Seda",
+            "descripcion": "Para las mañanas y las weekends en casa, con el bordado del nombre.",
+            "foto": "assets/img/bata_laboratorio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-joyeria-y-accesorios",
+            "temporada": "mayo",
+            "grupo": "Para Regalar a Mamá",
+            "titulo": "Joyería y Accesorios",
+            "descripcion": "Aros, collares y pañuelos para terminar el regalo.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-conjunto-familiar",
+            "temporada": "mayo",
+            "grupo": "Para Toda la Familia",
+            "titulo": "Conjunto Familiar",
+            "descripcion": "La ropa de todos en el mismo tono, para la foto del 10 de mayo.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-vestido-de-nina",
+            "temporada": "mayo",
+            "grupo": "Para Toda la Familia",
+            "titulo": "Vestido de Niña",
+            "descripcion": "Para las hijas y nietas que también quieren estrenar ese día.",
+            "foto": "assets/img/vestido_nina.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-camisa-y-pantalon",
+            "temporada": "mayo",
+            "grupo": "Para Toda la Familia",
+            "titulo": "Camisa y Pantalón",
+            "descripcion": "Para papás y hermanos: el complemento del regalo.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-mayo-ropa-de-bebe",
+            "temporada": "mayo",
+            "grupo": "Para Toda la Familia",
+            "titulo": "Ropa de Bebe",
+            "descripcion": "Conjuntos y bodys para el regalo más pequeño de todos.",
+            "foto": "assets/img/primavera_romeria.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-vestido-de-quinceanera",
+            "temporada": "junio",
+            "grupo": "Quinceañeras",
+            "titulo": "Vestido de Quinceañera",
+            "descripcion": "Largo, con volumen o de línea recta, con el bordado que elijas.",
+            "foto": "assets/img/quinceanera_bodas.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-traje-de-quinceanera",
+            "temporada": "junio",
+            "grupo": "Quinceañeras",
+            "titulo": "Traje de Quinceañera",
+            "descripcion": "Conjunto de dos piezas con encaje y pedrería discreta.",
+            "foto": "assets/img/quinceanera_bodas.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-zapatos-y-joyeria",
+            "temporada": "junio",
+            "grupo": "Quinceañeras",
+            "titulo": "Zapatos y Joyería",
+            "descripcion": "Los complementos que pide el dress code del evento.",
+            "foto": "assets/img/quinceanera_bodas.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-vestido-de-madrinas",
+            "temporada": "junio",
+            "grupo": "Quinceañeras",
+            "titulo": "Vestido de Madrinas",
+            "descripcion": "Para las amigas que acompañan a la quinceañera.",
+            "foto": "assets/img/quinceanera_bodas.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-vestido-de-novia-civil",
+            "temporada": "junio",
+            "grupo": "Bodas y Día del Padre",
+            "titulo": "Vestido de Novia Civil",
+            "descripcion": "Con el modelo, el encaje y el escote que quieras.",
+            "foto": "assets/img/san_valentin_novia.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-traje-formal-del-acompanante",
+            "temporada": "junio",
+            "grupo": "Bodas y Día del Padre",
+            "titulo": "Traje Formal del Acompañante",
+            "descripcion": "Smoking o traje de corte para el padre y los padrinos.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-camisa-y-corbata",
+            "temporada": "junio",
+            "grupo": "Bodas y Día del Padre",
+            "titulo": "Camisa y Corbata",
+            "descripcion": "El regalo del Día del Padre, con el nombre bordado.",
+            "foto": "assets/img/bata_laboratorio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-junio-alquiler-de-trajes",
+            "temporada": "junio",
+            "grupo": "Bodas y Día del Padre",
+            "titulo": "Alquiler de Trajes",
+            "descripcion": "Para eventos y clausuras: se alquilan y se ajustan a la talla.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-traje-de-la-calena",
+            "temporada": "julio",
+            "grupo": "Fiestas Patrias",
+            "titulo": "Traje de la Caleña",
+            "descripcion": "Mono de trabajo con casco y el color del municipio.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-uniforme-de-la-petrolera",
+            "temporada": "julio",
+            "grupo": "Fiestas Patrias",
+            "titulo": "Uniforme de la Petrolera",
+            "descripcion": "Para quienes visten a la empresa o la institución en el desfile.",
+            "foto": "assets/img/uniforme_colegio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-camiseta-de-la-fecha",
+            "temporada": "julio",
+            "grupo": "Fiestas Patrias",
+            "titulo": "Camiseta de la Fecha",
+            "descripcion": "Con el escudo o la fecha que te llevas a la marcha.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-accesorios-patrios",
+            "temporada": "julio",
+            "grupo": "Fiestas Patrias",
+            "titulo": "Accesorios Patrios",
+            "descripcion": "Banderines, sombreros y los detalles que faltaban.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-ropa-de-bano",
+            "temporada": "julio",
+            "grupo": "Veraneo y Vacaciones",
+            "titulo": "Ropa de Baño",
+            "descripcion": "Bañadores, pareos y ropa de playa para la estación cálida.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-conjunto-de-verano",
+            "temporada": "julio",
+            "grupo": "Veraneo y Vacaciones",
+            "titulo": "Conjunto de Verano",
+            "descripcion": "Saco o blusa con pantalón corto, en tela fresca.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-vestido-de-verano",
+            "temporada": "julio",
+            "grupo": "Veraneo y Vacaciones",
+            "titulo": "Vestido de Verano",
+            "descripcion": "Ligero y fresco, para las salidas de la temporada.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-julio-conjunto-familiar-de-piscina",
+            "temporada": "julio",
+            "grupo": "Veraneo y Vacaciones",
+            "titulo": "Conjunto Familiar de Piscina",
+            "descripcion": "La ropa de todos para las fotos del fin de semana.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-vestido-largo-de-gala",
+            "temporada": "agosto",
+            "grupo": "Ropa de Gala",
+            "titulo": "Vestido Largo de Gala",
+            "descripcion": "En satén, pedrería o encaje, para las noches de agosto.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-smoking",
+            "temporada": "agosto",
+            "grupo": "Ropa de Gala",
+            "titulo": "Smoking",
+            "descripcion": "Traje formal de una o dos piezas, con el ajuste a la medida.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-traje-de-ceremonia",
+            "temporada": "agosto",
+            "grupo": "Ropa de Gala",
+            "titulo": "Traje de Ceremonia",
+            "descripcion": "Para grados, premios y eventos institucionales.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-vestido-de-cocktail",
+            "temporada": "agosto",
+            "grupo": "Ropa de Gala",
+            "titulo": "Vestido de Cocktail",
+            "descripcion": "El corto elegante para la cocktail de la gala.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-traje-folclorico-boyacense",
+            "temporada": "agosto",
+            "grupo": "Aniversario y Eventos",
+            "titulo": "Traje Folclórico Boyacense",
+            "descripcion": "Para los desfiles del 6 de agosto y los eventos del municipio.",
+            "foto": "assets/img/folclor_boyacense.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-outfit-corporativo",
+            "temporada": "agosto",
+            "grupo": "Aniversario y Eventos",
+            "titulo": "Outfit Corporativo",
+            "descripcion": "El traje del evento de su empresa, con el logo bordado.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-conjunto-de-fiesta",
+            "temporada": "agosto",
+            "grupo": "Aniversario y Eventos",
+            "titulo": "Conjunto de Fiesta",
+            "descripcion": "Para la celebración del aniversario, en el color que pidas.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-agosto-alquiler-de-ropa-de-gala",
+            "temporada": "agosto",
+            "grupo": "Aniversario y Eventos",
+            "titulo": "Alquiler de Ropa de Gala",
+            "descripcion": "Para eventos: se alquila y se ajusta a la talla.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-conjunto-de-pareja",
+            "temporada": "septiembre",
+            "grupo": "Amor y Aniversarios",
+            "titulo": "Conjunto de Pareja",
+            "descripcion": "Los dos looks con la misma tela y el mismo tono.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-vestido-de-aniversario",
+            "temporada": "septiembre",
+            "grupo": "Amor y Aniversarios",
+            "titulo": "Vestido de Aniversario",
+            "descripcion": "Para la cena, la fiesta o la foto de los años juntos.",
+            "foto": "assets/img/gala_aniversario.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-ropa-formal-de-el",
+            "temporada": "septiembre",
+            "grupo": "Amor y Aniversarios",
+            "titulo": "Ropa Formal de Él",
+            "descripcion": "Camisa, corbata y el saco para la ocasión.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-pijama-y-bata",
+            "temporada": "septiembre",
+            "grupo": "Amor y Aniversarios",
+            "titulo": "Pijama y Bata",
+            "descripcion": "El regalo de pareja que siempre sale bien.",
+            "foto": "assets/img/bata_laboratorio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-traje-llanero",
+            "temporada": "septiembre",
+            "grupo": "La Raza y el Colegio",
+            "titulo": "Traje Llanero",
+            "descripcion": "Sombrero, pañuelo y la ropa para la semana de la Raza.",
+            "foto": "assets/img/blazer_ejecutivo.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-uniforme-escolar",
+            "temporada": "septiembre",
+            "grupo": "La Raza y el Colegio",
+            "titulo": "Uniforme Escolar",
+            "descripcion": "El uniforme del segundo semestre, con el escudo bordado.",
+            "foto": "assets/img/uniforme_colegio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-bata-de-laboratorio",
+            "temporada": "septiembre",
+            "grupo": "La Raza y el Colegio",
+            "titulo": "Bata de Laboratorio",
+            "descripcion": "Para colegio y universidad, lavable y con el nombre bordado.",
+            "foto": "assets/img/bata_laboratorio.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-septiembre-conjunto-de-baile",
+            "temporada": "septiembre",
+            "grupo": "La Raza y el Colegio",
+            "titulo": "Conjunto de Baile",
+            "descripcion": "Para las presentaciones y los eventos del colegio.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-capitana-marvel",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Capitana Marvel",
+            "descripcion": "Valiente guerrera de la noche.",
+            "foto": "assets/img/descarg6.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-thor-odinson",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Thor Odinson",
+            "descripcion": "El poder del rayo en sus manos.",
+            "foto": "assets/img/descarga7.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-traje-cuantico",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Traje Cuántico",
+            "descripcion": "Especialista en viajes por el tiempo.",
+            "foto": "assets/img/images 8.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-pantera-negra",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Pantera Negra",
+            "descripcion": "La fuerza letal de Wakanda.",
+            "foto": "assets/img/images 9.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-deadpool",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Deadpool",
+            "descripcion": "El mercenario bocazas con estilo único.",
+            "foto": "assets/img/images 10.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-zenitsu-agatsuma",
+            "temporada": "octubre",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "Zenitsu Agatsuma",
+            "descripcion": "El rayo de Demon Slayer con gran detalle.",
+            "foto": "assets/img/img14.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-art-the-clown",
+            "temporada": "octubre",
+            "grupo": "Terror",
+            "titulo": "Art the Clown",
+            "descripcion": "El terror silente de Terrifier.",
+            "foto": "assets/img/ima21.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-the-joker",
+            "temporada": "octubre",
+            "grupo": "Terror",
+            "titulo": "The Joker",
+            "descripcion": "Bromas del más allá y caos total.",
+            "foto": "assets/img/images (12.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-la-monja-valak",
+            "temporada": "octubre",
+            "grupo": "Terror",
+            "titulo": "La Monja (Valak)",
+            "descripcion": "Misterios velados y sombras pesadas.",
+            "foto": "assets/img/jr.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-pennywise",
+            "temporada": "octubre",
+            "grupo": "Terror",
+            "titulo": "Pennywise",
+            "descripcion": "Artesanía en el miedo puro.",
+            "foto": "assets/img/jr2.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-blanca-nieves",
+            "temporada": "octubre",
+            "grupo": "Cuentos y Fantasía",
+            "titulo": "Blanca Nieves",
+            "descripcion": "Cuentos clásicos con un toque místico.",
+            "foto": "assets/img/ima18.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-bella",
+            "temporada": "octubre",
+            "grupo": "Cuentos y Fantasía",
+            "titulo": "Bella",
+            "descripcion": "Encanto real y detallado de gala.",
+            "foto": "assets/img/img19.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-merida-valiente",
+            "temporada": "octubre",
+            "grupo": "Cuentos y Fantasía",
+            "titulo": "Mérida (Valiente)",
+            "descripcion": "Aventura y tradición escocesa.",
+            "foto": "assets/img/img20.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-elsa-y-ana",
+            "temporada": "octubre",
+            "grupo": "Cuentos y Fantasía",
+            "titulo": "Elsa y Ana",
+            "descripcion": "Magia blanca en la oscuridad.",
+            "foto": "assets/img/er.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-capitana-marvel-gala",
+            "temporada": "octubre",
+            "grupo": "Gala y Elegancia",
+            "titulo": "Capitana Marvel · Gala",
+            "descripcion": "Poder cósmico en traje de gala.",
+            "foto": "assets/img/img13.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-el-sombrerero-loco",
+            "temporada": "octubre",
+            "grupo": "Gala y Elegancia",
+            "titulo": "El Sombrerero Loco",
+            "descripcion": "Elegancia caótica del País de las Maravillas.",
+            "foto": "assets/img/descarga5.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-director-de-orquesta",
+            "temporada": "octubre",
+            "grupo": "Gala y Elegancia",
+            "titulo": "Director de Orquesta",
+            "descripcion": "Sinfonía oscura en corte clásico.",
+            "foto": "assets/img/descarga4.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-graduado-toga",
+            "temporada": "octubre",
+            "grupo": "Gala y Elegancia",
+            "titulo": "Graduado / Toga",
+            "descripcion": "Elegancia académica para celebraciones.",
+            "foto": "assets/img/img17.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-especialista-medico",
+            "temporada": "octubre",
+            "grupo": "Oficios y Uniforme",
+            "titulo": "Especialista Médico",
+            "descripcion": "Realismo técnico y fantasía profesional.",
+            "foto": "assets/img/imagen 3.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-octubre-oficial-de-policia",
+            "temporada": "octubre",
+            "grupo": "Oficios y Uniforme",
+            "titulo": "Oficial de Policía",
+            "descripcion": "La ley del silencio y el castigo.",
+            "foto": "assets/img/images.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-toga-roja-para-grado",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Togas y Trajes para Grados",
+            "titulo": "Toga Roja para Grado",
+            "descripcion": "Toga roja mate con birrete para niños y adultos, confeccionada a la medida para tu ceremonia de grado.",
+            "foto": "assets/img/remote/rU4NjIuanBnP3Y9MTU3OTkzODIzNQ.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-toga-azul-para-grado",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Togas y Trajes para Grados",
+            "titulo": "Toga Azul para Grado",
+            "descripcion": "Toga azul brillante con birrete para colegios y universidades, alquilada y ajustada a tu talla.",
+            "foto": "assets/img/remote/rhMDEyLmpwZz92PTE1Nzk5MzgxNzI.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-toga-ejecutiva",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Togas y Trajes para Grados",
+            "titulo": "Toga Ejecutiva",
+            "descripcion": "Conjunto completo de toga y birrete de corte elegante para grados y clausuras formales de fin de año.",
+            "foto": "assets/img/remote/rdlYjcuanBnP3Y9MTU3OTkzODIzNQ.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-cumbia-colombiana",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Cumbia Colombiana",
+            "descripcion": "Traje típico de cumbia con falda arandela tricolor para las clausuras de colegio y presentaciones folclóricas.",
+            "foto": "assets/img/remote/rZnJhY2VzLWJvZ290YS5qcGcuanBn.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-pasillo-fiestero",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Pasillo Fiestero",
+            "descripcion": "Traje para el baile del pasillo fiestero: falda y blusa de colores alegres con caída de vuelo, ideal para clausuras, festivales y presentaciones folclóricas. Se confecciona a la medida en El Bodegón.",
+            "foto": "assets/img/pasillo_fiestero.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-traje-tipico-para-baile",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Traje Típico para Baile",
+            "descripcion": "Vestuario tradicional para bailes de clausura y presentaciones de fin de año, confeccionado en El Bodegón.",
+            "foto": "assets/img/remote/r4MTgwMC5qcGcdj0xNzIxNzAxNjY0.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-sanjuanero-huilense",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Sanjuanero Huilense",
+            "descripcion": "Traje típico del bambuco sanjuanero con faldón de colores para las clausuras y festivales folclóricos del Huila.",
+            "foto": "assets/img/remote/ryMy8wOS9TYW4tSnVhbmVyby5qcGc.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-joropo-llanero",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Joropo Llanero",
+            "descripcion": "Vestuario de joropo de los Llanos Orientales para parejas: liqui liqui y falda de polleras para tu baile de clausura.",
+            "foto": "assets/img/remote/rFqZS1qb3JvcG8tcGFyZWphLmpwZw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-bambuco-andino",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Bambuco Andino",
+            "descripcion": "Atuendo típico de la Región Andina para parejas, ideal para clausuras, festivales y muestras folclóricas de fin de año.",
+            "foto": "assets/img/remote/rlamEtUmVnaW9uLUFuZGluYS5qcGc.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-pacifico-currulao-y-bullerengue",
+            "temporada": "noviembre",
+            "grupo": "Alquiler de Bailes Típicos para Clausura",
+            "titulo": "Pacífico · Currulao y Bullerengue",
+            "descripcion": "Vestuario del Pacífico colombiano para bailes de currulao y bullerengue en clausuras y presentaciones escolares.",
+            "foto": "assets/img/remote/rljby1yb2pvLXNvbWJyZXJvLmpwZw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-smoking-para-hombre",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Smoking para Hombre",
+            "descripcion": "Esmoquin negro de corte tradicional para prom, grados y cenas de clausura, confeccionado a la medida.",
+            "foto": "assets/img/remote/r8wMDU5LWNjLTEtc2NhbGVkLmpwZw.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-smoking-para-adolescente",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Smoking para Adolescente",
+            "descripcion": "Smoking azul juvenil para adolescentes en prom y grados, con ajuste moderno y a la medida.",
+            "foto": "assets/img/remote/ryMDI2LzA3L1NNT0stQkxVRS5wbmc.png",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-traje-para-nino",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Traje para Niño",
+            "descripcion": "Traje elegante para niños en grados de kinder y clausuras, confeccionado a la medida en El Bodegón.",
+            "foto": "assets/img/remote/rMjQ4MjY5NyZhbXA7d2lkdGg9NTMz.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-vestido-de-fiesta-para-mujer",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Vestido de Fiesta para Mujer",
+            "descripcion": "Vestido largo elegante para mujer en prom, cenas de gala y clausuras, con corte a la medida.",
+            "foto": "assets/img/remote/r2NTAxNy5qcGcdj0xNzE1NzI0MTQx.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-vestido-para-adolescente",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Vestido para Adolescente",
+            "descripcion": "Vestido de fiesta para adolescente en prom, bailes de grado y celebraciones de clausura.",
+            "foto": "assets/img/remote/rJsUGFydHlEcmVzc180MDB4LmpwZw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-noviembre-vestido-para-nina",
+            "temporada": "noviembre",
+            "grupo": "Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños",
+            "titulo": "Vestido para Niña",
+            "descripcion": "Vestido de gala para niñas en graduaciones de kinder, primaria y presentaciones de fin de año.",
+            "foto": "assets/img/remote/rJsRHJlc3MtMDAzMV84MDB4LmpwZw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-smoking-de-gala",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Smoking de Gala",
+            "descripcion": "Esmoquin clásico para niños y adultos en grados, clausuras y celebraciones de fin de año.",
+            "foto": "assets/img/remote/rUQ18wMDU5LWNjLXNjYWxlZC5qcGc.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-vestido-de-fiesta",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Vestido de Fiesta",
+            "descripcion": "Vestido largo elegante para niñas y mujeres en clausuras, bailes de grado y cenas de fin de año.",
+            "foto": "assets/img/remote/rxMDI0eC5qcGcdj0xNzU0MDQ0MzIy.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-vestido-de-gala",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Vestido de Gala",
+            "descripcion": "Atuendo de alto corte para niñas y mujeres en despedidas, bailes y clausuras en el salón de eventos.",
+            "foto": "assets/img/remote/r_vestido_gala_diciembre.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-traje-de-nino",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Traje de Niño",
+            "descripcion": "Traje elegante para niños en grados de kinder y clausuras, confeccionado a la medida.",
+            "foto": "assets/img/remote/rMjQ4MjY5NyZhbXA7d2lkdGg9NTMz.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-vestido-de-nina",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Vestido de Niña",
+            "descripcion": "Vestido de fiesta para niñas en graduaciones de kinder y primaria, con diseño a la medida.",
+            "foto": "assets/img/vestido_nina.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-vestido-de-princesa",
+            "temporada": "diciembre",
+            "grupo": "Trajes Elegantes para Grados y Clausuras · Niños y Adultos",
+            "titulo": "Vestido de Princesa",
+            "descripcion": "Vestido de presentación para niñas en clausuras y eventos de fin de año, con detalle de unicornio.",
+            "foto": "assets/img/remote/r1MTU2Mzc1JmFtcDt3aWR0aD01MzM.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-papa-noel",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Papá Noel",
+            "descripcion": "Traje clásico rojo con barba y gorro para alegrar la navidad.",
+            "foto": "assets/img/remote/rQ4NjU4MyZhbXA7d2lkdGg9MTIwMA.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-duende-navideno",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Duende Navideño",
+            "descripcion": "El ayudante más travieso del taller de Santa.",
+            "foto": "assets/img/remote/rNjQ0MzYzJmFtcDt3aWR0aD0xNTAw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-reno-rodolfo",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Reno Rodolfo",
+            "descripcion": "El reno de la nariz roja que guía el trineo mágico.",
+            "foto": "assets/img/reno_rudolfo.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-arbol-de-navidad",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Árbol de Navidad",
+            "descripcion": "Disfraz de árbol decorado para posadas y eventos.",
+            "foto": "assets/img/remote/rlkYWQtcGFyYS1uaW5vcy0xLmpwZw.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-angel-de-navidad",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Ángel de Navidad",
+            "descripcion": "Alas blancas y aureola dorada para anunciar la época.",
+            "foto": "assets/img/remote/rFuZ2VsLWJlYmVfMTAyNHgud2VicA.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-muneco-de-nieve",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Muñeco de Nieve",
+            "descripcion": "Frosty listo para decorar las fiestas en familia.",
+            "foto": "assets/img/remote/r1uaWV2ZS1pbmZhbnRpbC0xLmpwZw.jpg",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-galleta-de-jengibre",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Galleta de Jengibre",
+            "descripcion": "Dulce navideño con detalles de azúcar glas.",
+            "foto": "assets/img/remote/r0OTIyMjUmYW1wO3dpZHRoPTE1MDA.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-estrella-de-belen",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "Estrella de Belén",
+            "descripcion": "Brilla en lo alto de tu celebración navideña.",
+            "foto": "assets/img/remote/rYS1uaW5vLmpwZz93aWR0aD0xNTAw.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        },
+        {
+            "id": "card-diciembre-el-grinch",
+            "temporada": "diciembre",
+            "grupo": "Disfraces Navideños",
+            "titulo": "El Grinch",
+            "descripcion": "El gruñón más querido de la navidad, verde y peludo.",
+            "foto": "assets/img/remote/rA2NDEuanBnP3Y9MTc1MTQ0OTk2MA.webp",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": true,
+            "activo": true
+        }
+    ]
+}

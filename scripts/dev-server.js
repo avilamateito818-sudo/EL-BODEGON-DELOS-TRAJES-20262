@@ -50,6 +50,21 @@ http
       return;
     }
 
+    /* Manejador de catálogo en desarrollo local */
+    if (p === '/api/catalogo' || p === '/api/catalogo/') {
+      const catPath = path.join(root, 'data', 'catalogo.json');
+      res.writeHead(200, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-cache, must-revalidate, max-age=0'
+      });
+      if (fs.existsSync(catPath)) {
+        fs.createReadStream(catPath).pipe(res);
+      } else {
+        res.end(JSON.stringify({ ok: true, trajes: [] }));
+      }
+      return;
+    }
+
     /* En local los endpoints que en producción persisten
        datos (el guardado del panel, consultas del asistente y formulario de contacto)
        responden con éxito (no-op) para que el sitio no genere errores 404. */
@@ -71,6 +86,16 @@ http
 
     if (p === '/' || p === '/index.html') {
       const fp = path.join(root, 'index.html');
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache, must-revalidate, max-age=0'
+      });
+      fs.createReadStream(fp).pipe(res);
+      return;
+    }
+
+    if (p === '/admin' || p === '/admin/' || p === '/admin/index.html') {
+      const fp = path.join(root, 'admin', 'index.html');
       res.writeHead(200, {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'no-cache, must-revalidate, max-age=0'

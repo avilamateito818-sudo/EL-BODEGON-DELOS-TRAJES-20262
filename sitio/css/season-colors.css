@@ -37,218 +37,206 @@
    ------------------------------------------------------------------ */
 body[data-season="enero"] {
   --m-accent: #D4A017;
-  --m-ink: #59430A;
-  --m-lit: #D4A017;
+  --m-ink: #FFD700;
+  --m-lit: #FFD700;
   --m-on-accent: #1A1204;
   --m-soft: rgba(212, 160, 23, 0.18);
   --m-faint: rgba(212, 160, 23, 0.07);
-  --m-glow: rgba(212, 160, 23, 0.35);
-  /* Enero tiene cielo de invierno: el fondo es azul y el acento, el oro
-     de Reyes. */
-  --m-bg1: #A8D4F2;
-  --m-bg2: #D6EAF9;
-  --m-bg3: #85BBE8;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C170A;
-  --m-deep2: #2A2311;
-  --m-deep3: #110E06;
-  --m-dark: #0D2440;
-  --m-dark-soft: #1A3A6B;
-  --m-strong: #D4A017;
+  --m-glow: rgba(212, 160, 23, 0.45);
+  --m-bg1: #0A121E;
+  --m-bg2: #05090F;
+  --m-bg3: #121E2E;
+  --m-deep1: #0A121E;
+  --m-deep2: #05090F;
+  --m-deep3: #121E2E;
+  --m-dark: #F5E6BE;
+  --m-dark-soft: #D4A017;
+  --m-strong: #FFD700;
 }
 
 /* ------------------------------------------------------------------
-   FEBRERO · ROSA DE SAN VALENTIN
+   FEBRERO · ROSA DE SAN VALENTIN & CARNAVAL
    ------------------------------------------------------------------ */
 body[data-season="febrero"] {
   --m-accent: #E4738F;
-  --m-ink: #8B4657;
-  --m-lit: #E4738F;
+  --m-ink: #FFAEC3;
+  --m-lit: #FFAEC3;
   --m-on-accent: #2A0A14;
   --m-soft: rgba(228, 115, 143, 0.18);
   --m-faint: rgba(228, 115, 143, 0.07);
-  --m-glow: rgba(228, 115, 143, 0.38);
-  --m-bg1: #FDE8EE;
-  --m-bg2: #FBDCE4;
-  --m-bg3: #F6C9D6;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C0A0F;
-  --m-deep2: #2A1117;
-  --m-deep3: #110609;
-  --m-dark: #6E3540;
-  --m-dark-soft: #8A5560;
-  --m-strong: #A85462;
+  --m-glow: rgba(228, 115, 143, 0.45);
+  --m-bg1: #1F0A12;
+  --m-bg2: #110408;
+  --m-bg3: #2B0E19;
+  --m-deep1: #1F0A12;
+  --m-deep2: #110408;
+  --m-deep3: #2B0E19;
+  --m-dark: #FCE8EE;
+  --m-dark-soft: #E4738F;
+  --m-strong: #FFAEC3;
 }
 
 /* ------------------------------------------------------------------
-   MARZO · VIOLETA DE CUARESMA
+   MARZO · VIOLETA DE CUARESMA & EJECUTIVO
    ------------------------------------------------------------------ */
 body[data-season="marzo"] {
-  --m-accent: #8B5CF6;
-  --m-ink: #603FAA;
-  --m-lit: #9266F7;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(139, 92, 246, 0.18);
-  --m-faint: rgba(139, 92, 246, 0.07);
-  --m-glow: rgba(139, 92, 246, 0.40);
-  --m-bg1: #EFE7FE;
-  --m-bg2: #E2D8FB;
-  --m-bg3: #D2C2F6;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #100A1C;
-  --m-deep2: #19112A;
-  --m-deep3: #090611;
-  --m-dark: #3B2A63;
-  --m-dark-soft: #5B4794;
-  --m-strong: #6D3FD6;
+  --m-accent: #9D74FF;
+  --m-ink: #C4A8FF;
+  --m-lit: #C4A8FF;
+  --m-on-accent: #120524;
+  --m-soft: rgba(157, 116, 255, 0.18);
+  --m-faint: rgba(157, 116, 255, 0.07);
+  --m-glow: rgba(157, 116, 255, 0.45);
+  --m-bg1: #140A24;
+  --m-bg2: #0A0413;
+  --m-bg3: #1E0F36;
+  --m-deep1: #140A24;
+  --m-deep2: #0A0413;
+  --m-deep3: #1E0F36;
+  --m-dark: #EFE8FF;
+  --m-dark-soft: #9D74FF;
+  --m-strong: #C4A8FF;
 }
 
 /* ------------------------------------------------------------------
-   ABRIL · VERDE DE PRIMAVERA
+   ABRIL · VERDE DE PRIMAVERA & RENOVACION
    ------------------------------------------------------------------ */
 body[data-season="abril"] {
   --m-accent: #4CA968;
-  --m-ink: #2F6940;
-  --m-lit: #4CA968;
+  --m-ink: #72D991;
+  --m-lit: #72D991;
   --m-on-accent: #06180D;
   --m-soft: rgba(76, 169, 104, 0.18);
   --m-faint: rgba(76, 169, 104, 0.07);
-  --m-glow: rgba(76, 169, 104, 0.36);
-  --m-bg1: #E2F5E8;
-  --m-bg2: #D2EDDB;
-  --m-bg3: #BCE0C9;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #0A1C10;
-  --m-deep2: #112A18;
-  --m-deep3: #061109;
-  --m-dark: #1F4A2C;
-  --m-dark-soft: #3A6B48;
-  --m-strong: #35834C;
+  --m-glow: rgba(76, 169, 104, 0.42);
+  --m-bg1: #081A10;
+  --m-bg2: #040E08;
+  --m-bg3: #0F2B1A;
+  --m-deep1: #081A10;
+  --m-deep2: #040E08;
+  --m-deep3: #0F2B1A;
+  --m-dark: #E2F5E8;
+  --m-dark-soft: #4CA968;
+  --m-strong: #72D991;
 }
 
 /* ------------------------------------------------------------------
    MAYO · MAGENTA DEL DIA DE LAS MADRES
    ------------------------------------------------------------------ */
 body[data-season="mayo"] {
-  --m-accent: #C0509E;
-  --m-ink: #8C3A73;
-  --m-lit: #C45CA5;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(192, 80, 158, 0.18);
-  --m-faint: rgba(192, 80, 158, 0.07);
-  --m-glow: rgba(192, 80, 158, 0.38);
-  --m-bg1: #FBE6F4;
-  --m-bg2: #F7D8EC;
-  --m-bg3: #EDC3E0;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C0A17;
-  --m-deep2: #2A1122;
-  --m-deep3: #11060E;
-  --m-dark: #5B1B50;
-  --m-dark-soft: #83387A;
-  --m-strong: #9A2E86;
+  --m-accent: #C94E9F;
+  --m-ink: #F078C7;
+  --m-lit: #F078C7;
+  --m-on-accent: #1E0617;
+  --m-soft: rgba(201, 78, 159, 0.18);
+  --m-faint: rgba(201, 78, 159, 0.07);
+  --m-glow: rgba(201, 78, 159, 0.45);
+  --m-bg1: #1E0A1A;
+  --m-bg2: #0F040D;
+  --m-bg3: #2D0E27;
+  --m-deep1: #1E0A1A;
+  --m-deep2: #0F040D;
+  --m-deep3: #2D0E27;
+  --m-dark: #FBE6F4;
+  --m-dark-soft: #C94E9F;
+  --m-strong: #F078C7;
 }
 
 /* ------------------------------------------------------------------
-   JUNIO · CHAMPANA DE LAS BODAS
+   JUNIO · CHAMPANA DE LAS BODAS & QUINCEAÑERAS
    ------------------------------------------------------------------ */
 body[data-season="junio"] {
-  --m-accent: #D9A441;
-  --m-ink: #775A24;
-  --m-lit: #D9A441;
-  --m-on-accent: #221703;
-  --m-soft: rgba(217, 164, 65, 0.18);
-  --m-faint: rgba(217, 164, 65, 0.07);
-  --m-glow: rgba(217, 164, 65, 0.36);
-  --m-bg1: #FDF0D8;
-  --m-bg2: #FAE7C2;
-  --m-bg3: #F0D9A4;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C160A;
-  --m-deep2: #2A2111;
-  --m-deep3: #110D06;
-  --m-dark: #5C4413;
-  --m-dark-soft: #8A6E2A;
-  --m-strong: #A87A22;
+  --m-accent: #E0A838;
+  --m-ink: #FFCF6B;
+  --m-lit: #FFCF6B;
+  --m-on-accent: #1E1303;
+  --m-soft: rgba(224, 168, 56, 0.18);
+  --m-faint: rgba(224, 168, 56, 0.07);
+  --m-glow: rgba(224, 168, 56, 0.45);
+  --m-bg1: #1C1408;
+  --m-bg2: #0E0903;
+  --m-bg3: #2A1E0B;
+  --m-deep1: #1C1408;
+  --m-deep2: #0E0903;
+  --m-deep3: #2A1E0B;
+  --m-dark: #FCF4DF;
+  --m-dark-soft: #E0A838;
+  --m-strong: #FFCF6B;
 }
 
 /* ------------------------------------------------------------------
-   JULIO · TURQUESA DEL VERANO
+   JULIO · TURQUESA DE LAS FIESTAS PATRIAS & VERANO
    ------------------------------------------------------------------ */
 body[data-season="julio"] {
-  --m-accent: #17A2A2;
-  --m-ink: #0E6464;
-  --m-lit: #17A2A2;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(23, 162, 162, 0.18);
-  --m-faint: rgba(23, 162, 162, 0.07);
-  --m-glow: rgba(23, 162, 162, 0.36);
-  --m-bg1: #D9F2F2;
-  --m-bg2: #C4E9E9;
-  --m-bg3: #A9DCDB;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #0A1C1C;
-  --m-deep2: #112A2A;
-  --m-deep3: #061111;
-  --m-dark: #124F4F;
-  --m-dark-soft: #2E7373;
-  --m-strong: #0E8282;
+  --m-accent: #17B2B2;
+  --m-ink: #4FE1E1;
+  --m-lit: #4FE1E1;
+  --m-on-accent: #031818;
+  --m-soft: rgba(23, 178, 178, 0.18);
+  --m-faint: rgba(23, 178, 178, 0.07);
+  --m-glow: rgba(23, 178, 178, 0.45);
+  --m-bg1: #06181B;
+  --m-bg2: #030D0F;
+  --m-bg3: #0A252A;
+  --m-deep1: #06181B;
+  --m-deep2: #030D0F;
+  --m-deep3: #0A252A;
+  --m-dark: #E2FAFA;
+  --m-dark-soft: #17B2B2;
+  --m-strong: #4FE1E1;
 }
 
 /* ------------------------------------------------------------------
-   AGOSTO · VINO DE LAS GALAS
+   AGOSTO · VINO DE LAS GALAS & ANIVERSARIO
    ------------------------------------------------------------------ */
 body[data-season="agosto"] {
-  --m-accent: #9E2B4E;
-  --m-ink: #932849;
-  --m-lit: #BB6B83;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(158, 43, 78, 0.18);
-  --m-faint: rgba(158, 43, 78, 0.07);
-  --m-glow: rgba(158, 43, 78, 0.38);
-  --m-bg1: #F8E2E9;
-  --m-bg2: #F2D3DE;
-  --m-bg3: #E4B7C7;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C0A10;
-  --m-deep2: #2A1119;
-  --m-deep3: #110609;
-  --m-dark: #5A1730;
-  --m-dark-soft: #7E2E4A;
-  --m-strong: #8A2444;
+  --m-accent: #B83256;
+  --m-ink: #E85B82;
+  --m-lit: #E85B82;
+  --m-on-accent: #1E050D;
+  --m-soft: rgba(184, 50, 86, 0.18);
+  --m-faint: rgba(184, 50, 86, 0.07);
+  --m-glow: rgba(184, 50, 86, 0.45);
+  --m-bg1: #1D0811;
+  --m-bg2: #0E0308;
+  --m-bg3: #2B0C1A;
+  --m-deep1: #1D0811;
+  --m-deep2: #0E0308;
+  --m-deep3: #2B0C1A;
+  --m-dark: #FAE8EE;
+  --m-dark-soft: #B83256;
+  --m-strong: #E85B82;
 }
 
 /* ------------------------------------------------------------------
-   SEPTIEMBRE · AZUL PIZARRA DEL REGRESO A CLASES
+   SEPTIEMBRE · AZUL AMOR & AMISTAD Y REGRESO A CLASES
    ------------------------------------------------------------------ */
 body[data-season="septiembre"] {
-  --m-accent: #5A7BA6;
-  --m-ink: #3F5674;
-  --m-lit: #6684AC;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(90, 123, 166, 0.20);
-  --m-faint: rgba(90, 123, 166, 0.08);
-  --m-glow: rgba(90, 123, 166, 0.36);
-  --m-bg1: #E4EBF3;
-  --m-bg2: #D3DEEC;
-  --m-bg3: #BACAE0;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #081019;
-  --m-deep2: #0D1826;
-  --m-deep3: #04090F;
-  --m-dark: #2C3E55;
-  --m-dark-soft: #46597A;
-  --m-strong: #456189;
+  --m-accent: #5D8FD4;
+  --m-ink: #8CB4F2;
+  --m-lit: #8CB4F2;
+  --m-on-accent: #0A1424;
+  --m-soft: rgba(93, 143, 212, 0.18);
+  --m-faint: rgba(93, 143, 212, 0.07);
+  --m-glow: rgba(93, 143, 212, 0.45);
+  --m-bg1: #0A1422;
+  --m-bg2: #050A12;
+  --m-bg3: #102035;
+  --m-deep1: #0A1422;
+  --m-deep2: #050A12;
+  --m-deep3: #102035;
+  --m-dark: #EBF3FC;
+  --m-dark-soft: #5D8FD4;
+  --m-strong: #8CB4F2;
 }
 
 /* ------------------------------------------------------------------
    OCTUBRE · NARANJA DE HALLOWEEN
-   Es el unico mes con fondo oscuro: el resto usa --m-bg1/2/3 claros.
    ------------------------------------------------------------------ */
 body[data-season="octubre"] {
   --m-accent: #FF6B00;
-  --m-ink: #FF6B00;
-  --m-lit: #FF6B00;
+  --m-ink: #FF8C00;
+  --m-lit: #FF8C00;
   --m-on-accent: #1A0A00;
   --m-soft: rgba(255, 107, 0, 0.18);
   --m-faint: rgba(255, 107, 0, 0.07);
@@ -256,59 +244,56 @@ body[data-season="octubre"] {
   --m-bg1: #2A0D00;
   --m-bg2: #160800;
   --m-bg3: #3A1500;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #1C120A;
-  --m-deep2: #2A1B11;
-  --m-deep3: #110B06;
+  --m-deep1: #2A0D00;
+  --m-deep2: #160800;
+  --m-deep3: #3A1500;
   --m-dark: #FFB870;
   --m-dark-soft: #E08A3C;
   --m-strong: #FF8C00;
 }
 
 /* ------------------------------------------------------------------
-   NOVIEMBRE · AZUL MARINO DE LOS GRADOS
+   NOVIEMBRE · AZUL MARINO DE LOS GRADOS & CLAUSURAS
    ------------------------------------------------------------------ */
 body[data-season="noviembre"] {
-  --m-accent: #2C5FA8;
-  --m-ink: #265392;
-  --m-lit: #5D84BC;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(44, 95, 168, 0.20);
-  --m-faint: rgba(44, 95, 168, 0.08);
-  --m-glow: rgba(44, 95, 168, 0.38);
-  --m-bg1: #E3EBF6;
-  --m-bg2: #D0DDF0;
-  --m-bg3: #B4C9E5;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #0A121C;
-  --m-deep2: #111B2A;
-  --m-deep3: #060A11;
-  --m-dark: #16355F;
-  --m-dark-soft: #2C5F8A;
-  --m-strong: #23497F;
+  --m-accent: #3A74D4;
+  --m-ink: #689EFA;
+  --m-lit: #689EFA;
+  --m-on-accent: #061122;
+  --m-soft: rgba(58, 116, 212, 0.18);
+  --m-faint: rgba(58, 116, 212, 0.07);
+  --m-glow: rgba(58, 116, 212, 0.45);
+  --m-bg1: #0A1326;
+  --m-bg2: #050A14;
+  --m-bg3: #111E3B;
+  --m-deep1: #0A1326;
+  --m-deep2: #050A14;
+  --m-deep3: #111E3B;
+  --m-dark: #E6EFFC;
+  --m-dark-soft: #3A74D4;
+  --m-strong: #689EFA;
 }
 
 /* ------------------------------------------------------------------
-   DICIEMBRE · VERDE DE NAVIDAD
+   DICIEMBRE · VERDE ESMERALDA DE NAVIDAD & FIN DE AÑO
    ------------------------------------------------------------------ */
 body[data-season="diciembre"] {
-  --m-accent: #2E7D32;
-  --m-ink: #26682A;
-  --m-lit: #63B067;
-  --m-on-accent: #FFFFFF;
-  --m-soft: rgba(46, 125, 50, 0.18);
-  --m-faint: rgba(46, 125, 50, 0.07);
-  --m-glow: rgba(46, 125, 50, 0.36);
-  --m-bg1: #E3F3E4;
-  --m-bg2: #D3EBD6;
-  --m-bg3: #BBDCC0;
-  /* Fondo del catalogo: el color del mes, oscuro para leer en claro */
-  --m-deep1: #061405;
-  --m-deep2: #0C230D;
-  --m-deep3: #040E04;
-  --m-dark: #14401C;
-  --m-dark-soft: #2E7D32;
-  --m-strong: #22612A;
+  --m-accent: #2E9E3C;
+  --m-ink: #54CF65;
+  --m-lit: #54CF65;
+  --m-on-accent: #041407;
+  --m-soft: rgba(46, 158, 60, 0.18);
+  --m-faint: rgba(46, 158, 60, 0.07);
+  --m-glow: rgba(46, 158, 60, 0.45);
+  --m-bg1: #07170B;
+  --m-bg2: #030D06;
+  --m-bg3: #0D2613;
+  --m-deep1: #07170B;
+  --m-deep2: #030D06;
+  --m-deep3: #0D2613;
+  --m-dark: #E3F6E6;
+  --m-dark-soft: #2E9E3C;
+  --m-strong: #54CF65;
 }
 
 /* ===================================================================
@@ -366,13 +351,10 @@ body[data-season="diciembre"] {
 #temporadas .season-marquee .season-tab.is-active {
   background:
     radial-gradient(160% 150% at 20% 0%, var(--m-soft), transparent 62%),
-    linear-gradient(180deg, var(--m-bg1), var(--m-bg2));
-  color: var(--m-dark);
+    linear-gradient(180deg, rgba(24, 32, 46, 0.95), rgba(12, 16, 24, 0.95));
   border-color: var(--m-accent);
-  border-left: 4px solid var(--m-accent);
-  box-shadow: 0 0 0 2px var(--m-accent),
-              0 0 44px var(--m-glow),
-              inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 25px var(--m-glow), 0 10px 30px rgba(0, 0, 0, 0.7);
+  color: #FFFFFF;
 }
 #temporadas .season-marquee .season-tab.is-active .tab-label {
   color: var(--m-dark);
@@ -414,16 +396,18 @@ body[data-season="diciembre"] {
    tinta, que es el mismo color oscurecido lo justo para verse.
    Halloween y el catalogo general quedan fuera: esos van sobre negro y
    usan la version clara. */
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-title,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-range,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-subsection h4,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-item-body h4,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .card-body-haunted h3,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .section-head span,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .season-milestone,
-body[data-season]:not([data-season="octubre"]) #temporadas[data-season] .season-panel.is-active .section-head h2,
-body[data-season]:not([data-season="octubre"]) #temporadas .season-marquee .season-tab.is-active .tab-label {
-  color: var(--m-ink);
+/* En fondo oscuro elegante, los titulos de todas las temporadas brillan con su color iluminado */
+#temporadas[data-season] .season-panel.is-active .season-title,
+#temporadas[data-season] .season-panel.is-active .season-range,
+#temporadas[data-season] .season-panel.is-active .season-subsection h4,
+#temporadas[data-season] .season-panel.is-active .season-item-body h4,
+#temporadas[data-season] .season-panel.is-active .card-body-haunted h3,
+#temporadas[data-season] .season-panel.is-active .section-head span,
+#temporadas[data-season] .season-panel.is-active .season-milestone,
+#temporadas[data-season] .season-panel.is-active .section-head h2,
+#temporadas .season-marquee .season-tab.is-active .tab-label {
+  color: var(--m-lit);
+  text-shadow: 0 0 20px var(--m-glow);
 }
 
 #temporadas[data-season] .season-panel.is-active .season-subtitle,

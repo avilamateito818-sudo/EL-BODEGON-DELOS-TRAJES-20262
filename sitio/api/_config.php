@@ -81,19 +81,42 @@ function api_cors(): void
     } else {
         header('Access-Control-Allow-Origin: *');
     }
-    header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token, Authorization');
+    header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token, Authorization, X-Session-ID');
 }
 
-/** Inicia la sesión PHP con parámetros de cookie seguros (HttpOnly, SameSite=Lax). */
+/** Inicia la sesión PHP con parámetros de cookie seguros (HttpOnly, SameSite=Lax) y soporte para header X-Session-ID / Bearer. */
 function auth_session_start(): void
 {
+    @ini_set('session.gc_maxlifetime', '604800');
+    @ini_set('session.cookie_lifetime', '604800');
+
+    $hdrId = trim(strval($_SERVER['HTTP_X_SESSION_ID'] ?? ''));
+    if ($hdrId === '') {
+        $authHdr = trim(strval($_SERVER['HTTP_AUTHORIZATION'] ?? ''));
+        if (stripos($authHdr, 'Bearer ') === 0) {
+            $hdrId = trim(substr($authHdr, 7));
+        }
+    }
+
     if (session_status() === PHP_SESSION_ACTIVE) {
+        if (empty($_SESSION['admin_logged_in']) && !empty($hdrId)) {
+            if (preg_match('/^[a-zA-Z0-9,-]{16,128}$/', $hdrId) && $hdrId !== session_id()) {
+                session_write_close();
+                session_id($hdrId);
+                @session_start();
+            }
+        }
         return;
     }
+
     if (!headers_sent()) {
+        $proto = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '');
+        $cfVisitor = strtolower($_SERVER['HTTP_CF_VISITOR'] ?? '');
         $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+            || ($proto === 'https')
+            || (strpos($cfVisitor, 'https') !== false)
+            || (($_SERVER['SERVER_PORT'] ?? '') === '443');
         session_name('BODEGON_SESSID');
         session_set_cookie_params(array(
             'lifetime' => 86400 * 7, // 7 días
@@ -103,8 +126,14 @@ function auth_session_start(): void
             'httponly' => true,
             'samesite' => 'Lax',
         ));
+        if ($hdrId !== '' && preg_match('/^[a-zA-Z0-9,-]{16,128}$/', $hdrId)) {
+            session_id($hdrId);
+        }
         session_start();
     } else {
+        if ($hdrId !== '' && preg_match('/^[a-zA-Z0-9,-]{16,128}$/', $hdrId)) {
+            session_id($hdrId);
+        }
         @session_start();
     }
 }
@@ -119,31 +148,60 @@ function auth_get_csrf_token(): string
     return strval($_SESSION['csrf_token']);
 }
 
-/** Valida credenciales contra variables de entorno o configuración del servidor. */
+/** Valida credenciales contra variables de entorno o hash bcrypt del servidor. */
 function auth_validate_credentials(string $user, string $pass): bool
 {
     $envUser = getenv('ADMIN_USER');
-    $expectedUser = (is_string($envUser) && $envUser !== '') ? $envUser : 'Ana Avila';
+    $normalizedUser = strtolower(trim($user));
 
-    $envHash = getenv('ADMIN_PASSWORD_HASH');
-    $envPass = getenv('ADMIN_PASS');
+    // Variantes válidas para el usuario administrador
+    $validUsers = array('ana avila', 'ana isabel', 'anaisabel', 'admin');
+    if (is_string($envUser) && $envUser !== '') {
+        $validUsers[] = strtolower(trim($envUser));
+    }
 
-    if (!hash_equals($expectedUser, $user)) {
+    if (!in_array($normalizedUser, $validUsers, true)) {
         return false;
     }
 
-    if (is_string($envHash) && $envHash !== '') {
-        return password_verify($pass, $envHash);
+    $envHash = getenv('ADMIN_PASSWORD_HASH');
+    $expectedHash = (is_string($envHash) && $envHash !== '')
+        ? $envHash
+        : '$2y$10$ABl/MWHAOO6HhjcWrMSYl.RUcMSQRx91CAyVYKLCHyMg6axtSGOwe';
+
+    if (password_verify($pass, $expectedHash)) {
+        return true;
     }
 
-    $expectedPass = (is_string($envPass) && $envPass !== '') ? $envPass : 'ANAISABEL2026';
-    return hash_equals($expectedPass, $pass);
+    $envPass = getenv('ADMIN_PASS');
+    if (is_string($envPass) && $envPass !== '' && hash_equals($envPass, $pass)) {
+        return true;
+    }
+
+    return false;
 }
 
 /** Middleware: Exige sesión activa de administrador y valida CSRF en peticiones mutantes. */
 function auth_require_admin(): array
 {
     auth_session_start();
+
+    // Si la sesión activa no está autenticada, intentar reconectar con X-Session-ID / Bearer si se proporcionó
+    if (empty($_SESSION['admin_logged_in'])) {
+        $hdrId = trim(strval($_SERVER['HTTP_X_SESSION_ID'] ?? ''));
+        if ($hdrId === '') {
+            $authHdr = trim(strval($_SERVER['HTTP_AUTHORIZATION'] ?? ''));
+            if (stripos($authHdr, 'Bearer ') === 0) {
+                $hdrId = trim(substr($authHdr, 7));
+            }
+        }
+        if ($hdrId !== '' && preg_match('/^[a-zA-Z0-9,-]{16,128}$/', $hdrId) && $hdrId !== session_id()) {
+            session_write_close();
+            session_id($hdrId);
+            @session_start();
+        }
+    }
+
     if (empty($_SESSION['admin_logged_in'])) {
         api_send(401, array('ok' => false, 'error' => 'No autorizado. Se requiere sesión activa de administrador.'));
     }
@@ -236,7 +294,7 @@ function gh_http(string $method, string $url, ?string $token, ?string $jsonBody 
 
     $out = curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
+    unset($ch);
     if (!is_string($out)) {
         return null;
     }

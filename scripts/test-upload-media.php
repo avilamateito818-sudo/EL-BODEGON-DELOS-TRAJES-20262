@@ -31,7 +31,7 @@ function runCurlRequest(string $url, string $method, array $headers = array(), $
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     $response = curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    unset($ch);
 
     return array(
         'status' => $status,

@@ -1,0 +1,568 @@
+/**
+ * in-page-admin.css — Estilos para el Modo Edición en Vivo en la Landing Page
+ * El Bodegón de los Trajes (Tunja, Boyacá)
+ * 
+ * Alcance aislado (Scoped): Todos los estilos usan prefijo inpage- o dependen de body.inpage-admin-active
+ * para garantizar cero conflictos con los estilos públicos existentes.
+ */
+
+/* ==========================================================================
+   1. BARRA SUPERIOR DE ADMINISTRACIÓN (STICKY TOP BAR)
+   ========================================================================== */
+#inpage-admin-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: #11091f;
+  border-bottom: 2px solid #e8c96a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  z-index: 99999;
+  font-family: 'Cinzel', 'Outfit', system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+body.inpage-admin-active {
+  padding-top: 48px !important;
+}
+
+body.inpage-admin-active header {
+  top: 48px !important;
+}
+
+.inpage-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: #f3eaff;
+}
+
+.inpage-badge {
+  background: linear-gradient(135deg, #c8a227, #f7df8b);
+  color: #120924;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.inpage-user {
+  color: #cfc2df;
+  font-size: 0.8rem;
+}
+
+.inpage-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.inpage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.inpage-btn-primary {
+  background: linear-gradient(135deg, #e8c96a, #c8a227);
+  color: #120924;
+  border-color: #f7df8b;
+  box-shadow: 0 2px 8px rgba(200, 162, 39, 0.3);
+}
+
+.inpage-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200, 162, 39, 0.5);
+  color: #0d061a;
+}
+
+.inpage-btn-outline {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8c96a;
+  border-color: rgba(232, 201, 106, 0.35);
+}
+
+.inpage-btn-outline:hover {
+  background: rgba(232, 201, 106, 0.15);
+  border-color: #e8c96a;
+}
+
+.inpage-btn-ghost {
+  background: transparent;
+  color: #b9a7c9;
+}
+
+.inpage-btn-ghost:hover {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* ==========================================================================
+   2. BOTONES FLOTANTES DE ACCIÓN RÁPIDA EN LAS TARJETAS (EDITAR Y BORRAR)
+   ========================================================================== */
+.card-ghost,
+.season-subsection,
+[data-card-id] {
+  position: relative;
+}
+
+.card-inpage-actions {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 60;
+  gap: 6px;
+  align-items: center;
+}
+
+body.inpage-admin-active .card-inpage-actions {
+  display: flex !important;
+}
+
+.card-inpage-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(18, 9, 36, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.card-inpage-edit-btn {
+  border: 1.5px solid #e8c96a;
+  color: #e8c96a;
+}
+
+.card-inpage-edit-btn:hover {
+  transform: scale(1.15);
+  background: #e8c96a;
+  color: #120924;
+  box-shadow: 0 6px 16px rgba(232, 201, 106, 0.45);
+}
+
+.card-inpage-del-btn {
+  border: 1.5px solid #ff5e5e;
+  color: #ff7b7b;
+}
+
+.card-inpage-del-btn:hover {
+  transform: scale(1.15);
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.5);
+}
+
+/* ==========================================================================
+   3. MODALES OVERLAY (LOGIN Y FORMULARIO DE TRAJE)
+   ========================================================================== */
+.inpage-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 3, 15, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  z-index: 100000;
+  box-sizing: border-box;
+  animation: inpageFadeIn 0.2s ease forwards;
+}
+
+@keyframes inpageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.inpage-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #171026;
+  border: 1px solid rgba(232, 201, 106, 0.35);
+  border-radius: 16px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), 0 0 35px rgba(200, 162, 39, 0.15);
+  padding: 1.8rem;
+  color: #f3eaff;
+  box-sizing: border-box;
+  position: relative;
+  animation: inpageSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes inpageSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.inpage-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inpage-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #f7df8b;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inpage-modal-close {
+  background: transparent;
+  border: none;
+  color: #a797be;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 6px;
+  transition: color 0.15s ease;
+}
+
+.inpage-modal-close:hover {
+  color: #fff;
+}
+
+/* Campos de Formulario */
+.inpage-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.inpage-field-full {
+  grid-column: 1 / -1;
+}
+
+.inpage-group {
+  margin-bottom: 1rem;
+}
+
+.inpage-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #cfc2df;
+  margin-bottom: 0.4rem;
+}
+
+.inpage-input,
+.inpage-select,
+.inpage-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #0f0a1c;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inpage-input:focus,
+.inpage-select:focus,
+.inpage-textarea:focus {
+  outline: none;
+  border-color: #e8c96a;
+  box-shadow: 0 0 0 3px rgba(232, 201, 106, 0.2);
+}
+
+.inpage-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Caja de Fotografía */
+.inpage-photo-box {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed rgba(232, 201, 106, 0.35);
+  border-radius: 10px;
+  padding: 0.8rem;
+}
+
+.inpage-photo-preview {
+  width: 72px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #0c0717;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.inpage-photo-controls {
+  flex: 1;
+}
+
+.inpage-photo-hint {
+  font-size: 0.74rem;
+  color: #a797be;
+  margin-top: 0.35rem;
+}
+
+/* Checkbox toggle */
+.inpage-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #e0d5ee;
+  cursor: pointer;
+  margin-top: 0.3rem;
+}
+
+/* Botones de pie de modal */
+.inpage-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inpage-btn-danger {
+  margin-right: auto;
+  background: rgba(220, 53, 69, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(220, 53, 69, 0.35);
+}
+
+.inpage-btn-danger:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* Mensaje de error / estado */
+.inpage-error-msg {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid #dc3545;
+  color: #ff9999;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+}
+
+/* Toast */
+#inpage-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #140c24;
+  color: #fff;
+  border: 1px solid #e8c96a;
+  padding: 0.75rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  z-index: 100005;
+  font-size: 0.88rem;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  animation: inpageToastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes inpageToastIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  #inpage-admin-bar {
+    padding: 0 0.75rem;
+  }
+  .inpage-brand .inpage-user {
+    display: none;
+  }
+  .inpage-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   4. SELECTOR DE UBICACIÓN (PORTADA VS CATÁLOGO) EN EL MODAL
+   ========================================================================== */
+.inpage-location-box {
+  background: rgba(232, 201, 106, 0.04);
+  border: 1px solid rgba(232, 201, 106, 0.22);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.inpage-location-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 580px) {
+  .inpage-location-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inpage-checkbox-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(15, 10, 28, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.inpage-checkbox-card:hover {
+  border-color: #e8c96a;
+  background: rgba(232, 201, 106, 0.08);
+}
+
+.inpage-checkbox-card input[type="checkbox"] {
+  margin-top: 0.2rem;
+  accent-color: #e8c96a;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.inpage-checkbox-card strong {
+  display: block;
+  font-size: 0.84rem;
+  color: #f7df8b;
+  margin-bottom: 0.2rem;
+}
+
+.inpage-checkbox-card small {
+  display: block;
+  font-size: 0.74rem;
+  color: #b9a7c9;
+  line-height: 1.35;
+}
+
+.inpage-checkbox-card-active {
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   5. PRESENTACIÓN DE TARJETA TIPO CARTA COMERCIAL (PRODUCT SHEET)
+   ========================================================================== */
+.card-cat-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 25;
+  background: rgba(14, 7, 26, 0.88);
+  border: 1px solid rgba(232, 201, 106, 0.45);
+  color: #f7df8b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.card-tallas-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+  margin: 0.6rem 0;
+}
+
+.card-talla-pill {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(232, 201, 106, 0.22);
+  color: #f3eaff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.card-cta-row {
+  margin-top: 0.85rem;
+  display: flex;
+  justify-content: center;
+}
+
+.card-cta-wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #fff !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+.card-cta-wa:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  color: #fff !important;
+}
+
+
+

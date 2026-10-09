@@ -36,6 +36,7 @@ switch ($action) {
             'authenticated' => $isAuth,
             'user'          => $isAuth ? strval($_SESSION['admin_user'] ?? '') : null,
             'csrf_token'    => $isAuth ? auth_get_csrf_token() : null,
+            'session_id'    => $isAuth ? session_id() : null,
         ));
         break;
 
@@ -68,6 +69,7 @@ switch ($action) {
             'authenticated' => true,
             'user'          => $user,
             'csrf_token'    => $csrf,
+            'session_id'    => session_id(),
             'message'       => 'Sesión iniciada exitosamente.',
         ));
         break;

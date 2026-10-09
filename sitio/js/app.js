@@ -58,160 +58,101 @@
       desc.textContent = sub;
       tab.appendChild(desc);
     });
-    document.querySelectorAll('.season-panel').forEach((panel) => {
-      if (panel.querySelector('.halloween-landing')) return;
-      const month = panel.dataset.panel;
-      const monthName = month.charAt(0).toUpperCase() + month.slice(1);
-      const btnLabel = monthBtnLabels[month] || 'Entrar al Callejón';
-      const sub = monthSubtitles[month] || 'Viste tu imaginación, vive tu historia.';
-      const landing = document.createElement('div');
-      landing.className = 'halloween-landing';
-      landing.setAttribute('data-landing', month);
-      landing.innerHTML =
-        '<span class="season-milestone">Temporada de ' + monthName + '</span>' +
-        '<h3 class="halloween-landing-title">El Bodegón de los Trajes te trae la colección de <span>' + monthName + '</span> · Tunja</h3>' +
-        '<p class="halloween-landing-sub">' + sub + '</p>' +
-        '<button class="btn-haunted" type="button" data-enter="' + month + '">' + btnLabel + '</button>' +
-        '<button class="admin-season-photo-btn admin-ui" type="button" data-season-photo="' + month + '" title="Cambiar foto de portada">Cambiar portada</button>';
-      const content = document.createElement('div');
-      content.className = 'halloween-content';
-      content.setAttribute('data-content', month);
-      while (panel.firstChild) content.appendChild(panel.firstChild);
-      panel.appendChild(landing);
-      panel.appendChild(content);
-    });
-
-    function getLanding(month) {
-      return document.querySelector('.halloween-landing[data-landing="' + month + '"]') ||
-             document.getElementById('halloween-landing');
-    }
-
-    function getContent(month) {
-      return document.querySelector('.halloween-content[data-content="' + month + '"]') ||
-             document.getElementById('halloween-content');
-    }
-
-    /* Primer bloque con contenido real de una temporada: el h1/hero y, si no
-       hubiera, la primera seccion del catalogo. Sirve para desplazar la pagina
-       hasta algo visible al abrir una temporada (la portada oculta el resto
-       con display:none, asi que medir su caja daria siempre 0). */
-    function firstContentBlock(month) {
-      const content = getContent(month);
-      if (!content) return null;
-      return content.querySelector('.season-hero') ||
-             content.querySelector('.season-sub-sections > *') ||
-             content.firstElementChild || content;
-    }
-
-    const monthNames = {
-      enero: 'Enero', febrero: 'Febrero', marzo: 'Marzo', abril: 'Abril', mayo: 'Mayo',
-      junio: 'Junio', julio: 'Julio', agosto: 'Agosto', septiembre: 'Septiembre',
-      octubre: 'Octubre', noviembre: 'Noviembre', diciembre: 'Diciembre'
+    const seasonTitles = {
+      enero: 'Enero · Reyes Magos & Retorno',
+      febrero: 'Febrero · Carnaval & Glamour',
+      marzo: 'Marzo · Efecto Ejecutivo',
+      abril: 'Abril · Feria & Renovación',
+      mayo: 'Mayo · Día de las Madres',
+      junio: 'Junio · Bodas & Quinceañeras',
+      julio: 'Julio · Fiestas Patrias',
+      agosto: 'Agosto · Celebraciones de Gala',
+      septiembre: 'Septiembre · Amor & Amistad',
+      octubre: 'Octubre · Halloween Exclusivo',
+      noviembre: 'Noviembre · Grados & Clausuras',
+      diciembre: 'Diciembre · Navidad & Fin de Año'
     };
-
-    /* La seccion de catalogo es una sola y siempre enseña el de la temporada
-       elegida: no hay pestanas ni copias, asi que aqui basta con mostrar el
-       panel del mes y escribir su nombre en el titulo. */
-    function syncCatalogoGeneral(month) {
-      const panels = document.querySelectorAll('.catalogo-general-panel');
-      if (!panels.length) return;
-      panels.forEach((panel) => {
-        const on = panel.dataset.catPanel === month;
-        panel.classList.toggle('is-visible', on);
-        panel.hidden = !on;
-      });
-      const nombre = document.getElementById('catalogo-general-mes');
-      if (nombre) nombre.textContent = monthNames[month] || month;
-    }
-
-    function resetSeasonGates() {
-      document.querySelectorAll('.halloween-landing').forEach((l) => l.classList.remove('is-visible'));
-      document.querySelectorAll('.halloween-content').forEach((c) => c.classList.remove('is-visible'));
-    }
-
-    function showLanding(month) {
-      if (document.body.classList.contains('admin-edit-mode')) {
-        revealContent(month);
-        return;
-      }
-      const landing = getLanding(month);
-      const content = getContent(month);
-      if (landing) landing.classList.add('is-visible');
-      if (content) content.classList.remove('is-visible');
-    }
-
-    function revealContent(month) {
-      const landing = getLanding(month);
-      const content = getContent(month);
-      if (landing) landing.classList.remove('is-visible');
-      if (content) {
-        content.classList.add('is-visible');
-        content.querySelectorAll('.reveal:not(.is-revealed)').forEach((el) => el.classList.add('is-revealed'));
-      }
-    }
 
     function selectSeason(month) {
       if (!month) return;
+      month = month.toLowerCase();
       document.querySelectorAll('.season-tab').forEach((t) => {
         const isMatch = t.dataset.month === month;
         t.classList.toggle('is-active', isMatch);
         t.setAttribute('aria-selected', isMatch ? 'true' : 'false');
       });
       document.querySelectorAll('.season-panel').forEach((p) => {
-        p.classList.toggle('is-active', p.dataset.panel === month);
+        const isActive = p.dataset.panel === month;
+        p.classList.toggle('is-active', isActive);
+        if (isActive) {
+          p.querySelectorAll('.reveal:not(.is-revealed)').forEach((el) => el.classList.add('is-revealed'));
+        }
       });
       if (seasonSection) seasonSection.dataset.season = month;
-      /* El color de la pagina lo decide el mes activo: cinta, temporada,
-         catalogo y contacto leen las mismas variables. */
       document.body.dataset.season = month;
-      resetSeasonGates();
-      showLanding(month);
-      syncCatalogoGeneral(month);
+      const headTitle = document.querySelector('[data-field="season.header_title"]');
+      if (headTitle && seasonTitles[month]) headTitle.textContent = seasonTitles[month];
       if (window.__centerMarqueeOn) window.__centerMarqueeOn(month);
-      // Elegir temporada deja la cinta quieta en la portada de esa temporada
       document.querySelectorAll('.season-marquee').forEach((m) => {
         if (m.__lockTape) m.__lockTape(month);
       });
     }
     window.selectSeason = selectSeason;
 
-/* Enseña el contenido de una temporada y lleva la pagina hasta el primer
-       bloque con texto. Solo se llama al pulsar el boton de portada: al elegir
-       una temporada desde la cinta o el menu se muestra su panel y queda la
-       decision de entrar al catalogo. */
     function openSeason(month) {
-      revealContent(month);
-      const target = firstContentBlock(month);
-      if (!target) return;
+      selectSeason(month);
+      const activeP = document.querySelector('.season-panel[data-panel="' + month + '"]');
+      if (activeP) {
+        activeP.classList.add('is-expanded');
+        const magicBtn = activeP.querySelector('.btn-season-magic');
+        if (magicBtn) magicBtn.setAttribute('aria-expanded', 'true');
+      }
+      const catTarget = (activeP && (activeP.querySelector('.season-sub-sections, .season-catalog[id$="-temporada"]') || activeP.querySelector('.season-catalog') || activeP)) || document.getElementById('temporadas');
       if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
-      setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+      if (catTarget) {
+        setTimeout(() => catTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+      }
     }
 
-    /* Elige una temporada y deja su portada a la vista. La cinta y el menu usan
-       esta ruta; el boton de portada usa openSeason para entrar al catalogo. */
     function previewSeason(month) {
       selectSeason(month);
-      const landing = getLanding(month);
+      const activeP = document.querySelector('.season-panel[data-panel="' + month + '"]');
       if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
-      if (landing) setTimeout(() => landing.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
+      if (activeP) {
+        setTimeout(() => activeP.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+      }
     }
 
-document.querySelectorAll('.season-tab').forEach((tab) => {
+    document.querySelectorAll('.season-tab').forEach((tab) => {
       tab.addEventListener('click', (e) => {
         if (document.body.classList.contains('admin-edit-mode') && e.target.closest('.tab-desc')) return;
         previewSeason(tab.dataset.month);
       });
     });
 
-    /* La seccion de catalogo no lleva pestanas: sigue a la temporada, asi que
-       no hay nada que filtrar aqui. Al abrir el menu o la cinta ya se
-       actualiza desde selectSeason. */
+    // Manejo de clic en enlaces de Catálogo en menú y enlaces rápidos
+    document.querySelectorAll('a[href="#catalogo"], a[href="#catalogo-general"], a[href$="-catalogo"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const activeM = (seasonSection && seasonSection.dataset.season) || 'enero';
+        selectSeason(activeM);
+        const activeP = document.querySelector('.season-panel.is-active') || document.querySelector('.season-panel');
+        if (activeP) {
+          activeP.classList.add('is-expanded');
+          const magicBtn = activeP.querySelector('.btn-season-magic');
+          if (magicBtn) magicBtn.setAttribute('aria-expanded', 'true');
+        }
+        if (mqMobile.matches && navMenu && navMenu.classList.contains('is-open')) closeMenu();
+        const catTarget = (activeP && (activeP.querySelector('.season-catalog[id$="-catalogo"], .season-catalog, .season-sub-sections') || activeP)) || document.getElementById('temporadas');
+        if (catTarget) {
+          setTimeout(() => catTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        }
+      });
+    });
 
     /* Estado inicial: enero */
     document.body.dataset.season = 'enero';
-    resetSeasonGates();
-    showLanding('enero');
-    syncCatalogoGeneral('enero');
+    selectSeason('enero');
 
     const MONTH_ORDER = [
       'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -644,26 +585,51 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
       });
     });
 
-    // Close menu and dropdowns when a link is chosen
-    document.querySelectorAll('#nav-menu a').forEach((link) => {
-      link.addEventListener('click', () => {
-        closeMenu();
+    // Close menu and smooth-scroll when a link is chosen
+    document.querySelectorAll('#nav-menu a[href^="#"]:not([data-tab])').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const hash = link.getAttribute('href');
+        if (hash === '#catalogo' || hash === '#catalogo-general') return; // Handled by catalog listener
+        const target = document.querySelector(hash);
+        if (target) {
+          e.preventDefault();
+          closeMenu();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (window.history && window.history.pushState) {
+            window.history.pushState(null, null, hash);
+          }
+        }
       });
     });
 
-    // Atajos de temporada del menú: muestran la portada de esa temporada
+    // Atajos de temporada del menú: activan la temporada y se desplazan a ella
     document.querySelectorAll('a[data-tab][href="#temporadas"]').forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        previewSeason(link.dataset.tab);
+        const tabMonth = link.dataset.tab;
+        selectSeason(tabMonth);
+        closeMenu();
+        const targetEl = document.querySelector('.season-panel[data-panel="' + tabMonth + '"]') || document.getElementById('temporadas');
+        if (targetEl) {
+          setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        }
       });
     });
 
-    // Entrar a la temporada: revela todo el contenido e información del mes activo
+    // Entrar a la temporada: despliega la colección, catálogo y contacto del negocio
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-enter]');
       if (!btn) return;
-      openSeason(btn.dataset.enter);
+      e.preventDefault();
+      const month = btn.dataset.enter;
+      const panel = document.querySelector('.season-panel[data-panel="' + month + '"]');
+      if (panel && panel.classList.contains('is-expanded')) {
+        panel.classList.remove('is-expanded');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        openSeason(month);
+      }
     });
 
     // Cerrar menú o dropdowns al hacer clic afuera
@@ -726,12 +692,13 @@ document.querySelectorAll('.season-tab').forEach((tab) => {
       document.body.style.overflow = '';
     }
 
-    document.querySelectorAll('.img-ghost img').forEach((img) => {
-      img.addEventListener('click', (e) => {
-        if (document.body.classList.contains('admin-edit-mode')) return;
+    document.addEventListener('click', (e) => {
+      if (document.body.classList.contains('admin-edit-mode')) return;
+      const img = e.target.closest('.img-ghost img');
+      if (img) {
         e.preventDefault();
         openLightbox(img.currentSrc || img.src);
-      });
+      }
     });
 
     lightboxClose.addEventListener('click', closeLightbox);

@@ -64,21 +64,25 @@ nav {
 
 nav ul {
   display: flex;
-  gap: 1rem;
+  gap: 1.4rem;
   list-style: none;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
   justify-content: flex-end;
+  margin: 0;
+  padding: 0;
 }
 
 nav a {
   text-decoration: none;
   color: var(--ghostly-white);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   transition: var(--transition-haunted);
   position: relative;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 nav a:hover {

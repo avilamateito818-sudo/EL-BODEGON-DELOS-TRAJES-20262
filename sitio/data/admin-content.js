@@ -113,8 +113,11 @@ window.ADMIN_CONTENT = {
     }
   },
   "editorStyles": {
-    "#catalogo-general": "background-color: rgb(173, 216, 225);",
-    "#batas": "--d: 270ms; --foto-relacion: 1.0000;",
-    "body[data-season=\"enero\"] > footer:nth-child(7)": "background-color: rgb(98, 152, 163);"
+    "#admin-menu-btn": "width: 30px; height: 30px;",
+    ".hero-box": "height: 25350px; left: 0px; top: 0px; max-width: 100%; width: 1425px;",
+    "[data-field=\"hero\\.title\"]": "height: 40px; max-width: 100%;",
+    "#catalogo-general": "background-color: rgb(173, 216, 225); max-width: 100%;",
+    "[data-card-id=\"card-enero-batas\"]": "--d: 270ms; --foto-relacion: 1.0000; max-width: 100%;",
+    "body[data-season=\"enero\"] > footer:nth-child(7)": "background-color: rgb(98, 152, 163); max-width: 100%;"
   }
 };

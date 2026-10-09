@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración | El Bodegón de los Trajes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- PANTALLA DE LOGIN -->
+  <div id="login-screen" class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <span class="login-badge">Acceso Administrativo</span>
+        <h2>El Bodegón</h2>
+        <p>Inicia sesión para gestionar el catálogo y temporadas</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Usuario</label>
+          <input type="text" id="username" name="username" required autocomplete="username" placeholder="Ana Avila">
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••••••">
+        </div>
+        <div id="login-error" class="error-msg" hidden></div>
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block">Iniciar Sesión</button>
+      </form>
+      <div class="login-footer">
+        <a href="../" class="back-link">← Volver al sitio web público</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL -->
+  <div id="admin-panel" class="admin-wrapper" hidden>
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div class="topbar-brand">
+        <h1>El Bodegón de los Trajes</h1>
+        <span class="panel-tag">Panel de Gestión</span>
+      </div>
+      <div class="topbar-actions">
+        <span class="user-pill" id="user-display">👤 Administrador</span>
+        <a href="../" target="_blank" class="btn btn-secondary btn-sm" title="Ver tienda pública">Ver Sitio Web ↗</a>
+        <button id="logout-btn" class="btn btn-danger btn-sm">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <!-- Barra de Navegación de Pestañas -->
+    <nav class="admin-nav">
+      <button class="nav-tab is-active" data-tab="catalogo">
+        👗 Catálogo de Trajes (<span id="count-trajes">0</span>)
+      </button>
+      <button class="nav-tab" data-tab="temporada">
+        🗓️ Temporada Activa y Hero
+      </button>
+      <button class="nav-tab" data-tab="leads">
+        💬 Mensajes y Prospectos (<span id="count-leads">0</span>)
+      </button>
+      <button class="nav-tab" data-tab="ajustes">
+        ⚙️ Configuración del Negocio
+      </button>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="admin-content">
+
+      <!-- ========================================================= -->
+      <!-- PESTAÑA 1: CATÁLOGO DE TRAJES (CRUD)                      -->
+      <!-- ========================================================= -->
+      <section id="tab-catalogo" class="tab-pane is-active">
+        <div class="toolbar">
+          <div class="toolbar-search">
+            <input type="text" id="catalog-search" placeholder="Buscar por nombre, descripción o grupo..." class="input-search">
+            <select id="catalog-season-filter" class="select-filter">
+              <option value="all">Todas las temporadas (12 meses)</option>
+              <option value="enero">Enero (Reyes y Uniformes)</option>
+              <option value="febrero">Febrero (Carnaval y San Valentín)</option>
+              <option value="marzo">Marzo (Cuaresma y Ejecutivo)</option>
+              <option value="abril">Abril (Feria y Renovación)</option>
+              <option value="mayo">Mayo (Día de las Madres)</option>
+              <option value="junio">Junio (Bodas y Quinceañeras)</option>
+              <option value="julio">Julio (Fiestas Patrias)</option>
+              <option value="agosto">Agosto (Celebraciones de Gala)</option>
+              <option value="septiembre">Septiembre (Amor y Amistad)</option>
+              <option value="octubre">Octubre (Halloween)</option>
+              <option value="noviembre">Noviembre (Grados y Clausuras)</option>
+              <option value="diciembre">Diciembre (Navidad y Fiestas)</option>
+            </select>
+          </div>
+          <button id="btn-nuevo-traje" class="btn btn-success">+ Nuevo Traje</button>
+        </div>
+
+        <div class="trajes-grid" id="trajes-container">
+          <!-- Renderizado dinámico de tarjetas de trajes -->
+          <div class="loading-state">Cargando catálogo...</div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- PESTAÑA 2: TEMPORADA ACTIVA Y HERO                        -->
+      <!-- ========================================================= -->
+      <section id="tab-temporada" class="tab-pane">
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>Tema y Temporada Destacada del Mes</h3>
+            <p>Define qué mes se abre de forma automática al ingresar a la página web y cuál viste el diseño principal.</p>
+          </div>
+          <form id="season-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="active-season-select">Temporada Activa</label>
+                <select id="active-season-select" class="select-lg">
+                  <option value="enero">Enero · Reyes Magos, Uniformes y Batas</option>
+                  <option value="febrero">Febrero · Carnaval, San Valentín y Bodas</option>
+                  <option value="marzo">Marzo · Cuaresma y Efecto Ejecutivo</option>
+                  <option value="abril">Abril · Feria y Renovación</option>
+                  <option value="mayo">Mayo · Día de las Madres</option>
+                  <option value="junio">Junio · Bodas y Quinceañeras</option>
+                  <option value="julio">Julio · Fiestas Patrias</option>
+                  <option value="agosto">Agosto · Celebraciones de Gala</option>
+                  <option value="septiembre">Septiembre · Amor y Amistad</option>
+                  <option value="octubre">Octubre · Halloween · Exclusivo Boutique</option>
+                  <option value="noviembre">Noviembre · Grados y Clausuras</option>
+                  <option value="diciembre">Diciembre · Navidad y Fin de Año</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Temporada Activa</button>
+          </form>
+        </div>
+
+        <div class="card-box" style="margin-top: 1.5rem;">
+          <div class="card-box-header">
+            <h3>Textos del Banner de Inicio (Hero)</h3>
+            <p>Personaliza el lema y bienvenida de la cabecera sin tocar el código.</p>
+          </div>
+          <form id="hero-form">
+            <div class="form-group">
+              <label for="hero-tag">Distintivo Superior (Badge)</label>
+              <input type="text" id="hero-tag" placeholder="El Bodegón de los Trajes · Tunja">
+            </div>
+            <div class="form-group">
+              <label for="hero-titulo">Título Principal</label>
+              <input type="text" id="hero-titulo" placeholder="Disfraces, Uniformes y Vestidos a la Medida">
+            </div>
+            <div class="form-group">
+              <label for="hero-subtitulo">Subtítulo Descriptivo</label>
+              <textarea id="hero-subtitulo" rows="3" placeholder="Colección exclusiva de alta costura..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Textos del Banner</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- PESTAÑA 3: BANDEJA DE PROSPECTOS Y LEADS                  -->
+      <!-- ========================================================= -->
+      <section id="tab-leads" class="tab-pane">
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>Mensajes y Solicitudes de Clientes</h3>
+            <p>Personas que han dejado solicitudes en el formulario web o el asistente virtual. Haz clic en "Responder por WhatsApp" para abrir el chat de inmediato.</p>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Contacto</th>
+                  <th>Tipo</th>
+                  <th>Mensaje</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="leads-table-body">
+                <tr><td colspan="6" class="text-center">Cargando mensajes...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- PESTAÑA 4: CONFIGURACIÓN GENERAL DEL NEGOCIO              -->
+      <!-- ========================================================= -->
+      <section id="tab-ajustes" class="tab-pane">
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>Canales de Atención y Horarios</h3>
+            <p>Asegúrate de mantener tu número de WhatsApp y dirección actualizados para que los clientes lleguen sin tropiezos.</p>
+          </div>
+          <form id="settings-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="cfg-whatsapp">Número de WhatsApp (con código de país, ej. 573107706615)</label>
+                <input type="text" id="cfg-whatsapp" value="573107706615" required>
+              </div>
+              <div class="form-group">
+                <label for="cfg-phone-display">Teléfono Visible en Web</label>
+                <input type="text" id="cfg-phone-display" value="+57 310 770 6615">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="cfg-email">Correo Electrónico de Contacto</label>
+                <input type="email" id="cfg-email" value="elbodegondelostrajes@gmail.com">
+              </div>
+              <div class="form-group">
+                <label for="cfg-address">Dirección Física en Tunja</label>
+                <input type="text" id="cfg-address" value="Diagonal 66 2B 04, Tunja, Boyacá">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="cfg-hours-week">Horario Lunes a Sábado</label>
+                <input type="text" id="cfg-hours-week" value="Lun–Sáb 8:00 am – 6:00 pm">
+              </div>
+              <div class="form-group">
+                <label for="cfg-hours-sun">Horario Domingos y Festivos</label>
+                <input type="text" id="cfg-hours-sun" value="Dom y festivos 9:00 am – 1:00 pm">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Configuración del Negocio</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: CREAR / EDITAR TRAJE -->
+  <div id="traje-modal" class="modal-backdrop" hidden>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="traje-modal-title">Nuevo Traje</h3>
+        <button type="button" class="modal-close" id="btn-close-traje-modal">&times;</button>
+      </div>
+      <form id="traje-form">
+        <input type="hidden" id="traje-id" name="id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="traje-titulo">Nombre del Traje / Prenda *</label>
+            <input type="text" id="traje-titulo" name="titulo" required placeholder="Ej. Disfraz Bruja Escarlata">
+          </div>
+          <div class="form-group">
+            <label for="traje-temporada">Temporada *</label>
+            <select id="traje-temporada" name="temporada" required>
+              <option value="octubre">Octubre (Halloween)</option>
+              <option value="enero">Enero (Reyes y Uniformes)</option>
+              <option value="febrero">Febrero (Carnaval y San Valentín)</option>
+              <option value="marzo">Marzo (Cuaresma y Ejecutivo)</option>
+              <option value="abril">Abril (Feria y Renovación)</option>
+              <option value="mayo">Mayo (Día de las Madres)</option>
+              <option value="junio">Junio (Bodas y Quinceañeras)</option>
+              <option value="julio">Julio (Fiestas Patrias)</option>
+              <option value="agosto">Agosto (Celebraciones de Gala)</option>
+              <option value="septiembre">Septiembre (Amor y Amistad)</option>
+              <option value="noviembre">Noviembre (Grados y Clausuras)</option>
+              <option value="diciembre">Diciembre (Navidad y Fiestas)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="traje-seccion-select">Sección / Categoría *</label>
+            <select id="traje-seccion-select" class="form-control">
+              <option value="Terror">🎃 Terror (Monstruos, Villanos, Sombras)</option>
+              <option value="Cuentos y Fantasía">👑 Princesas y Cuentos de Hadas</option>
+              <option value="Superhéroes y Anime">⚡ Superhéroes y Anime</option>
+              <option value="Gala y Elegancia">✨ Gala y Elegancia</option>
+              <option value="Oficios y Uniforme">🩺 Oficios y Uniformes</option>
+              <option value="Bailes Típicos y Tradición">🎭 Folclor y Tradición</option>
+              <option value="Carnaval y Comparsas">🎉 Carnaval y Comparsas</option>
+              <option value="Disfraces Navideños">🎄 Navidad & Fin de Año</option>
+              <option value="_custom_">✏️ Otra sección personalizada...</option>
+            </select>
+            <input type="text" id="traje-grupo" name="grupo" placeholder="Escribe el nombre de la sección..." style="display: none; margin-top: 0.4rem;">
+          </div>
+          <div class="form-group">
+            <label for="traje-tallas">Tallas Disponibles</label>
+            <input type="text" id="traje-tallas" name="tallas" placeholder="S, M, L, A la medida">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="traje-descripcion">Descripción y Detalles de la Prenda</label>
+          <textarea id="traje-descripcion" name="descripcion" rows="3" placeholder="Qué piezas incluye, telas, accesorios..."></textarea>
+        </div>
+
+        <!-- Zona de Carga de Fotografía -->
+        <div class="form-group">
+          <label>Fotografía de la Prenda</label>
+          <div class="photo-upload-zone">
+            <div class="photo-preview-box" id="photo-preview-box">
+              <img id="photo-preview-img" src="../assets/img/ph-generico.svg" alt="Previsualización">
+            </div>
+            <div class="photo-upload-controls">
+              <input type="file" id="photo-file-input" accept="image/webp,image/jpeg,image/png" hidden>
+              <button type="button" id="btn-select-photo" class="btn btn-secondary">Subir Nueva Foto</button>
+              <span id="photo-upload-status" class="status-hint">Formatos: WebP, JPG, PNG (máx 10 MB)</span>
+              <input type="hidden" id="traje-foto" name="foto">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="traje-formato-foto">📐 Tamaño y Proporción de Fotografía *</label>
+          <select id="traje-formato-foto" name="formato_foto" class="form-control">
+            <option value="carta" selected>📐 Formato Carta Vertical (3:4) — Ideal para trajes completos</option>
+            <option value="cuadrado">🔲 Cuadrado Comercial (1:1) — Ideal para máscaras y accesorios</option>
+            <option value="panoramico">🖼️ Panorámico Amplio (16:9) — Ideal para comparsas o grupos</option>
+          </select>
+        </div>
+
+        <div class="form-group-checkbox">
+          <label>
+            <input type="checkbox" id="traje-activo" name="activo" checked>
+            Prenda visible en la página web pública
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-traje">Cancelar</button>
+          <button type="submit" id="btn-save-traje" class="btn btn-primary">Guardar Prenda</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE REANUDACIÓN DE SESIÓN (RECOVERY SIN PÉRDIDA DE FORMULARIOS) -->
+  <div id="reauth-modal" class="modal-backdrop" style="z-index: 2100;" hidden>
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="reauth-modal-title">🔐 Reanudar Sesión</h3>
+        <button type="button" class="modal-close" id="btn-close-reauth-modal">&times;</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">
+        Tu sesión de administrador requiere verificación de seguridad. Ingresa tu contraseña para continuar de inmediato <strong>sin perder ningún dato escrito en el formulario</strong>.
+      </p>
+      <form id="reauth-form">
+        <div class="form-group">
+          <label for="reauth-username">Usuario Administrador</label>
+          <input type="text" id="reauth-username" class="form-control" value="Ana Avila" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="reauth-password">Contraseña</label>
+          <input type="password" id="reauth-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+        <div id="reauth-error" class="error-msg" hidden style="margin-bottom: 1rem;"></div>
+        <div class="modal-footer" style="padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-reauth">Cancelar</button>
+          <button type="submit" id="btn-submit-reauth" class="btn btn-primary">Reanudar y Continuar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICACIONES -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

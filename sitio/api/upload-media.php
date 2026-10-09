@@ -146,6 +146,10 @@ api_send(200, array(
     'ok'        => true,
     'url'       => $relativeUrl,
     'filename'  => $filename,
+    'file'      => array(
+        'url'  => $relativeUrl,
+        'name' => $filename,
+    ),
     'size'      => file_exists($targetPath) ? filesize($targetPath) : $fileSize,
     'mime'      => $ext === 'webp' ? 'image/webp' : $mime,
     'converted' => $converted,

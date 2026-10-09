@@ -1,0 +1,270 @@
+/* ===================================================================
+   SECCIÓN SOBRE NOSOTROS — EL BODEGÓN DE LOS TRAJES (TUNJA)
+   Diseño premium, elegante y armónico con la identidad de sastrería
+   =================================================================== */
+
+.nosotros-section {
+  position: relative;
+  padding: 6.5rem 8%;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255, 140, 0, 0.07), transparent 50%),
+    radial-gradient(circle at 85% 75%, rgba(255, 215, 0, 0.05), transparent 50%),
+    linear-gradient(180deg, #070707 0%, #100b07 50%, #080605 100%);
+  border-top: 1px solid rgba(255, 140, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 140, 0, 0.25);
+  scroll-margin-top: 90px;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.nosotros-section .section-head {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 4rem auto;
+}
+
+.nosotros-section .section-head span {
+  display: inline-block;
+  color: var(--halloween-vivid, #ff8c00);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.nosotros-section .section-head h2 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 25px rgba(255, 140, 0, 0.35);
+}
+
+.nosotros-subtitle {
+  color: #c9bfb5;
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  font-weight: 400;
+}
+
+.nosotros-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nosotros-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.nosotros-media {
+  position: relative;
+}
+
+.nosotros-img-frame {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 140, 0, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 140, 0, 0.15);
+  background: #050505;
+}
+
+.nosotros-img-frame img {
+  width: 100%;
+  height: 100%;
+  max-height: 520px;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.nosotros-img-frame:hover img {
+  transform: scale(1.04);
+}
+
+.nosotros-badge-experience {
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  background: rgba(12, 7, 4, 0.94);
+  border: 1px solid rgba(255, 140, 0, 0.7);
+  border-radius: 14px;
+  padding: 0.9rem 1.4rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
+}
+
+.nosotros-badge-experience strong {
+  display: block;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1.6rem;
+  color: #ffd700;
+  line-height: 1.1;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+.nosotros-badge-experience span {
+  font-size: 0.72rem;
+  color: #ffb347;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.nosotros-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.nosotros-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.68rem;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: #ffb347;
+  border: 1px solid rgba(255, 179, 71, 0.4);
+  padding: 0.35rem 1rem;
+  border-radius: 30px;
+  margin-bottom: 1.3rem;
+  background: rgba(255, 140, 0, 0.08);
+}
+
+.nosotros-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  color: #FFFFFF;
+  line-height: 1.35;
+  margin-bottom: 1.4rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+}
+
+.nosotros-lead {
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: #f0e6dc;
+  margin-bottom: 1.1rem;
+}
+
+.nosotros-lead strong {
+  color: #ffd700;
+  font-weight: 700;
+}
+
+.nosotros-body {
+  font-size: 0.94rem;
+  line-height: 1.8;
+  color: #b5aaa0;
+  margin-bottom: 2rem;
+}
+
+.nosotros-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+  margin-bottom: 2.3rem;
+}
+
+.pillar-card {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 140, 0, 0.22);
+  border-radius: 12px;
+  padding: 1.1rem 1rem;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 140, 0, 0.6);
+  box-shadow: 0 8px 24px rgba(255, 140, 0, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pillar-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.pillar-card h4 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.pillar-card p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #a3998f;
+  margin: 0;
+}
+
+.nosotros-cta-row {
+  display: flex;
+  gap: 1.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nosotros-btn-secondary {
+  color: #ffd700;
+  font-size: 0.82rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.9rem 1.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nosotros-btn-secondary:hover {
+  background: rgba(255, 215, 0, 0.12);
+  border-color: #ffd700;
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+@media (max-width: 960px) {
+  .nosotros-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .nosotros-media {
+    max-width: 550px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .nosotros-section {
+    padding: 4.5rem 1.2rem;
+  }
+  .nosotros-pillars {
+    grid-template-columns: 1fr;
+  }
+  .nosotros-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nosotros-cta-row .btn-haunted,
+  .nosotros-btn-secondary {
+    text-align: center;
+    justify-content: center;
+  }
+}

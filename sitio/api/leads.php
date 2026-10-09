@@ -148,4 +148,81 @@ class LeadRepository
             @mail($to, $subject, $body, $headers);
         }
     }
+
+    /**
+     * Retorna todos los leads almacenados para el panel de administración.
+     */
+    public static function getAllLeads(): array
+    {
+        $dir = self::getStorageDir();
+        $mensajes = array();
+        $consultas = array();
+
+        $mf = $dir . '/mensajes_contacto.json';
+        if (is_file($mf)) {
+            $decoded = json_decode(@file_get_contents($mf), true);
+            if (is_array($decoded)) $mensajes = $decoded;
+        }
+
+        $cf = $dir . '/consultas_asistente.json';
+        if (is_file($cf)) {
+            $decoded = json_decode(@file_get_contents($cf), true);
+            if (is_array($decoded)) $consultas = $decoded;
+        }
+
+        // Combinar y enriquecer con enlaces a WhatsApp
+        $all = array();
+        foreach ($mensajes as $m) {
+            $phone = preg_replace('/[^0-9]/', '', strval($m['whatsapp'] ?? ''));
+            if ($phone !== '' && strlen($phone) === 10) {
+                $phone = '57' . $phone;
+            }
+            $nombre = trim(strval($m['nombre'] ?? ''));
+            $waMsg = 'Hola' . ($nombre !== '' ? ' ' . $nombre : '') . ', te escribimos de El Bodegón de los Trajes respecto a tu mensaje en la página web.';
+            $m['wa_link'] = ($phone !== '') ? 'https://wa.me/' . $phone . '?text=' . rawurlencode($waMsg) : null;
+            $all[] = $m;
+        }
+
+        foreach ($consultas as $c) {
+            $phone = preg_replace('/[^0-9]/', '', strval($c['whatsapp'] ?? ''));
+            if ($phone !== '' && strlen($phone) === 10) {
+                $phone = '57' . $phone;
+            }
+            $nombre = trim(strval($c['nombre'] ?? ''));
+            $waMsg = 'Hola' . ($nombre !== '' ? ' ' . $nombre : '') . ', te escribimos de El Bodegón de los Trajes respecto a tu consulta en el asistente virtual.';
+            $c['wa_link'] = ($phone !== '') ? 'https://wa.me/' . $phone . '?text=' . rawurlencode($waMsg) : null;
+            $c['mensaje'] = $c['consulta'] ?? '';
+            $all[] = $c;
+        }
+
+        // Ordenar cronológicamente descendente
+        usort($all, function ($a, $b) {
+            return strcmp(strval($b['fecha'] ?? ''), strval($a['fecha'] ?? ''));
+        });
+
+        return $all;
+    }
+}
+
+// =========================================================================
+// Controlador HTTP si se invoca leads.php directamente
+// =========================================================================
+if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === 'leads.php') {
+    api_cors();
+    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+    if ($method === 'OPTIONS') {
+        api_send(200, array('ok' => true));
+    }
+
+    // Exige sesión activa de administrador
+    auth_require_admin();
+
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    $leads = LeadRepository::getAllLeads();
+    api_send(200, array(
+        'ok' => true,
+        'total' => count($leads),
+        'leads' => $leads
+    ));
 }

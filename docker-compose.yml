@@ -5,14 +5,16 @@ services:
       dockerfile: docker/Dockerfile.php
     container_name: el-bodegon-trajes-php
     ports:
-      - "8095:80"
+      - "${PORT:-8095}:80"
     volumes:
       - ./sitio:/usr/share/nginx/html
     restart: unless-stopped
     environment:
-      # Opcionales: si defines GITHUB_TOKEN aquí (o en un archivo .env junto a
-      # este compose) el panel de administración y el asistente sincronizan
-      # con GitHub. Sin token, el sitio sigue funcionando (fallback WhatsApp).
+      PORT: "${PORT:-8095}"
+      ADMIN_USER: "${ADMIN_USER:-Ana Avila}"
+      ADMIN_PASS: "${ADMIN_PASS:-ANAISABEL2026}"
+      ADMIN_PASSWORD_HASH: "${ADMIN_PASSWORD_HASH:-}"
+      CONTACT_PHONE: "${CONTACT_PHONE:-573107706615}"
       GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
-      GITHUB_REPO: "${GITHUB_REPO:-}"
-      GITHUB_BRANCH: "${GITHUB_BRANCH:-}"
+      GITHUB_REPO: "${GITHUB_REPO:-avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262}"
+      GITHUB_BRANCH: "${GITHUB_BRANCH:-main}"
