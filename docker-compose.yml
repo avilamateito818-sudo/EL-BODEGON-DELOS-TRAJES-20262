@@ -18,3 +18,9 @@ services:
       GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
       GITHUB_REPO: "${GITHUB_REPO:-avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262}"
       GITHUB_BRANCH: "${GITHUB_BRANCH:-main}"
+    networks:
+      - red_proxy
+
+networks:
+  red_proxy:
+    external: true
