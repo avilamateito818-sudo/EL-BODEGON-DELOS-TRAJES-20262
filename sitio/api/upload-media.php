@@ -127,14 +127,21 @@ if (function_exists('imagewebp') && in_array($ext, array('jpg', 'png'), true)) {
 }
 
 if (!$converted) {
+    $saved = false;
     if (is_uploaded_file($tmpPath)) {
-        if (!@move_uploaded_file($tmpPath, $targetPath)) {
-            api_send(500, array('ok' => false, 'error' => 'No se pudo mover el archivo al directorio de destino.'));
-        }
-    } else {
-        if (!@copy($tmpPath, $targetPath)) {
-            api_send(500, array('ok' => false, 'error' => 'No se pudo copiar el archivo al directorio de destino.'));
-        }
+        $saved = @move_uploaded_file($tmpPath, $targetPath);
+    }
+    if (!$saved) {
+        $saved = @copy($tmpPath, $targetPath);
+    }
+    if (!$saved) {
+        $permError = !is_writable($uploadDir)
+            ? ' El directorio "assets/img/uploads" no tiene permisos de escritura para el servidor web.'
+            : '';
+        api_send(500, array(
+            'ok' => false,
+            'error' => 'No se pudo mover el archivo al directorio de destino.' . $permError
+        ));
     }
     @chmod($targetPath, 0666);
 }

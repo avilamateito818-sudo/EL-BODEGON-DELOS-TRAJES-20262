@@ -8,6 +8,8 @@ RUN apk add --no-cache nginx supervisor \
 
 COPY docker/nginx-php.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 COPY sitio/ /usr/share/nginx/html/
 RUN chmod -R a+rX /usr/share/nginx/html \
@@ -20,4 +22,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget -q -O /dev/null http://127.0.0.1/ || exit 1
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

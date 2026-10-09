@@ -54,6 +54,12 @@ function load_catalog(string $filePath): array
 /** Función auxiliar para guardar el catálogo de forma atómica y segura */
 function save_catalog(string $filePath, array $data): bool
 {
+    $dir = dirname($filePath);
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0777, true);
+    }
+    @chmod($dir, 0777);
+
     $data['ultima_actualizacion'] = gmdate('Y-m-d\TH:i:s\Z');
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     if ($json === false) {
@@ -61,11 +67,26 @@ function save_catalog(string $filePath, array $data): bool
     }
 
     $tmp = $filePath . '.' . bin2hex(random_bytes(6)) . '.tmp';
-    if (file_put_contents($tmp, $json, LOCK_EX) === false) {
+    if (@file_put_contents($tmp, $json, LOCK_EX) === false) {
+        if (@file_put_contents($filePath, $json, LOCK_EX) !== false) {
+            @chmod($filePath, 0666);
+            return true;
+        }
         return false;
     }
 
-    return rename($tmp, $filePath);
+    if (!@rename($tmp, $filePath)) {
+        if (@file_put_contents($filePath, $json, LOCK_EX) !== false) {
+            @unlink($tmp);
+            @chmod($filePath, 0666);
+            return true;
+        }
+        @unlink($tmp);
+        return false;
+    }
+
+    @chmod($filePath, 0666);
+    return true;
 }
 
 // =========================================================================
