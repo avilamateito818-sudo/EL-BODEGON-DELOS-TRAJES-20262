@@ -21,6 +21,7 @@ desktop.ini
 bodegon_admin_session
 sitio/api/config.local.php
 bodegon-config.php
+sitio/data/sessions/
 *.log
 
 # Datos privados de clientes y leads (Habeas Data / Privacidad)

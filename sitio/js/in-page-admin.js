@@ -12,11 +12,45 @@
 (function () {
   'use strict';
 
+  // Variables de Estado de Sesión (Persistentes con LocalStorage y sincronizadas con /admin/)
+  var sessionId = '';
   var csrfToken = '';
-  var currentUser = null;
+  var currentUser = 'Ana Avila';
   var isAdmin = false;
   var currentEditTraje = null;
   var toastTimer = null;
+
+  try {
+    sessionId = localStorage.getItem('bodegon_session_id') || '';
+    csrfToken = localStorage.getItem('bodegon_csrf_token') || '';
+    currentUser = localStorage.getItem('bodegon_admin_user') || 'Ana Avila';
+  } catch (e) {}
+
+  function saveSession(data) {
+    if (!data) return;
+    if (data.session_id) {
+      sessionId = data.session_id;
+      try { localStorage.setItem('bodegon_session_id', sessionId); } catch (e) {}
+    }
+    if (data.csrf_token) {
+      csrfToken = data.csrf_token;
+      try { localStorage.setItem('bodegon_csrf_token', csrfToken); } catch (e) {}
+    }
+    if (data.user) {
+      currentUser = data.user;
+      try { localStorage.setItem('bodegon_admin_user', currentUser); } catch (e) {}
+    }
+  }
+
+  function clearSession() {
+    sessionId = '';
+    csrfToken = '';
+    try {
+      localStorage.removeItem('bodegon_session_id');
+      localStorage.removeItem('bodegon_csrf_token');
+      localStorage.removeItem('bodegon_admin_user');
+    } catch (e) {}
+  }
 
   // Detección automática del backend (soporte para Live Server 5500/5501 hacia Docker 8095)
   function getApiBase() {
@@ -26,6 +60,27 @@
     return '';
   }
   var API_BASE = getApiBase();
+
+  /**
+   * Wrapper unificado de fetch para inyectar credenciales, X-Session-ID y X-CSRF-Token
+   */
+  function inpageApiFetch(endpoint, options) {
+    options = options || {};
+    var headers = Object.assign({}, options.headers || {});
+
+    if (csrfToken && !headers['X-CSRF-Token']) {
+      headers['X-CSRF-Token'] = csrfToken;
+    }
+    if (sessionId && !headers['X-Session-ID']) {
+      headers['X-Session-ID'] = sessionId;
+      headers['Authorization'] = 'Bearer ' + sessionId;
+    }
+    options.headers = headers;
+    options.credentials = 'include';
+
+    var fullUrl = (endpoint.startsWith('http') ? '' : API_BASE) + endpoint;
+    return fetch(fullUrl, options);
+  }
 
   var SEASONS = [
     { id: 'octubre', label: 'Octubre (Halloween)' },
@@ -70,23 +125,105 @@
     }, 4000);
   }
 
+  /**
+   * Panel inline de reautenticación rápida sin pérdida de formulario
+   */
+  function showInlineReauth(container, onSuccess) {
+    if (!container) return;
+    var existing = container.querySelector('.inpage-reauth-box');
+    if (existing) existing.remove();
+
+    var box = document.createElement('div');
+    box.className = 'inpage-reauth-box';
+    box.style.cssText = 'background: rgba(220, 38, 38, 0.18); border: 1px solid #ef4444; border-radius: 8px; padding: 14px; margin: 10px 0; text-align: left;';
+    box.innerHTML =
+      '<p style="color: #fca5a5; margin: 0 0 10px 0; font-size: 0.9rem; font-weight: 600; line-height: 1.4;">' +
+        '⚠️ Tu sesión de administrador expiró o no está activa en este navegador.<br>' +
+        '<span style="font-size: 0.82rem; font-weight: normal; color: #fecaca;">Ingresa tu contraseña para guardar tu prenda <strong>sin perder los datos que escribiste</strong>:</span>' +
+      '</p>' +
+      '<div style="display: flex; gap: 8px; flex-wrap: wrap;">' +
+        '<input type="password" class="inpage-input inpage-reauth-pass-input" placeholder="Contraseña maestra (ANAISABEL2026)" style="flex: 1; min-width: 180px; padding: 8px 12px; font-size: 0.9rem;" autocomplete="current-password">' +
+        '<button type="button" class="inpage-btn inpage-btn-primary inpage-reauth-btn-submit" style="padding: 8px 16px; font-size: 0.88rem; white-space: nowrap;">Reconectar y Guardar</button>' +
+      '</div>' +
+      '<div class="inpage-reauth-feedback" style="color: #fca5a5; font-size: 0.82rem; margin-top: 8px; display: none;"></div>';
+
+    container.appendChild(box);
+    container.style.display = 'block';
+
+    var passInput = box.querySelector('.inpage-reauth-pass-input');
+    var btnSubmit = box.querySelector('.inpage-reauth-btn-submit');
+    var fb = box.querySelector('.inpage-reauth-feedback');
+
+    passInput.focus();
+
+    function executeLogin() {
+      var pass = passInput.value;
+      if (!pass) {
+        fb.textContent = 'Por favor ingresa la contraseña.';
+        fb.style.display = 'block';
+        return;
+      }
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Verificando...';
+      fb.style.display = 'none';
+
+      fetch((API_BASE ? API_BASE : '') + '/api/auth?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ user: currentUser || 'Ana Avila', pass: pass })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.ok) {
+            saveSession(data);
+            setAdminState(true);
+            box.remove();
+            showToast('✓ Sesión reactivada exitosamente.');
+            if (typeof onSuccess === 'function') {
+              onSuccess();
+            }
+          } else {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Reconectar y Guardar';
+            fb.textContent = data.error || 'Contraseña incorrecta.';
+            fb.style.display = 'block';
+          }
+        })
+        .catch(function () {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = 'Reconectar y Guardar';
+          fb.textContent = 'Error de conexión con el servidor.';
+          fb.style.display = 'block';
+        });
+    }
+
+    btnSubmit.addEventListener('click', executeLogin);
+    passInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        executeLogin();
+      }
+    });
+  }
+
   // =========================================================================
   // 2. GESTIÓN DE SESIÓN Y MODO ADMINISTRADOR
   // =========================================================================
   function checkSession() {
-    fetch(API_BASE + '/api/auth?action=status', { credentials: 'include' })
+    inpageApiFetch('/api/auth?action=status')
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data && data.authenticated) {
-          csrfToken = data.csrf_token || '';
-          currentUser = data.user || 'Ana Avila';
+          saveSession(data);
           setAdminState(true);
         } else {
+          clearSession();
           setAdminState(false);
         }
       })
       .catch(function () {
-        setAdminState(false);
+        if (!sessionId) setAdminState(false);
       });
   }
 
@@ -139,12 +276,14 @@
     });
 
     document.getElementById('inpage-btn-logout').addEventListener('click', function () {
-      fetch(API_BASE + '/api/auth?action=logout', { method: 'POST', credentials: 'include' })
+      inpageApiFetch('/api/auth?action=logout', { method: 'POST' })
         .then(function () {
+          clearSession();
           setAdminState(false);
           showToast('Sesión de administración cerrada.');
         })
         .catch(function () {
+          clearSession();
           setAdminState(false);
         });
     });
@@ -201,10 +340,8 @@
         delBtn.disabled = true;
         delBtn.innerHTML = '⌛';
 
-        fetch(API_BASE + '/api/catalogo?id=' + encodeURIComponent(cardId), {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: { 'X-CSRF-Token': csrfToken }
+        inpageApiFetch('/api/catalogo?id=' + encodeURIComponent(cardId), {
+          method: 'DELETE'
         })
           .then(function (r) { return r.json(); })
           .then(function (res) {
@@ -269,7 +406,7 @@
         '<form id="inpage-login-form">' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-user-input">Usuario</label>' +
-            '<input type="text" id="inpage-user-input" class="inpage-input" value="anaisabel" required autocomplete="username">' +
+            '<input type="text" id="inpage-user-input" class="inpage-input" value="Ana Avila" required autocomplete="username">' +
           '</div>' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-pass-input">Contraseña Maestra</label>' +
@@ -303,17 +440,15 @@
       var user = document.getElementById('inpage-user-input').value.trim();
       var pass = document.getElementById('inpage-pass-input').value;
 
-      fetch(API_BASE + '/api/auth?action=login', {
+      inpageApiFetch('/api/auth?action=login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ user: user, pass: pass })
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
           if (data && data.ok) {
-            csrfToken = data.csrf_token || '';
-            currentUser = data.user || 'Ana Avila';
+            saveSession(data);
             setAdminState(true);
             overlay.remove();
             showToast('¡Bienvenida doña Ana Avila! Modo edición activo.');
@@ -524,21 +659,30 @@
       photoHint.textContent = 'Subiendo imagen al servidor...';
       var formData = new FormData();
       formData.append('file', file);
-      formData.append('csrf_token', csrfToken);
+      if (csrfToken) formData.append('csrf_token', csrfToken);
 
-      fetch(API_BASE + '/api/upload-media', {
+      inpageApiFetch('/api/upload-media', {
         method: 'POST',
-        credentials: 'include',
-        headers: { 'X-CSRF-Token': csrfToken },
         body: formData
       })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
+        .then(function (r) {
+          return r.json().then(function (res) {
+            return { status: r.status, data: res };
+          });
+        })
+        .then(function (pack) {
+          var res = pack.data;
           var photoUrl = (res && res.url) || (res && res.file && res.file.url);
           if (res && res.ok && photoUrl) {
             previewImg.src = photoUrl;
             hiddenFoto.value = photoUrl;
             photoHint.textContent = '✓ Imagen guardada: ' + ((res.file && res.file.name) || res.filename || file.name);
+          } else if (pack.status === 401 || (res && (res.error || '').indexOf('No autorizado') !== -1)) {
+            photoHint.textContent = '⚠️ Se requiere autorizar tu sesión para guardar la imagen:';
+            showInlineReauth(document.getElementById('inpage-traje-err'), function () {
+              photoHint.textContent = 'Reintentando subida de foto...';
+              fileInput.dispatchEvent(new Event('change'));
+            });
           } else {
             photoHint.textContent = 'Error: ' + (res.error || 'No se pudo subir la foto.');
           }
@@ -556,10 +700,8 @@
         deleteBtn.disabled = true;
         deleteBtn.textContent = 'Eliminando...';
 
-        fetch(API_BASE + '/api/catalogo?id=' + encodeURIComponent(traje.id), {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: { 'X-CSRF-Token': csrfToken }
+        inpageApiFetch('/api/catalogo?id=' + encodeURIComponent(traje.id), {
+          method: 'DELETE'
         })
           .then(function (r) { return r.json(); })
           .then(function (res) {
@@ -615,21 +757,24 @@
       };
 
       var url = isEdit
-        ? API_BASE + '/api/catalogo?id=' + encodeURIComponent(traje.id)
-        : API_BASE + '/api/catalogo';
+        ? '/api/catalogo?id=' + encodeURIComponent(traje.id)
+        : '/api/catalogo';
       var method = isEdit ? 'PUT' : 'POST';
 
-      fetch(url, {
+      inpageApiFetch(url, {
         method: method,
-        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
+        .then(function (r) {
+          return r.json().then(function (res) {
+            return { status: r.status, data: res };
+          });
+        })
+        .then(function (pack) {
+          var res = pack.data;
           if (res && res.ok) {
             overlay.remove();
             showToast(isEdit ? 'Prenda actualizada con éxito.' : 'Nueva prenda agregada al catálogo.');
@@ -638,6 +783,12 @@
                 attachEditButtonsToCards();
               });
             }
+          } else if (pack.status === 401 || (res && (res.error || '').indexOf('No autorizado') !== -1)) {
+            errEl.textContent = '';
+            errEl.style.display = 'block';
+            showInlineReauth(errEl, function () {
+              form.dispatchEvent(new Event('submit'));
+            });
           } else {
             errEl.textContent = res.error || 'Error al guardar la prenda.';
             errEl.style.display = 'block';
@@ -649,7 +800,7 @@
         })
         .finally(function () {
           saveBtn.disabled = false;
-          saveBtn.textContent = 'Guardar Prenda';
+          saveBtn.textContent = isEdit ? 'Guardar Cambios' : 'Colocar Prenda';
         });
     });
   }

@@ -91,6 +91,15 @@ function auth_session_start(): void
     @ini_set('session.gc_maxlifetime', '604800');
     @ini_set('session.cookie_lifetime', '604800');
 
+    $sessionSavePath = dirname(__DIR__) . '/data/sessions';
+    if (!is_dir($sessionSavePath)) {
+        @mkdir($sessionSavePath, 0777, true);
+        @chmod($sessionSavePath, 0777);
+    }
+    if (is_dir($sessionSavePath) && is_writable($sessionSavePath)) {
+        @ini_set('session.save_path', $sessionSavePath);
+    }
+
     $hdrId = trim(strval($_SERVER['HTTP_X_SESSION_ID'] ?? ''));
     if ($hdrId === '') {
         $authHdr = trim(strval($_SERVER['HTTP_AUTHORIZATION'] ?? ''));
