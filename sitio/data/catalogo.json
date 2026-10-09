@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "ultima_actualizacion": "2026-10-09T22:40:11Z",
+    "ultima_actualizacion": "2026-10-09T22:44:12Z",
     "temporada_activa": "octubre",
     "hero_general": {
         "tag": "El Bodegón de los Trajes · Tunja",
@@ -107,6 +107,26 @@
         }
     },
     "trajes": [
+        {
+            "id": "card-octubre-mujer-maravilla",
+            "temporada": "octubre",
+            "categoria": "Superhéroes y Anime",
+            "grupo": "Superhéroes y Anime",
+            "titulo": "mujer maravilla",
+            "descripcion": "VESITIDO MAS ACCESORIOS",
+            "foto": "assets/img/uploads/img_20261009_224409_cf125fdf0a8c.webp",
+            "formato_foto": "carta",
+            "tiene_foto_real": true,
+            "tallas": [
+                "S",
+                "M",
+                "L",
+                "A la medida"
+            ],
+            "destacado": false,
+            "activo": true,
+            "creado_en": "2026-10-09T22:44:12Z"
+        },
         {
             "id": "card-octubre-princesa-pich",
             "temporada": "octubre",
