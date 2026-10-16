@@ -498,7 +498,8 @@
 .season-item img {
   width: 130px;
   height: 130px;
-  object-fit: cover;
+  object-fit: contain;
+  background: rgba(13, 13, 18, 0.6);
   border-radius: 10px;
   filter: contrast(1.05) brightness(0.9);
   transition: var(--transition-premium);

@@ -458,8 +458,25 @@
           }
         })
         .catch(function () {
-          var hint = (location.port === '5500' || location.port === '5501')
-            ? ' Para conectar con el backend PHP, abre el sitio en http://localhost:8095/'
+          // Si estamos en entorno local (Live Server / puerto 5500 / file:) y el contenedor PHP no está corriendo,
+          // permitir acceso con la clave maestra en modo local para no dejar bloqueado al administrador
+          var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+          if (isLocalDev && (pass === 'ANAISABEL2026' || pass === 'admin2026')) {
+            var mockSession = {
+              ok: true,
+              user: user || 'Ana Avila',
+              csrf_token: 'local-dev-token-' + Date.now(),
+              session_id: 'local-session-' + Date.now()
+            };
+            saveSession(mockSession);
+            setAdminState(true);
+            overlay.remove();
+            showToast('¡Bienvenida Ana Avila! Modo edición local activo.');
+            return;
+          }
+
+          var hint = isLocalDev
+            ? ' Para conectar con el backend PHP, inicia Docker o utiliza la contraseña maestra.'
             : '';
           errEl.textContent = 'Error de conexión con el servidor.' + hint;
           errEl.style.display = 'block';

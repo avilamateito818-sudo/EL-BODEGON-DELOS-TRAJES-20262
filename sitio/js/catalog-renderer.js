@@ -229,7 +229,11 @@
     document.querySelectorAll('[data-card-id]').forEach(function (cardEl) {
       var cardId = cardEl.getAttribute('data-card-id');
       var traje = trajesMap[cardId];
-      if (!traje) return;
+      if (!traje) {
+        // Si ya no existe en el catálogo, removerla de inmediato del DOM
+        cardEl.remove();
+        return;
+      }
 
       // Si está desactivado, ocultar la tarjeta
       if (traje.activo === false) {
