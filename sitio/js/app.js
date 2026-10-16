@@ -505,7 +505,7 @@
     const navMenu = document.getElementById('nav-menu');
     const navClose = document.getElementById('nav-close');
     const navOverlay = document.getElementById('nav-overlay');
-    const mqMobile = window.matchMedia('(max-width: 900px)');
+    const mqMobile = window.matchMedia('(max-width: 1100px)');
 
     function closeMenu() {
       navMenu.classList.remove('is-open');

@@ -52,11 +52,8 @@
     } catch (e) {}
   }
 
-  // Detección automática del backend (soporte para Live Server 5500/5501 hacia Docker 8095)
   function getApiBase() {
-    if (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:') {
-      return 'http://localhost:8095';
-    }
+    if (window.BODEGON_API_URL) return window.BODEGON_API_URL;
     return '';
   }
   var API_BASE = getApiBase();
@@ -96,6 +93,78 @@
     { id: 'septiembre', label: 'Septiembre (Amor & Amistad)' },
     { id: 'noviembre', label: 'Noviembre (Mitología & Fantasía)' }
   ];
+
+  var SECCIONES_POR_TEMPORADA = {
+    octubre: [
+      { id: 'Terror', label: '🎃 Terror (Monstruos, Villanos, Sombras, Clásicos)' },
+      { id: 'Princesas y Cuentos de Hadas', label: '👑 Princesas y Cuentos de Hadas (Blanca Nieves, Bella, Elsa, Mérida)' },
+      { id: 'Superhéroes y Anime', label: '⚡ Superhéroes y Anime (Marvel, DC, Demon Slayer, Shonen)' },
+      { id: 'Gala y Elegancia', label: '✨ Gala y Elegancia de Época' },
+      { id: 'Oficios y Uniforme', label: '🩺 Oficios y Uniformes Divertidos (Médicos, Policías, Profesiones)' }
+    ],
+    noviembre: [
+      { id: 'Alquiler de Togas y Trajes para Grados', label: '🎓 Togas y Birretes para Grados (Preescolar, Bachiller, Universidad)' },
+      { id: 'Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños', label: '💃 Trajes Elegantes para Prom y Grados (Hombre, Mujer y Niños)' },
+      { id: 'Alquiler de Bailes Típicos para Clausura', label: '🎭 Bailes Típicos y Danzas para Clausura Escolar' },
+      { id: 'Mitología y Fantasía', label: '🏛️ Mitología, Dioses y Obras de Teatro' }
+    ],
+    diciembre: [
+      { id: 'Disfraces Navideños', label: '🎅 Personajes Navideños (Papá Noel, Mamá Noel, Duendes, Elfos)' },
+      { id: 'Pesebres en Vivo y Pastores', label: '🌟 Pesebres en Vivo (San José, María, Ángeles, Pastores)' },
+      { id: 'Trajes Elegantes para Grados y Clausuras · Niños y Adultos', label: '🥂 Gala y Fin de Año (Esmoquin, Vestidos de Nochevieja)' },
+      { id: 'Fantasía Invernal', label: '⛄ Fantasía Invernal (Reno, Muñeco de Nieve, Cascanueces)' }
+    ],
+    enero: [
+      { id: 'Reyes Magos y Pajes', label: '👑 Reyes Magos y Pajes Reales (Melchor, Gaspar, Baltasar)' },
+      { id: 'Batas Escolares y Médicas', label: '🥼 Batas de Laboratorio y Médicas a la Medida' },
+      { id: 'Uniformes Escolares y Dotación', label: '🎒 Uniformes Escolares y Dotación Institucional' }
+    ],
+    febrero: [
+      { id: 'Carnaval de Negros y Blancos', label: '🎉 Carnaval de Negros y Blancos & Comparsas con Plumas' },
+      { id: 'San Valentín y Bodas', label: '❤️ San Valentín & Gala Romántica de Pareja' },
+      { id: 'Danzas Típicas de Carnaval', label: '💃 Trajes Folclóricos de Danza y Comparsas' }
+    ],
+    marzo: [
+      { id: 'Cuaresma y Semana Santa', label: '✝️ Túnicas, Nazarenos y Personajes Bíblicos de Cuaresma' },
+      { id: 'Ejecutivos y Sastrería', label: '👔 Trajes Ejecutivos y Sastrería a la Medida' },
+      { id: 'Día de la Mujer y Gala', label: '👗 Gala y Alta Costura para el Día de la Mujer' }
+    ],
+    abril: [
+      { id: 'Prenda Nueva de Primavera', label: '🌱 Ropa y Conjuntos de Primavera y Feria' },
+      { id: 'Día del Niño y Personajes', label: '🎈 Disfraces Infantiles del Día del Niño' },
+      { id: 'Feria y Uniformes', label: '🩺 Batas y Uniformes Escolares de Renovación' }
+    ],
+    mayo: [
+      { id: 'Para Regalar a Mamá', label: '💐 Vestidos y Conjuntos de Gala para el Día de la Madre' },
+      { id: 'Primeras Comuniones', label: '🕊️ Trajes y Vestidos para Primera Comunión' },
+      { id: 'Para Toda la Familia', label: '✨ Conjuntos Elegantes Familiares' }
+    ],
+    junio: [
+      { id: 'Quinceañeras y Damas', label: '👑 Vestidos de Quinceañera y Damas de Honor' },
+      { id: 'Bodas y Día del Padre', label: '💍 Novias, Esmoquin y Trajes para Caballeros' },
+      { id: 'San Pedro y Folclor', label: '🎭 Trajes Típicos para Fiestas de San Pedro y San Juan' }
+    ],
+    julio: [
+      { id: 'Fiestas Patrias y Desfiles', label: '🇨🇴 Trajes del 20 de Julio y Desfile Militar / Escolar' },
+      { id: 'Folclor Andino y Boyacense', label: '🏔️ Danzas y Folclor de Boyacá y Colombia' },
+      { id: 'Veraneo y Vacaciones', label: '☀️ Conjuntos y Trajes de Verano' }
+    ],
+    agosto: [
+      { id: 'Aniversario de Tunja', label: '🪁 Trajes de Época y Conmemoración de Tunja' },
+      { id: 'Ropa de Gala y Fiestas', label: '✨ Vestidos de Gala y Celebraciones' },
+      { id: 'Comparsas de Viento', label: '🎉 Comparsas y Festivales de Verano' }
+    ],
+    septiembre: [
+      { id: 'Amor y Amistad', label: '❤️ Cenas Románticas, Gala y Amor y Amistad' },
+      { id: 'Día de la Raza y Colegio', label: '🌎 Trajes Típicos para el Día de la Raza' },
+      { id: 'Aniversarios Especiales', label: '✨ Trajes Elegantes para Eventos Sociales' }
+    ]
+  };
+
+  function getSeccionesForSeason(seasonId) {
+    var sid = (seasonId || 'octubre').toLowerCase();
+    return SECCIONES_POR_TEMPORADA[sid] || SECCIONES_POR_TEMPORADA['octubre'];
+  }
 
   // =========================================================================
   // 1. UTILIDADES Y TOAST
@@ -211,8 +280,22 @@
   // 2. GESTIÓN DE SESIÓN Y MODO ADMINISTRADOR
   // =========================================================================
   function checkSession() {
+    var storedId = sessionId;
+    try {
+      if (!storedId) storedId = localStorage.getItem('bodegon_session_id');
+    } catch (e) {}
+
+    // Si es un visitante público normal sin sesión iniciada, no disparar peticiones
+    if (!storedId) {
+      setAdminState(false);
+      return;
+    }
+
     inpageApiFetch('/api/auth?action=status')
-      .then(function (res) { return res.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) return null;
+        return res.json().catch(function () { return null; });
+      })
       .then(function (data) {
         if (data && data.authenticated) {
           saveSession(data);
@@ -223,7 +306,7 @@
         }
       })
       .catch(function () {
-        if (!sessionId) setAdminState(false);
+        setAdminState(false);
       });
   }
 
@@ -426,7 +509,7 @@
           '<button type="button" class="inpage-modal-close" id="inpage-login-close">&times;</button>' +
         '</div>' +
         '<div id="inpage-login-err" class="inpage-error-msg" style="display:none;"></div>' +
-        '<form id="inpage-login-form">' +
+        '<form id="inpage-login-form" onsubmit="return false;">' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-user-input">Usuario</label>' +
             '<input type="text" id="inpage-user-input" class="inpage-input" value="Ana Avila" required autocomplete="username">' +
@@ -530,27 +613,23 @@
 
     var defaultImg = (traje && traje.foto) ? traje.foto : 'assets/img/ph-generico.svg';
 
-    var PRESET_SECCIONES = [
-      { id: 'Terror', label: '🎃 Terror (Monstruos, Villanos, Sombras)' },
-      { id: 'Cuentos y Fantasía', label: '👑 Princesas y Cuentos de Hadas (Blanca Nieves, Bella, Elsa, Mérida)' },
-      { id: 'Superhéroes y Anime', label: '⚡ Superhéroes y Anime (Marvel, DC, Demon Slayer)' },
-      { id: 'Gala y Elegancia', label: '✨ Gala y Elegancia (Vestidos de Prom, Esmoquin, Togas)' },
-      { id: 'Oficios y Uniforme', label: '🩺 Oficios y Uniformes (Médicos, Policías, Profesiones)' },
-      { id: 'Bailes Típicos y Tradición', label: '🎭 Folclor y Tradición (Boyacá, Danzas Típicas)' },
-      { id: 'Carnaval y Comparsas', label: '🎉 Carnaval y Comparsas (Negros y Blancos)' },
-      { id: 'Disfraces Navideños', label: '🎄 Navidad & Fin de Año (Santa, Duendes, Reyes Magos)' }
-    ];
+    var currentSeason = (traje && traje.temporada) ? traje.temporada : 'octubre';
 
-    var currentCat = traje ? (traje.categoria || traje.grupo || 'Terror') : 'Terror';
-    var isPreset = PRESET_SECCIONES.some(function (p) { return p.id.toLowerCase() === currentCat.toLowerCase(); });
-    var selectedPreset = isPreset
-      ? PRESET_SECCIONES.find(function (p) { return p.id.toLowerCase() === currentCat.toLowerCase(); }).id
-      : (currentCat ? '_custom_' : 'Terror');
+    function buildOptionsHtml(seasonId, activeCat) {
+      var sPresets = getSeccionesForSeason(seasonId);
+      var match = sPresets.find(function (p) { return p.id.toLowerCase() === (activeCat || '').toLowerCase(); });
+      var activePreset = match ? match.id : (activeCat ? '_custom_' : sPresets[0].id);
+      return sPresets.map(function (p) {
+        var sel = (activePreset === p.id) ? 'selected' : '';
+        return '<option value="' + escapeHtml(p.id) + '" ' + sel + '>' + escapeHtml(p.label) + '</option>';
+      }).join('') + '<option value="_custom_" ' + (activePreset === '_custom_' ? 'selected' : '') + '>✏️ Otra sección personalizada...</option>';
+    }
 
-    var seccionOptionsHtml = PRESET_SECCIONES.map(function (p) {
-      var sel = (selectedPreset === p.id) ? 'selected' : '';
-      return '<option value="' + escapeHtml(p.id) + '" ' + sel + '>' + escapeHtml(p.label) + '</option>';
-    }).join('') + '<option value="_custom_" ' + (selectedPreset === '_custom_' ? 'selected' : '') + '>✏️ Otra sección personalizada...</option>';
+    var presets = getSeccionesForSeason(currentSeason);
+    var currentCat = traje ? (traje.categoria || traje.grupo || presets[0].id) : presets[0].id;
+    var seccionOptionsHtml = buildOptionsHtml(currentSeason, currentCat);
+    var isPreset = presets.some(function (p) { return p.id.toLowerCase() === currentCat.toLowerCase(); });
+    var selectedPreset = isPreset ? currentCat : (currentCat ? '_custom_' : presets[0].id);
 
     var currentDestacado = traje ? Boolean(traje.destacado === true || traje.destacado === 'true' || traje.destacado === 1) : false;
     var currentFormato = traje ? (traje.formato_foto || 'carta') : 'carta';
@@ -567,7 +646,7 @@
           '<button type="button" class="inpage-modal-close" id="inpage-traje-close">&times;</button>' +
         '</div>' +
         '<div id="inpage-traje-err" class="inpage-error-msg" style="display:none;"></div>' +
-        '<form id="inpage-traje-form">' +
+        '<form id="inpage-traje-form" onsubmit="return false;">' +
           '<div class="inpage-form-grid">' +
             '<div class="inpage-group inpage-field-full">' +
               '<label class="inpage-label" for="inpage-traje-titulo">Nombre del Traje / Prenda *</label>' +
@@ -642,10 +721,20 @@
       if (e.target === overlay) close();
     });
 
-    // Control de selección de sección dinámica
+    // Control dinámico de Secciones Temáticas al cambiar de Temporada
+    var temporadaSelect = document.getElementById('inpage-traje-temporada');
     var seccionSelect = document.getElementById('inpage-traje-seccion-select');
     var customCatBox = document.getElementById('inpage-custom-cat-box');
     var catInput = document.getElementById('inpage-traje-categoria');
+    if (temporadaSelect && seccionSelect && customCatBox && catInput) {
+      temporadaSelect.addEventListener('change', function () {
+        var newSeason = temporadaSelect.value;
+        seccionSelect.innerHTML = buildOptionsHtml(newSeason, '');
+        seccionSelect.dispatchEvent(new Event('change'));
+      });
+    }
+
+    // Control de selección de sección dinámica
     if (seccionSelect && customCatBox && catInput) {
       seccionSelect.addEventListener('change', function () {
         if (seccionSelect.value === '_custom_') {
@@ -850,7 +939,7 @@
             errEl.textContent = '';
             errEl.style.display = 'block';
             showInlineReauth(errEl, function () {
-              form.dispatchEvent(new Event('submit'));
+              form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
             });
           } else {
             errEl.textContent = res.error || 'Error al guardar la prenda.';

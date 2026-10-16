@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Panel de Administración | El Bodegón de los Trajes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +19,7 @@
         <h2>El Bodegón</h2>
         <p>Inicia sesión para gestionar el catálogo y temporadas</p>
       </div>
-      <form id="login-form">
+      <form id="login-form" onsubmit="return false;">
         <div class="form-group">
           <label for="username">Usuario</label>
           <input type="text" id="username" name="username" required autocomplete="username" placeholder="Ana Avila">
@@ -111,7 +112,7 @@
             <h3>Tema y Temporada Destacada del Mes</h3>
             <p>Define qué mes se abre de forma automática al ingresar a la página web y cuál viste el diseño principal.</p>
           </div>
-          <form id="season-form">
+          <form id="season-form" onsubmit="return false;">
             <div class="form-grid">
               <div class="form-group">
                 <label for="active-season-select">Temporada Activa</label>
@@ -140,7 +141,7 @@
             <h3>Textos del Banner de Inicio (Hero)</h3>
             <p>Personaliza el lema y bienvenida de la cabecera sin tocar el código.</p>
           </div>
-          <form id="hero-form">
+          <form id="hero-form" onsubmit="return false;">
             <div class="form-group">
               <label for="hero-tag">Distintivo Superior (Badge)</label>
               <input type="text" id="hero-tag" placeholder="El Bodegón de los Trajes · Tunja">
@@ -196,7 +197,7 @@
             <h3>Canales de Atención y Horarios</h3>
             <p>Asegúrate de mantener tu número de WhatsApp y dirección actualizados para que los clientes lleguen sin tropiezos.</p>
           </div>
-          <form id="settings-form">
+          <form id="settings-form" onsubmit="return false;">
             <div class="form-grid">
               <div class="form-group">
                 <label for="cfg-whatsapp">Número de WhatsApp (con código de país, ej. 573107706615)</label>
@@ -242,7 +243,7 @@
         <h3 id="traje-modal-title">Nuevo Traje</h3>
         <button type="button" class="modal-close" id="btn-close-traje-modal">&times;</button>
       </div>
-      <form id="traje-form">
+      <form id="traje-form" onsubmit="return false;">
         <input type="hidden" id="traje-id" name="id">
         <div class="form-grid">
           <div class="form-group">
@@ -348,7 +349,7 @@
       <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">
         Tu sesión de administrador requiere verificación de seguridad. Ingresa tu contraseña para continuar de inmediato <strong>sin perder ningún dato escrito en el formulario</strong>.
       </p>
-      <form id="reauth-form">
+      <form id="reauth-form" onsubmit="return false;">
         <div class="form-group">
           <label for="reauth-username">Usuario Administrador</label>
           <input type="text" id="reauth-username" class="form-control" value="Ana Avila" required autocomplete="username">

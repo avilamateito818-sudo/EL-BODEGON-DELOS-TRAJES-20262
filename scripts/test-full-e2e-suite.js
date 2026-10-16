@@ -2,11 +2,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 8095;
+const PORT = Number(process.env.PORT) || 8095;
 let passed = 0;
-let total = 7;
+let total = 8;
 
-console.log('=== SUITE COMPLETA DE REGRESIÓN END-TO-END (FASE 4) ===\n');
+console.log('=== SUITE COMPLETA DE REGRESIÓN END-TO-END (PRODUCCIÓN) ===\n');
 
 function request(options, postData = null) {
   return new Promise((resolve, reject) => {
@@ -80,7 +80,12 @@ async function runTests() {
       console.log('[PASS] Test 3: Autenticación segura (401 en erróneo, 200 con cookie HttpOnly y CSRF 64 chars en válido).');
       passed++;
     } else {
-      console.error('[FAIL] Test 3: Fallo en login o atributos de sesión');
+      console.error('[FAIL] Test 3: Fallo en login o atributos de sesión', {
+        badStatus: badLogin.status,
+        goodStatus: goodLogin.status,
+        csrfLen: csrfToken ? csrfToken.length : 0,
+        cookieHeader: cookieHeader
+      });
     }
 
     // -------------------------------------------------------------
@@ -156,6 +161,30 @@ async function runTests() {
       passed++;
     } else {
       console.error('[FAIL] Test 7: /data/leads/ no está protegido con 403 (status ' + privRes.status + ')');
+    }
+
+    // -------------------------------------------------------------
+    // Test 8: Persistencia de Ajustes de Negocio (/api/config)
+    // -------------------------------------------------------------
+    const getCfgRes = await request({ host: 'localhost', port: PORT, path: '/api/config', method: 'GET' });
+    const postCfgRes = await request({
+      host: 'localhost', port: PORT, path: '/api/config', method: 'POST',
+      headers: { 'Cookie': cookieHeader, 'X-CSRF-Token': csrfToken }
+    }, {
+      whatsapp: '573107706615',
+      phone_display: '+57 310 770 6615',
+      email: 'elbodegondelostrajes@gmail.com',
+      address: 'Diagonal 66 2B 04, Tunja, Boyacá',
+      hours_week: 'Lun–Sáb 8:00 am – 6:00 pm',
+      hours_sun: 'Dom y festivos 9:00 am – 1:00 pm'
+    });
+
+    if (getCfgRes.status === 200 && getCfgRes.json && getCfgRes.json.config &&
+        postCfgRes.status === 200 && postCfgRes.json && postCfgRes.json.ok) {
+      console.log('[PASS] Test 8: /api/config permite consulta pública y persistencia segura de contacto y horarios (GET 200 / POST 200).');
+      passed++;
+    } else {
+      console.error('[FAIL] Test 8: Error en /api/config (GET:' + getCfgRes.status + ', POST:' + postCfgRes.status + ')');
     }
 
     console.log(`\n======================================================`);

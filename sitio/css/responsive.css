@@ -185,7 +185,7 @@
   transform: rotate(90deg) scale(1.08);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .nav-overlay {
     display: block;
   }

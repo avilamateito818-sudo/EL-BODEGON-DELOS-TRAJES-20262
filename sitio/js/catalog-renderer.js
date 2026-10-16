@@ -13,6 +13,14 @@
   'use strict';
 
   var CATALOG_URL = 'data/catalogo.json?v=' + Date.now();
+  var businessConfig = {
+    whatsapp: '573107706615',
+    phone_display: '+57 310 770 6615',
+    email: 'elbodegondelostrajes@gmail.com',
+    address: 'Diagonal 66 2B 04, Tunja, Boyacá',
+    hours_week: 'Lun–Sáb 8:00 am – 6:00 pm',
+    hours_sun: 'Dom y festivos 9:00 am – 1:00 pm'
+  };
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -22,6 +30,60 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  function applyBusinessConfig(cfg) {
+    if (!cfg) return;
+    businessConfig = Object.assign(businessConfig, cfg);
+    window.BODEGON_CONFIG = businessConfig;
+
+    document.querySelectorAll('[data-field="quick.phone"], a[href^="tel:"]').forEach(function (el) {
+      if (el.tagName === 'A') {
+        el.href = 'tel:+' + businessConfig.whatsapp;
+        el.textContent = businessConfig.phone_display;
+      }
+    });
+
+    document.querySelectorAll('[data-field="quick.email"], a[href^="mailto:"]').forEach(function (el) {
+      if (el.tagName === 'A') {
+        el.href = 'mailto:' + businessConfig.email;
+        el.textContent = businessConfig.email;
+      }
+    });
+
+    document.querySelectorAll('[data-field="quick.address"]').forEach(function (el) {
+      el.innerHTML = '<strong>Portal en Tunja:</strong> ' + escapeHtml(businessConfig.address);
+    });
+
+    document.querySelectorAll('[data-field="quick.schedule"]').forEach(function (el) {
+      el.innerHTML = '<strong>Lunes a sábado:</strong> ' + escapeHtml(businessConfig.hours_week) + ' &middot; <strong>Domingos y festivos:</strong> ' + escapeHtml(businessConfig.hours_sun);
+    });
+    document.querySelectorAll('[data-field="hero.schedule"]').forEach(function (el) {
+      el.innerHTML = escapeHtml(businessConfig.hours_week) + ' &middot; ' + escapeHtml(businessConfig.hours_sun);
+    });
+
+    document.querySelectorAll('[data-field="quick.wa"], [data-field="hero.cta_wa"], a.btn-wa-hero, a.floating-wa-btn').forEach(function (el) {
+      var currentHref = el.getAttribute('href') || '';
+      var textMatch = currentHref.match(/text=([^&]+)/);
+      var textParam = textMatch ? textMatch[1] : encodeURIComponent('Hola El Bodegón, quiero cotizar un traje.');
+      el.href = 'https://wa.me/' + businessConfig.whatsapp + '?text=' + textParam;
+    });
+  }
+
+  function initBusinessConfig() {
+    fetch('api/config')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.ok && data.config) {
+          applyBusinessConfig(data.config);
+        }
+      })
+      .catch(function () {
+        fetch('data/config-negocio.json?v=' + Date.now())
+          .then(function (res) { return res.json(); })
+          .then(function (cfg) { applyBusinessConfig(cfg); })
+          .catch(function () {});
+      });
   }
 
   function getAspectValue(formato) {
@@ -50,7 +112,7 @@
     }
 
     var waText = encodeURIComponent('Hola El Bodegón, quiero consultar disponibilidad del traje: ' + (traje.titulo || ''));
-    var waUrl = 'https://wa.me/573107706615?text=' + waText;
+    var waUrl = 'https://wa.me/' + (businessConfig.whatsapp || '573107706615') + '?text=' + waText;
 
     card.innerHTML =
       catBadgeHtml +
@@ -339,8 +401,12 @@
 
   // Inicializar al cargar el DOM
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { initCatalog(); });
+    document.addEventListener('DOMContentLoaded', function () {
+      initBusinessConfig();
+      initCatalog();
+    });
   } else {
+    initBusinessConfig();
     initCatalog();
   }
 })();

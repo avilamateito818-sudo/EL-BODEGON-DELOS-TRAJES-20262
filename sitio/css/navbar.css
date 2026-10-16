@@ -6,7 +6,7 @@ header {
   right: 0;
   width: 100%;
   z-index: 1000;
-  padding: max(1.2rem, var(--sat)) max(5%, var(--sar)) 1.2rem max(5%, var(--sal));
+  padding: max(1rem, var(--sat)) max(3.5%, var(--sar)) 1rem max(3.5%, var(--sal));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +18,7 @@ header {
 }
 
 header.scrolled {
-  padding: max(0.8rem, var(--sat)) max(5%, var(--sar)) 0.8rem max(5%, var(--sal));
+  padding: max(0.75rem, var(--sat)) max(3.5%, var(--sar)) 0.75rem max(3.5%, var(--sal));
   background: var(--pure-black);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
 }
@@ -26,15 +26,13 @@ header.scrolled {
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(0.75rem, 1.2vw, 1.25rem);
   min-width: 0;
-  overflow: hidden;
-  flex-shrink: 1;
-  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .logo-container img {
-  height: 50px;
+  height: 44px;
   width: auto;
   border-radius: 8px;
   border: 1px solid var(--halloween-primary);
@@ -45,26 +43,18 @@ header h1 {
   color: var(--halloween-vivid);
   text-shadow: 0 0 12px rgba(255, 179, 71, 0.4);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* El titulo no se recorta: si el espacio aprieta, baja de tamano en vez de
-     perder letras. min-width evita que el contenedor flexible lo aplaste. */
-  flex-shrink: 0;
-  min-width: max-content;
-  font-size: clamp(1rem, 2.1vw, 1.5rem);
-  letter-spacing: 1px;
+  font-size: clamp(0.9rem, 1.35vw, 1.35rem);
+  letter-spacing: 0.5px;
 }
 
-/* El menu puede encogerse antes que el titulo: si no, el logo se queda sin
-   espacio y "El Bodegon de los Trajes" aparece cortado. */
 nav {
-  flex-shrink: 1;
+  flex-shrink: 0;
   min-width: 0;
 }
 
 nav ul {
   display: flex;
-  gap: 1.4rem;
+  gap: clamp(0.6rem, 1.1vw, 1.25rem);
   list-style: none;
   flex-wrap: nowrap;
   align-items: center;
@@ -76,9 +66,9 @@ nav ul {
 nav a {
   text-decoration: none;
   color: var(--ghostly-white);
-  font-size: 0.72rem;
+  font-size: clamp(0.64rem, 0.76vw, 0.72rem);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   transition: var(--transition-haunted);
   position: relative;
   font-weight: 600;

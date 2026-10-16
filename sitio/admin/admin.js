@@ -32,6 +32,88 @@
     currentAdminUser = localStorage.getItem('bodegon_admin_user') || 'Ana Avila';
   } catch (e) {}
 
+  var SECCIONES_POR_TEMPORADA = {
+    octubre: [
+      { id: 'Terror', label: '🎃 Terror (Monstruos, Villanos, Sombras, Clásicos)' },
+      { id: 'Princesas y Cuentos de Hadas', label: '👑 Princesas y Cuentos de Hadas (Blanca Nieves, Bella, Elsa, Mérida)' },
+      { id: 'Superhéroes y Anime', label: '⚡ Superhéroes y Anime (Marvel, DC, Demon Slayer, Shonen)' },
+      { id: 'Gala y Elegancia', label: '✨ Gala y Elegancia de Época' },
+      { id: 'Oficios y Uniforme', label: '🩺 Oficios y Uniformes Divertidos (Médicos, Policías, Profesiones)' }
+    ],
+    noviembre: [
+      { id: 'Alquiler de Togas y Trajes para Grados', label: '🎓 Togas y Birretes para Grados (Preescolar, Bachiller, Universidad)' },
+      { id: 'Trajes Elegantes para Prom y Grados · Hombre, Mujer y Niños', label: '💃 Trajes Elegantes para Prom y Grados (Hombre, Mujer y Niños)' },
+      { id: 'Alquiler de Bailes Típicos para Clausura', label: '🎭 Bailes Típicos y Danzas para Clausura Escolar' },
+      { id: 'Mitología y Fantasía', label: '🏛️ Mitología, Dioses y Obras de Teatro' }
+    ],
+    diciembre: [
+      { id: 'Disfraces Navideños', label: '🎅 Personajes Navideños (Papá Noel, Mamá Noel, Duendes, Elfos)' },
+      { id: 'Pesebres en Vivo y Pastores', label: '🌟 Pesebres en Vivo (San José, María, Ángeles, Pastores)' },
+      { id: 'Trajes Elegantes para Grados y Clausuras · Niños y Adultos', label: '🥂 Gala y Fin de Año (Esmoquin, Vestidos de Nochevieja)' },
+      { id: 'Fantasía Invernal', label: '⛄ Fantasía Invernal (Reno, Muñeco de Nieve, Cascanueces)' }
+    ],
+    enero: [
+      { id: 'Reyes Magos y Pajes', label: '👑 Reyes Magos y Pajes Reales (Melchor, Gaspar, Baltasar)' },
+      { id: 'Batas Escolares y Médicas', label: '🥼 Batas de Laboratorio y Médicas a la Medida' },
+      { id: 'Uniformes Escolares y Dotación', label: '🎒 Uniformes Escolares y Dotación Institucional' }
+    ],
+    febrero: [
+      { id: 'Carnaval de Negros y Blancos', label: '🎉 Carnaval de Negros y Blancos & Comparsas con Plumas' },
+      { id: 'San Valentín y Bodas', label: '❤️ San Valentín & Gala Romántica de Pareja' },
+      { id: 'Danzas Típicas de Carnaval', label: '💃 Trajes Folclóricos de Danza y Comparsas' }
+    ],
+    marzo: [
+      { id: 'Cuaresma y Semana Santa', label: '✝️ Túnicas, Nazarenos y Personajes Bíblicos de Cuaresma' },
+      { id: 'Ejecutivos y Sastrería', label: '👔 Trajes Ejecutivos y Sastrería a la Medida' },
+      { id: 'Día de la Mujer y Gala', label: '👗 Gala y Alta Costura para el Día de la Mujer' }
+    ],
+    abril: [
+      { id: 'Prenda Nueva de Primavera', label: '🌱 Ropa y Conjuntos de Primavera y Feria' },
+      { id: 'Día del Niño y Personajes', label: '🎈 Disfraces Infantiles del Día del Niño' },
+      { id: 'Feria y Uniformes', label: '🩺 Batas y Uniformes Escolares de Renovación' }
+    ],
+    mayo: [
+      { id: 'Para Regalar a Mamá', label: '💐 Vestidos y Conjuntos de Gala para el Día de la Madre' },
+      { id: 'Primeras Comuniones', label: '🕊️ Trajes y Vestidos para Primera Comunión' },
+      { id: 'Para Toda la Familia', label: '✨ Conjuntos Elegantes Familiares' }
+    ],
+    junio: [
+      { id: 'Quinceañeras y Damas', label: '👑 Vestidos de Quinceañera y Damas de Honor' },
+      { id: 'Bodas y Día del Padre', label: '💍 Novias, Esmoquin y Trajes para Caballeros' },
+      { id: 'San Pedro y Folclor', label: '🎭 Trajes Típicos para Fiestas de San Pedro y San Juan' }
+    ],
+    julio: [
+      { id: 'Fiestas Patrias y Desfiles', label: '🇨🇴 Trajes del 20 de Julio y Desfile Militar / Escolar' },
+      { id: 'Folclor Andino y Boyacense', label: '🏔️ Danzas y Folclor de Boyacá y Colombia' },
+      { id: 'Veraneo y Vacaciones', label: '☀️ Conjuntos y Trajes de Verano' }
+    ],
+    agosto: [
+      { id: 'Aniversario de Tunja', label: '🪁 Trajes de Época y Conmemoración de Tunja' },
+      { id: 'Ropa de Gala y Fiestas', label: '✨ Vestidos de Gala y Celebraciones' },
+      { id: 'Comparsas de Viento', label: '🎉 Comparsas y Festivales de Verano' }
+    ],
+    septiembre: [
+      { id: 'Amor y Amistad', label: '❤️ Cenas Románticas, Gala y Amor y Amistad' },
+      { id: 'Día de la Raza y Colegio', label: '🌎 Trajes Típicos para el Día de la Raza' },
+      { id: 'Aniversarios Especiales', label: '✨ Trajes Elegantes para Eventos Sociales' }
+    ]
+  };
+
+  function getSeccionesForSeason(seasonId) {
+    var sid = (seasonId || 'octubre').toLowerCase();
+    return SECCIONES_POR_TEMPORADA[sid] || SECCIONES_POR_TEMPORADA['octubre'];
+  }
+
+  function buildOptionsHtmlAdmin(seasonId, activeCat) {
+    var sPresets = getSeccionesForSeason(seasonId);
+    var match = sPresets.find(function (p) { return p.id.toLowerCase() === (activeCat || '').toLowerCase(); });
+    var activePreset = match ? match.id : (activeCat ? '_custom_' : sPresets[0].id);
+    return sPresets.map(function (p) {
+      var sel = (activePreset === p.id) ? 'selected' : '';
+      return '<option value="' + escapeHtml(p.id) + '" ' + sel + '>' + escapeHtml(p.label) + '</option>';
+    }).join('') + '<option value="_custom_" ' + (activePreset === '_custom_' ? 'selected' : '') + '>✏️ Otra sección personalizada...</option>';
+  }
+
   var catalogData = null;
   var leadsData = [];
 
@@ -272,6 +354,7 @@
     adminPanel.hidden = false;
     loadCatalog();
     loadLeads();
+    loadSettings();
   }
 
   function showLoginScreen() {
@@ -451,6 +534,16 @@
   // Control dinámico de selección de sección
   var seccionSelectAdmin = document.getElementById('traje-seccion-select');
   var customGrupoInputAdmin = document.getElementById('traje-grupo');
+  var modalTemporadaSelect = document.getElementById('traje-temporada');
+
+  if (modalTemporadaSelect && seccionSelectAdmin) {
+    modalTemporadaSelect.addEventListener('change', function () {
+      var s = modalTemporadaSelect.value;
+      seccionSelectAdmin.innerHTML = buildOptionsHtmlAdmin(s, '');
+      seccionSelectAdmin.dispatchEvent(new Event('change'));
+    });
+  }
+
   if (seccionSelectAdmin && customGrupoInputAdmin) {
     seccionSelectAdmin.addEventListener('change', function () {
       if (seccionSelectAdmin.value === '_custom_') {
@@ -471,11 +564,17 @@
     photoPreviewImg.src = '../assets/img/ph-generico.svg';
     trajeFotoHidden.value = '';
     photoUploadStatus.textContent = 'Formatos: WebP, JPG, PNG (máx 10 MB)';
-    if (seccionSelectAdmin) seccionSelectAdmin.value = 'Terror';
+
+    var initSeason = modalTemporadaSelect ? modalTemporadaSelect.value : 'octubre';
+    if (seccionSelectAdmin) {
+      seccionSelectAdmin.innerHTML = buildOptionsHtmlAdmin(initSeason, '');
+      seccionSelectAdmin.selectedIndex = 0;
+    }
     if (customGrupoInputAdmin) {
       customGrupoInputAdmin.style.display = 'none';
-      customGrupoInputAdmin.value = 'Terror';
+      customGrupoInputAdmin.value = seccionSelectAdmin ? seccionSelectAdmin.value : '';
     }
+
     var destEl = document.getElementById('traje-destacado');
     if (destEl) destEl.checked = false;
     var fmtEl = document.getElementById('traje-formato-foto');
@@ -494,27 +593,23 @@
     document.getElementById('traje-id').value = traje.id;
     trajeModalTitle.textContent = 'Editar Traje: ' + traje.titulo;
     document.getElementById('traje-titulo').value = traje.titulo || '';
-    document.getElementById('traje-temporada').value = traje.temporada || 'octubre';
+    
+    var editSeason = traje.temporada || 'octubre';
+    if (modalTemporadaSelect) modalTemporadaSelect.value = editSeason;
 
-    var curCat = traje.categoria || traje.grupo || 'Terror';
-    var matchedOpt = false;
+    var curCat = traje.categoria || traje.grupo || '';
     if (seccionSelectAdmin) {
-      for (var i = 0; i < seccionSelectAdmin.options.length; i++) {
-        if (seccionSelectAdmin.options[i].value.toLowerCase() === curCat.toLowerCase()) {
-          seccionSelectAdmin.selectedIndex = i;
-          matchedOpt = true;
-          break;
-        }
-      }
-      if (!matchedOpt) {
-        seccionSelectAdmin.value = '_custom_';
+      seccionSelectAdmin.innerHTML = buildOptionsHtmlAdmin(editSeason, curCat);
+      if (seccionSelectAdmin.value === '_custom_') {
         if (customGrupoInputAdmin) {
           customGrupoInputAdmin.style.display = 'block';
           customGrupoInputAdmin.value = curCat;
         }
-      } else if (customGrupoInputAdmin) {
-        customGrupoInputAdmin.style.display = 'none';
-        customGrupoInputAdmin.value = curCat;
+      } else {
+        if (customGrupoInputAdmin) {
+          customGrupoInputAdmin.style.display = 'none';
+          customGrupoInputAdmin.value = seccionSelectAdmin.value;
+        }
       }
     }
 
@@ -770,7 +865,7 @@
       })
       .catch(function (err) {
         if (err && err.message === 'AUTH_401') {
-          showReauthModal(function () { seasonForm.dispatchEvent(new Event('submit')); });
+          showReauthModal(function () { seasonForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); });
           return;
         }
         showToast('Error al conectar con el servidor', 'error');
@@ -806,7 +901,7 @@
       })
       .catch(function (err) {
         if (err && err.message === 'AUTH_401') {
-          showReauthModal(function () { heroForm.dispatchEvent(new Event('submit')); });
+          showReauthModal(function () { heroForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); });
           return;
         }
         showToast('Error al conectar con el servidor', 'error');
@@ -862,11 +957,83 @@
   // =========================================================================
   // 6. MÓDULO 4: AJUSTES GENERALES DEL NEGOCIO
   // =========================================================================
+  function loadSettings() {
+    adminApiFetch('/api/config')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.ok && data.config) {
+          var c = data.config;
+          var elWa = document.getElementById('cfg-whatsapp');
+          var elPhone = document.getElementById('cfg-phone-display');
+          var elEmail = document.getElementById('cfg-email');
+          var elAddr = document.getElementById('cfg-address');
+          var elWeek = document.getElementById('cfg-hours-week');
+          var elSun = document.getElementById('cfg-hours-sun');
+
+          if (elWa && c.whatsapp) elWa.value = c.whatsapp;
+          if (elPhone && c.phone_display) elPhone.value = c.phone_display;
+          if (elEmail && c.email) elEmail.value = c.email;
+          if (elAddr && c.address) elAddr.value = c.address;
+          if (elWeek && c.hours_week) elWeek.value = c.hours_week;
+          if (elSun && c.hours_sun) elSun.value = c.hours_sun;
+        }
+      })
+      .catch(function () {
+        // En caso de fallo de red, mantiene los valores predeterminados
+      });
+  }
+
   settingsForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    showToast('Ajustes de negocio guardados con éxito', 'success');
+
+    var payload = {
+      whatsapp: document.getElementById('cfg-whatsapp').value.trim(),
+      phone_display: document.getElementById('cfg-phone-display').value.trim(),
+      email: document.getElementById('cfg-email').value.trim(),
+      address: document.getElementById('cfg-address').value.trim(),
+      hours_week: document.getElementById('cfg-hours-week').value.trim(),
+      hours_sun: document.getElementById('cfg-hours-sun').value.trim()
+    };
+
+    var btnSubmit = settingsForm.querySelector('button[type="submit"]');
+    var originalText = btnSubmit ? btnSubmit.textContent : 'Guardar';
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Guardando ajustes...';
+    }
+
+    adminApiFetch('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.ok) {
+          showToast('Configuración del negocio guardada exitosamente.', 'success');
+          loadSettings();
+        } else {
+          showToast(data.error || 'Error al guardar la configuración', 'error');
+        }
+      })
+      .catch(function (err) {
+        if (err && err.message === 'AUTH_401') {
+          showReauthModal(function () {
+            settingsForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+          });
+          return;
+        }
+        showToast('Error de conexión al guardar los ajustes.', 'error');
+      })
+      .finally(function () {
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = originalText;
+        }
+      });
   });
 
   // Inicialización al cargar la página
   checkAuth();
 })();
+

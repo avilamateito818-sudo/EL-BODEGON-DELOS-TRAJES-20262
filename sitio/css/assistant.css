@@ -32,17 +32,20 @@
   animation: whatsapp-pulse 2s infinite;
 }
 
-.assistant-float .assistant-open-icon,
+.assistant-float .assistant-open-icon {
+  display: block !important;
+}
+
 .assistant-float .assistant-close-icon {
-  display: block;
+  display: none !important;
 }
 
 .assistant-float.is-open .assistant-open-icon {
-  display: none;
+  display: none !important;
 }
 
 .assistant-float.is-open .assistant-close-icon {
-  display: block;
+  display: block !important;
 }
 
 .assistant-window {
