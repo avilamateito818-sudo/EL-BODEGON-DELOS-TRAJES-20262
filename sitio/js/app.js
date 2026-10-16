@@ -714,47 +714,57 @@
       '.section-head, .card-ghost, .season-catalog, .season-subsection, .season-hero, .season-item, .contact-card, .contact-form-container, .footer-col'
     );
     if ('IntersectionObserver' in window) {
-    revealTargets.forEach((el, i) => {
-      el.classList.add('reveal');
-      el.style.setProperty('--d', ((i % 6) * 90) + 'ms');
-    });
-    // Establece proporción real de las fotos para evitar recortes
-    function setRealRatio(img) {
-      if (!img || img.dataset.ratioSet) return;
-      if (img.complete && img.naturalWidth && img.naturalHeight) {
-        const r = img.naturalWidth / img.naturalHeight;
-        const wrap = img.parentElement;
-        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
-        img.dataset.ratioSet = '1';
+      revealTargets.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.setProperty('--d', ((i % 6) * 90) + 'ms');
+      });
+      // Establece proporción real de las fotos para evitar recortes
+      function setRealRatio(img) {
+        if (!img || img.dataset.ratioSet) return;
+        if (img.complete && img.naturalWidth && img.naturalHeight) {
+          const r = img.naturalWidth / img.naturalHeight;
+          const wrap = img.parentElement;
+          if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+          img.dataset.ratioSet = '1';
+        }
+        img.addEventListener('load', () => {
+          if (!img.naturalWidth || !img.naturalHeight) return;
+          const r = img.naturalWidth / img.naturalHeight;
+          const wrap = img.parentElement;
+          if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+          img.dataset.ratioSet = '1';
+        }, { once: true });
       }
-      img.addEventListener('load', () => {
-        if (!img.naturalWidth || !img.naturalHeight) return;
-        const r = img.naturalWidth / img.naturalHeight;
-        const wrap = img.parentElement;
-        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
-        img.dataset.ratioSet = '1';
-      }, { once: true });
-    }
-    document.querySelectorAll('.img-ghost img, .subsection-img img, .enero-hero-photo img, .season-item img, .admin-added-photo, .season-subsection img').forEach((img) => {
-      setRealRatio(img);
-      // Si ya está cargada, intenta leerla ahora
-      if (img.complete && img.naturalWidth && img.naturalHeight) {
-        const r = img.naturalWidth / img.naturalHeight;
-        const wrap = img.parentElement;
-        if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
-        img.dataset.ratioSet = '1';
-      }
-    });
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.querySelectorAll('img').forEach(setRealRatio);
-          entry.target.classList.add('is-revealed');
-          revealObserver.unobserve(entry.target);
+      document.querySelectorAll('.img-ghost img, .subsection-img img, .enero-hero-photo img, .season-item img, .admin-added-photo, .season-subsection img').forEach((img) => {
+        setRealRatio(img);
+        if (img.complete && img.naturalWidth && img.naturalHeight) {
+          const r = img.naturalWidth / img.naturalHeight;
+          const wrap = img.parentElement;
+          if (wrap) wrap.style.setProperty('--foto-relacion', r.toFixed(4));
+          img.dataset.ratioSet = '1';
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    revealTargets.forEach((el) => revealObserver.observe(el));
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('img').forEach(setRealRatio);
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '50px 0px 50px 0px' });
+      revealTargets.forEach((el) => revealObserver.observe(el));
+
+      // Salvaguarda móvil / iOS Safari: asegurarse de que tras 1.5s todo esté visible si el observer falla
+      setTimeout(() => {
+        revealTargets.forEach((el) => {
+          if (!el.classList.contains('is-revealed')) {
+            el.classList.add('is-revealed');
+          }
+        });
+      }, 1500);
+    } else {
+      revealTargets.forEach((el) => el.classList.add('is-revealed'));
     }
 
     // Respaldo cuando una foto no existe: los errores de recurso no burbujean,

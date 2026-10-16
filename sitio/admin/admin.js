@@ -510,11 +510,22 @@
     photoUploadStatus.textContent = 'Fotografía actual lista para usar.';
     document.getElementById('traje-activo').checked = (traje.activo !== false);
 
+    var btnModalDelete = document.getElementById('btn-modal-delete-traje');
+    if (btnModalDelete) {
+      btnModalDelete.style.display = 'inline-block';
+      btnModalDelete.onclick = function () {
+        closeTrajeModal();
+        confirmDeleteTraje(traje.id);
+      };
+    }
+
     trajeModal.hidden = false;
   }
 
   function closeTrajeModal() {
     trajeModal.hidden = true;
+    var btnModalDelete = document.getElementById('btn-modal-delete-traje');
+    if (btnModalDelete) btnModalDelete.style.display = 'none';
   }
   btnCloseTrajeModal.addEventListener('click', closeTrajeModal);
   btnCancelTraje.addEventListener('click', closeTrajeModal);

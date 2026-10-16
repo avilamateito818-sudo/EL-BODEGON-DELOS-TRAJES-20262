@@ -327,9 +327,12 @@
           </label>
         </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-traje">Cancelar</button>
-          <button type="submit" id="btn-save-traje" class="btn btn-primary">Guardar Prenda</button>
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+          <button type="button" class="btn btn-danger" id="btn-modal-delete-traje" style="display: none;">🗑️ Eliminar Prenda</button>
+          <div style="display: flex; gap: 0.75rem; margin-left: auto;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-traje">Cancelar</button>
+            <button type="submit" id="btn-save-traje" class="btn btn-primary">Guardar Prenda</button>
+          </div>
         </div>
       </form>
     </div>

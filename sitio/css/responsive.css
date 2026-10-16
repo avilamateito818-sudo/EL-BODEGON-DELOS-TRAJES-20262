@@ -668,7 +668,7 @@ footer .footer-grid {
 body > section,
 body > footer,
 body > header {
-  max-width: 100vw;
+  max-width: 100%;
 }
 
 /* Los paneles y subsections no fuerzan ancho: un width:100% dentro de una
