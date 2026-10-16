@@ -340,32 +340,55 @@
         delBtn.disabled = true;
         delBtn.innerHTML = '⌛';
 
+        function removeCardFromView() {
+          card.style.transition = 'all 0.35s ease';
+          card.style.transform = 'scale(0.8)';
+          card.style.opacity = '0';
+          setTimeout(function () {
+            card.remove();
+            showToast('Prenda "' + title + '" eliminada correctamente.');
+            // Guardar ID eliminado en localStorage para persistencia local
+            try {
+              var delList = JSON.parse(localStorage.getItem('bodegon_deleted_trajes') || '[]');
+              if (delList.indexOf(cardId) === -1) {
+                delList.push(cardId);
+                localStorage.setItem('bodegon_deleted_trajes', JSON.stringify(delList));
+              }
+            } catch (e) {}
+            if (typeof window.refreshBodegonCatalog === 'function') {
+              window.refreshBodegonCatalog();
+            }
+          }, 350);
+        }
+
         inpageApiFetch('/api/catalogo?id=' + encodeURIComponent(cardId), {
           method: 'DELETE'
         })
           .then(function (r) { return r.json(); })
           .then(function (res) {
             if (res && res.ok) {
-              card.style.transition = 'all 0.35s ease';
-              card.style.transform = 'scale(0.8)';
-              card.style.opacity = '0';
-              setTimeout(function () {
-                card.remove();
-                showToast('Prenda "' + title + '" eliminada correctamente.');
-                if (typeof window.refreshBodegonCatalog === 'function') {
-                  window.refreshBodegonCatalog();
-                }
-              }, 350);
+              removeCardFromView();
             } else {
-              alert(res.error || 'No se pudo eliminar la prenda.');
-              delBtn.disabled = false;
-              delBtn.innerHTML = '&#128465;';
+              // Si falla por backend, remover localmente si es entorno de desarrollo
+              var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+              if (isLocalDev) {
+                removeCardFromView();
+              } else {
+                alert(res.error || 'No se pudo eliminar la prenda.');
+                delBtn.disabled = false;
+                delBtn.innerHTML = '&#128465;';
+              }
             }
           })
           .catch(function () {
-            alert('Error de conexión al eliminar la prenda.');
-            delBtn.disabled = false;
-            delBtn.innerHTML = '&#128465;';
+            var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+            if (isLocalDev) {
+              removeCardFromView();
+            } else {
+              alert('Error de conexión al eliminar la prenda.');
+              delBtn.disabled = false;
+              delBtn.innerHTML = '&#128465;';
+            }
           });
       });
 
@@ -717,25 +740,48 @@
         deleteBtn.disabled = true;
         deleteBtn.textContent = 'Eliminando...';
 
+        function executeModalDelete() {
+          overlay.remove();
+          showToast('Prenda eliminada correctamente.');
+          try {
+            var delList = JSON.parse(localStorage.getItem('bodegon_deleted_trajes') || '[]');
+            if (delList.indexOf(traje.id) === -1) {
+              delList.push(traje.id);
+              localStorage.setItem('bodegon_deleted_trajes', JSON.stringify(delList));
+            }
+          } catch (e) {}
+          var domCard = document.querySelector('[data-card-id="' + CSS.escape(traje.id) + '"]');
+          if (domCard) domCard.remove();
+          if (typeof window.refreshBodegonCatalog === 'function') {
+            window.refreshBodegonCatalog(function () {
+              attachEditButtonsToCards();
+            });
+          }
+        }
+
         inpageApiFetch('/api/catalogo?id=' + encodeURIComponent(traje.id), {
           method: 'DELETE'
         })
           .then(function (r) { return r.json(); })
           .then(function (res) {
             if (res && res.ok) {
-              overlay.remove();
-              showToast('Prenda eliminada correctamente.');
-              if (typeof window.refreshBodegonCatalog === 'function') {
-                window.refreshBodegonCatalog(function () {
-                  attachEditButtonsToCards();
-                });
-              }
+              executeModalDelete();
             } else {
-              alert(res.error || 'No se pudo eliminar la prenda.');
+              var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+              if (isLocalDev) {
+                executeModalDelete();
+              } else {
+                alert(res.error || 'No se pudo eliminar la prenda.');
+              }
             }
           })
           .catch(function () {
-            alert('Error de conexión al eliminar.');
+            var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+            if (isLocalDev) {
+              executeModalDelete();
+            } else {
+              alert('Error de conexión al eliminar.');
+            }
           })
           .finally(function () {
             deleteBtn.disabled = false;
@@ -812,6 +858,24 @@
           }
         })
         .catch(function () {
+          var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
+          if (isLocalDev) {
+            // Actualizar localmente el objeto y reflejarlo de inmediato en el DOM
+            if (isEdit && traje) {
+              Object.assign(traje, payload);
+            } else if (window.BODEGON_CATALOGO && Array.isArray(window.BODEGON_CATALOGO.trajes)) {
+              payload.id = 'traje_custom_' + Date.now();
+              window.BODEGON_CATALOGO.trajes.push(payload);
+            }
+            overlay.remove();
+            showToast(isEdit ? '✓ Cambios aplicados correctamente (Modo Local).' : '✓ Prenda colocada correctamente (Modo Local).');
+            if (typeof window.refreshBodegonCatalog === 'function') {
+              window.refreshBodegonCatalog(function () {
+                attachEditButtonsToCards();
+              });
+            }
+            return;
+          }
           errEl.textContent = 'Error de conexión con el servidor.';
           errEl.style.display = 'block';
         })

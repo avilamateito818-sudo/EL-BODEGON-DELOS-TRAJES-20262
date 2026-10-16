@@ -220,14 +220,25 @@
   function hydrateCards(trajes) {
     if (!Array.isArray(trajes)) return;
 
+    var deletedIds = [];
+    try {
+      deletedIds = JSON.parse(localStorage.getItem('bodegon_deleted_trajes') || '[]');
+    } catch (e) {}
+
     var trajesMap = {};
     trajes.forEach(function (t) {
-      if (t.id) trajesMap[t.id] = t;
+      if (t.id && deletedIds.indexOf(t.id) === -1) {
+        trajesMap[t.id] = t;
+      }
     });
 
     // 1. Actualizar tarjetas ya existentes en el DOM (en paneles de temporadas)
     document.querySelectorAll('[data-card-id]').forEach(function (cardEl) {
       var cardId = cardEl.getAttribute('data-card-id');
+      if (deletedIds.indexOf(cardId) !== -1) {
+        cardEl.remove();
+        return;
+      }
       var traje = trajesMap[cardId];
       if (!traje) {
         // Si ya no existe en el catálogo, removerla de inmediato del DOM
