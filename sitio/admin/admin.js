@@ -253,7 +253,7 @@
   function showReauthModal(callback) {
     pendingActionCallback = callback || null;
     if (reauthUsername) {
-      reauthUsername.value = currentAdminUser || '';
+      reauthUsername.value = '';
     }
     if (reauthPassword) {
       reauthPassword.value = '';
