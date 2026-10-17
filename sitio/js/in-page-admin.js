@@ -509,14 +509,14 @@
           '<button type="button" class="inpage-modal-close" id="inpage-login-close">&times;</button>' +
         '</div>' +
         '<div id="inpage-login-err" class="inpage-error-msg" style="display:none;"></div>' +
-        '<form id="inpage-login-form" onsubmit="return false;">' +
+        '<form id="inpage-login-form" autocomplete="off" onsubmit="return false;">' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-user-input">Usuario</label>' +
-            '<input type="text" id="inpage-user-input" class="inpage-input" value="" placeholder="Usuario" required autocomplete="username">' +
+            '<input type="text" id="inpage-user-input" class="inpage-input" value="" placeholder="Usuario" required autocomplete="off">' +
           '</div>' +
           '<div class="inpage-group">' +
-            '<label class="inpage-label" for="inpage-pass-input">Contraseña Maestra</label>' +
-            '<input type="password" id="inpage-pass-input" class="inpage-input" placeholder="Contraseña" required autocomplete="current-password">' +
+            '<label class="inpage-label" for="inpage-pass-input">Contraseña</label>' +
+            '<input type="password" id="inpage-pass-input" class="inpage-input" placeholder="Contraseña" required autocomplete="new-password">' +
           '</div>' +
           '<div class="inpage-modal-footer">' +
             '<button type="button" class="inpage-btn inpage-btn-ghost" id="inpage-login-cancel">Cancelar</button>' +
@@ -593,7 +593,16 @@
         });
     });
 
-    document.getElementById('inpage-pass-input').focus();
+    var userInput = document.getElementById('inpage-user-input');
+    var passInput = document.getElementById('inpage-pass-input');
+    if (userInput) userInput.value = '';
+    if (passInput) passInput.value = '';
+
+    if (userInput) {
+      userInput.focus();
+    } else if (passInput) {
+      passInput.focus();
+    }
   }
 
   // =========================================================================
