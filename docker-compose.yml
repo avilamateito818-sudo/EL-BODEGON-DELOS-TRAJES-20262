@@ -11,8 +11,8 @@ services:
     restart: unless-stopped
     environment:
       PORT: "${PORT:-8095}"
-      ADMIN_USER: "${ADMIN_USER:-Ana Avila}"
-      ADMIN_PASS: "${ADMIN_PASS:-ANAISABEL2026}"
+      ADMIN_USER: "${ADMIN_USER:-admin}"
+      ADMIN_PASS: "${ADMIN_PASS:-}"
       ADMIN_PASSWORD_HASH: "${ADMIN_PASSWORD_HASH:-}"
       CONTACT_PHONE: "${CONTACT_PHONE:-573107706615}"
       GITHUB_TOKEN: "${GITHUB_TOKEN:-}"

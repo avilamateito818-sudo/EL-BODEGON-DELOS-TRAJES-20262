@@ -22,11 +22,11 @@
       <form id="login-form" onsubmit="return false;">
         <div class="form-group">
           <label for="username">Usuario</label>
-          <input type="text" id="username" name="username" required autocomplete="username" placeholder="Ana Avila">
+          <input type="text" id="username" name="username" required autocomplete="username" placeholder="Usuario">
         </div>
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••••••">
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Contraseña">
         </div>
         <div id="login-error" class="error-msg" hidden></div>
         <button type="submit" id="login-btn" class="btn btn-primary btn-block">Iniciar Sesión</button>
@@ -352,11 +352,11 @@
       <form id="reauth-form" onsubmit="return false;">
         <div class="form-group">
           <label for="reauth-username">Usuario Administrador</label>
-          <input type="text" id="reauth-username" class="form-control" value="Ana Avila" required autocomplete="username">
+          <input type="text" id="reauth-username" class="form-control" value="" placeholder="Usuario" required autocomplete="username">
         </div>
         <div class="form-group">
           <label for="reauth-password">Contraseña</label>
-          <input type="password" id="reauth-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+          <input type="password" id="reauth-password" class="form-control" placeholder="Contraseña" required autocomplete="current-password">
         </div>
         <div id="reauth-error" class="error-msg" hidden style="margin-bottom: 1rem;"></div>
         <div class="modal-footer" style="padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">

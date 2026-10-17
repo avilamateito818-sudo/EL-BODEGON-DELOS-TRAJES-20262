@@ -24,12 +24,12 @@
   // Variables de Estado de Sesión (Persistentes con LocalStorage)
   var sessionId = '';
   var csrfToken = '';
-  var currentAdminUser = 'Ana Avila';
+  var currentAdminUser = '';
 
   try {
     sessionId = localStorage.getItem('bodegon_session_id') || '';
     csrfToken = localStorage.getItem('bodegon_csrf_token') || '';
-    currentAdminUser = localStorage.getItem('bodegon_admin_user') || 'Ana Avila';
+    currentAdminUser = localStorage.getItem('bodegon_admin_user') || '';
   } catch (e) {}
 
   var SECCIONES_POR_TEMPORADA = {
@@ -253,7 +253,7 @@
   function showReauthModal(callback) {
     pendingActionCallback = callback || null;
     if (reauthUsername) {
-      reauthUsername.value = currentAdminUser || 'Ana Avila';
+      reauthUsername.value = currentAdminUser || '';
     }
     if (reauthPassword) {
       reauthPassword.value = '';
@@ -287,7 +287,7 @@
         btnSubmitReauth.textContent = 'Verificando...';
       }
 
-      var user = (reauthUsername && reauthUsername.value) ? reauthUsername.value.trim() : (currentAdminUser || 'Ana Avila');
+      var user = (reauthUsername && reauthUsername.value) ? reauthUsername.value.trim() : (currentAdminUser || '');
       var pass = reauthPassword ? reauthPassword.value : '';
 
       adminApiFetch('/api/auth?action=login', {
@@ -392,7 +392,7 @@
         if (isLocalDev && (pass === 'ANAISABEL2026' || pass === 'admin2026')) {
           var mockSession = {
             ok: true,
-            user: user || 'Ana Avila',
+            user: user || 'Administrador',
             csrf_token: 'local-dev-token-' + Date.now(),
             session_id: 'local-session-' + Date.now()
           };

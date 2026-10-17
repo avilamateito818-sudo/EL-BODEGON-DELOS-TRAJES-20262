@@ -15,7 +15,7 @@
   // Variables de Estado de Sesión (Persistentes con LocalStorage y sincronizadas con /admin/)
   var sessionId = '';
   var csrfToken = '';
-  var currentUser = 'Ana Avila';
+  var currentUser = '';
   var isAdmin = false;
   var currentEditTraje = null;
   var toastTimer = null;
@@ -23,7 +23,7 @@
   try {
     sessionId = localStorage.getItem('bodegon_session_id') || '';
     csrfToken = localStorage.getItem('bodegon_csrf_token') || '';
-    currentUser = localStorage.getItem('bodegon_admin_user') || 'Ana Avila';
+    currentUser = localStorage.getItem('bodegon_admin_user') || '';
   } catch (e) {}
 
   function saveSession(data) {
@@ -211,7 +211,7 @@
         '<span style="font-size: 0.82rem; font-weight: normal; color: #fecaca;">Ingresa tu contraseña para guardar tu prenda <strong>sin perder los datos que escribiste</strong>:</span>' +
       '</p>' +
       '<div style="display: flex; gap: 8px; flex-wrap: wrap;">' +
-        '<input type="password" class="inpage-input inpage-reauth-pass-input" placeholder="Contraseña maestra (ANAISABEL2026)" style="flex: 1; min-width: 180px; padding: 8px 12px; font-size: 0.9rem;" autocomplete="current-password">' +
+        '<input type="password" class="inpage-input inpage-reauth-pass-input" placeholder="Contraseña" style="flex: 1; min-width: 180px; padding: 8px 12px; font-size: 0.9rem;" autocomplete="current-password">' +
         '<button type="button" class="inpage-btn inpage-btn-primary inpage-reauth-btn-submit" style="padding: 8px 16px; font-size: 0.88rem; white-space: nowrap;">Reconectar y Guardar</button>' +
       '</div>' +
       '<div class="inpage-reauth-feedback" style="color: #fca5a5; font-size: 0.82rem; margin-top: 8px; display: none;"></div>';
@@ -240,7 +240,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ user: currentUser || 'Ana Avila', pass: pass })
+        body: JSON.stringify({ user: currentUser || '', pass: pass })
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
@@ -512,11 +512,11 @@
         '<form id="inpage-login-form" onsubmit="return false;">' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-user-input">Usuario</label>' +
-            '<input type="text" id="inpage-user-input" class="inpage-input" value="Ana Avila" required autocomplete="username">' +
+            '<input type="text" id="inpage-user-input" class="inpage-input" value="" placeholder="Usuario" required autocomplete="username">' +
           '</div>' +
           '<div class="inpage-group">' +
             '<label class="inpage-label" for="inpage-pass-input">Contraseña Maestra</label>' +
-            '<input type="password" id="inpage-pass-input" class="inpage-input" placeholder="••••••••••••" required autocomplete="current-password">' +
+            '<input type="password" id="inpage-pass-input" class="inpage-input" placeholder="Contraseña" required autocomplete="current-password">' +
           '</div>' +
           '<div class="inpage-modal-footer">' +
             '<button type="button" class="inpage-btn inpage-btn-ghost" id="inpage-login-cancel">Cancelar</button>' +
@@ -557,7 +557,7 @@
             saveSession(data);
             setAdminState(true);
             overlay.remove();
-            showToast('¡Bienvenida doña Ana Avila! Modo edición activo.');
+            showToast('¡Sesión iniciada con éxito! Modo edición activo.');
           } else {
             errEl.textContent = data.error || 'Credenciales incorrectas.';
             errEl.style.display = 'block';
@@ -570,19 +570,19 @@
           if (isLocalDev && (pass === 'ANAISABEL2026' || pass === 'admin2026')) {
             var mockSession = {
               ok: true,
-              user: user || 'Ana Avila',
+              user: user || 'Administrador',
               csrf_token: 'local-dev-token-' + Date.now(),
               session_id: 'local-session-' + Date.now()
             };
             saveSession(mockSession);
             setAdminState(true);
             overlay.remove();
-            showToast('¡Bienvenida Ana Avila! Modo edición local activo.');
+            showToast('¡Modo edición activo!');
             return;
           }
 
           var hint = isLocalDev
-            ? ' Para conectar con el backend PHP, inicia Docker o utiliza la contraseña maestra.'
+            ? ' Para conectar con el backend PHP, inicia Docker.'
             : '';
           errEl.textContent = 'Error de conexión con el servidor.' + hint;
           errEl.style.display = 'block';
