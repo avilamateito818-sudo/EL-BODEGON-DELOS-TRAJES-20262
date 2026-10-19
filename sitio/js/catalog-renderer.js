@@ -117,7 +117,7 @@
     card.innerHTML =
       catBadgeHtml +
       '<div class="img-ghost">' +
-        '<img loading="lazy" src="' + escapeHtml(traje.foto || 'assets/img/ph-generico.svg') + '" alt="' + escapeHtml(traje.titulo || 'Traje') + '">' +
+        '<img loading="lazy" decoding="async" width="600" height="800" src="' + escapeHtml(traje.foto || 'assets/img/ph-generico.svg') + '" alt="' + escapeHtml(traje.titulo || 'Traje') + '">' +
       '</div>' +
       '<div class="card-body-haunted">' +
         '<h3>' + escapeHtml(traje.titulo || 'Traje Exclusivo') + '</h3>' +

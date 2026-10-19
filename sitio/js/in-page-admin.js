@@ -564,25 +564,9 @@
           }
         })
         .catch(function () {
-          // Si estamos en entorno local (Live Server / puerto 5500 / file:) y el contenedor PHP no está corriendo,
-          // permitir acceso con la clave maestra en modo local para no dejar bloqueado al administrador
           var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
-          if (isLocalDev && (pass === 'ANAISABEL2026' || pass === 'admin2026')) {
-            var mockSession = {
-              ok: true,
-              user: user || 'Administrador',
-              csrf_token: 'local-dev-token-' + Date.now(),
-              session_id: 'local-session-' + Date.now()
-            };
-            saveSession(mockSession);
-            setAdminState(true);
-            overlay.remove();
-            showToast('¡Modo edición activo!');
-            return;
-          }
-
           var hint = isLocalDev
-            ? ' Para conectar con el backend PHP, inicia Docker.'
+            ? ' Para conectar con el backend PHP, inicia Docker o dev-server.'
             : '';
           errEl.textContent = 'Error de conexión con el servidor.' + hint;
           errEl.style.display = 'block';
@@ -696,7 +680,7 @@
             '<div class="inpage-group inpage-field-full">' +
               '<label class="inpage-label">Fotografía de la Prenda</label>' +
               '<div class="inpage-photo-box">' +
-                '<img id="inpage-photo-preview" class="inpage-photo-preview" src="' + escapeHtml(defaultImg) + '" alt="Previsualización" style="aspect-ratio:' + (currentFormato === 'cuadrado' ? '1/1' : (currentFormato === 'panoramico' ? '16/9' : '3/4')) + ';">' +
+                '<img loading="lazy" decoding="async" width="300" height="400" id="inpage-photo-preview" class="inpage-photo-preview" src="' + escapeHtml(defaultImg) + '" alt="Previsualización" style="aspect-ratio:' + (currentFormato === 'cuadrado' ? '1/1' : (currentFormato === 'panoramico' ? '16/9' : '3/4')) + ';">' +
                 '<div class="inpage-photo-controls">' +
                   '<input type="file" id="inpage-photo-file" accept="image/*" style="display:none;">' +
                   '<input type="hidden" id="inpage-traje-foto-val" value="' + escapeHtml(traje ? (traje.foto || '') : '') + '">' +
@@ -778,6 +762,58 @@
     var photoHint = document.getElementById('inpage-photo-hint');
     var hiddenFoto = document.getElementById('inpage-traje-foto-val');
 
+    function compressInpageImage(file, callback) {
+      if (!file || !file.type.match(/^image\/(jpeg|png|webp)/i)) {
+        return callback(file);
+      }
+      var img = new Image();
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        img.onload = function () {
+          var maxDim = 1200;
+          var w = img.width;
+          var h = img.height;
+          if (w <= maxDim && h <= maxDim && file.size < 300 * 1024 && file.type === 'image/webp') {
+            return callback(file);
+          }
+          if (w > h) {
+            if (w > maxDim) {
+              h = Math.round(h * (maxDim / w));
+              w = maxDim;
+            }
+          } else {
+            if (h > maxDim) {
+              w = Math.round(w * (maxDim / h));
+              h = maxDim;
+            }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, w, h);
+          if (canvas.toBlob) {
+            canvas.toBlob(function (blob) {
+              if (blob && blob.size < file.size) {
+                var optimizedFile = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' });
+                callback(optimizedFile);
+              } else {
+                callback(file);
+              }
+            }, 'image/webp', 0.85);
+          } else {
+            callback(file);
+          }
+        };
+        img.onerror = function () { callback(file); };
+        img.src = e.target.result;
+      };
+      reader.onerror = function () { callback(file); };
+      reader.readAsDataURL(file);
+    }
+
     btnSelectPhoto.addEventListener('click', function () {
       fileInput.click();
     });
@@ -794,15 +830,17 @@
         reader.readAsDataURL(file);
       }
 
-      photoHint.textContent = 'Subiendo imagen al servidor...';
-      var formData = new FormData();
-      formData.append('file', file);
-      if (csrfToken) formData.append('csrf_token', csrfToken);
+      photoHint.textContent = 'Optimizando imagen...';
+      compressInpageImage(file, function (processedFile) {
+        photoHint.textContent = 'Subiendo imagen optimizada al servidor...';
+        var formData = new FormData();
+        formData.append('file', processedFile);
+        if (csrfToken) formData.append('csrf_token', csrfToken);
 
-      inpageApiFetch('/api/upload-media', {
-        method: 'POST',
-        body: formData
-      })
+        inpageApiFetch('/api/upload-media', {
+          method: 'POST',
+          body: formData
+        })
         .then(function (r) {
           return r.json().then(function (res) {
             return { status: r.status, data: res };
@@ -828,6 +866,7 @@
         .catch(function () {
           photoHint.textContent = 'Error de conexión al subir la imagen.';
         });
+      });
     });
 
     // Eliminar traje (si está en edición)

@@ -229,7 +229,9 @@
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-left: 1px solid var(--border-glow);
-    transition: right 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+    visibility: hidden;
+    pointer-events: none;
+    transition: right 0.35s cubic-bezier(0.2, 0, 0.2, 1), visibility 0.35s;
     z-index: 1000;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -238,6 +240,8 @@
 
   nav ul.nav-menu.is-open {
     right: 0;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav-menu li {
@@ -477,6 +481,23 @@ section {
 
 /* ===== CELULAR (<= 640px) ===== */
 @media (max-width: 640px) {
+  /* Salvaguarda crítica para iPhone / iOS Safari: tamaño mínimo 16px para evitar auto-zoom molesto */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Blancos táctiles cómodos para dedos en móvil (mínimo 44px de altura táctil por Apple HIG / WCAG) */
+  .season-tab,
+  .dropdown a,
+  .card-cta-wa,
+  .btn-haunted {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
   .hero-horror { height: 100svh; height: 100dvh; min-height: 520px; }
   .hero-box h2 { margin-bottom: 1.4rem; }
   .hero-box p { letter-spacing: 2px; line-height: 1.7; }

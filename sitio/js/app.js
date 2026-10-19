@@ -674,7 +674,7 @@
     lightbox.setAttribute('role', 'dialog');
     lightbox.setAttribute('aria-modal', 'true');
     lightbox.innerHTML =
-      '<img alt="Foto ampliada">' +
+      '<img loading="lazy" decoding="async" width="800" height="1000" alt="Foto ampliada">' +
       '<button type="button" class="lightbox-close" aria-label="Cerrar">&times;</button>';
     document.body.appendChild(lightbox);
 

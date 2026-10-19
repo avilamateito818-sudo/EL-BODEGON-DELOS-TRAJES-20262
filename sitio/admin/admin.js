@@ -389,19 +389,8 @@
       })
       .catch(function () {
         var isLocalDev = (location.port === '5500' || location.port === '5501' || location.port === '3000' || location.protocol === 'file:');
-        if (isLocalDev && (pass === 'ANAISABEL2026' || pass === 'admin2026')) {
-          var mockSession = {
-            ok: true,
-            user: user || 'Administrador',
-            csrf_token: 'local-dev-token-' + Date.now(),
-            session_id: 'local-session-' + Date.now()
-          };
-          saveSessionState(mockSession);
-          showToast('Bienvenida al panel de administración (Modo Local)', 'success');
-          showAdminPanel();
-          return;
-        }
-        loginError.textContent = 'Error de conexión con el servidor.';
+        var hint = isLocalDev ? ' Inicia Docker o dev-server para validar credenciales.' : '';
+        loginError.textContent = 'Error de conexión con el servidor.' + hint;
         loginError.hidden = false;
       })
       .finally(function () {
@@ -650,6 +639,59 @@
   btnCloseTrajeModal.addEventListener('click', closeTrajeModal);
   btnCancelTraje.addEventListener('click', closeTrajeModal);
 
+  // Compresión fotográfica del lado del cliente antes de subir
+  function compressImageFile(file, callback) {
+    if (!file || !file.type.match(/^image\/(jpeg|png|webp)/i)) {
+      return callback(file);
+    }
+    var img = new Image();
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      img.onload = function () {
+        var maxDim = 1200;
+        var w = img.width;
+        var h = img.height;
+        if (w <= maxDim && h <= maxDim && file.size < 300 * 1024 && file.type === 'image/webp') {
+          return callback(file);
+        }
+        if (w > h) {
+          if (w > maxDim) {
+            h = Math.round(h * (maxDim / w));
+            w = maxDim;
+          }
+        } else {
+          if (h > maxDim) {
+            w = Math.round(w * (maxDim / h));
+            h = maxDim;
+          }
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, w, h);
+        if (canvas.toBlob) {
+          canvas.toBlob(function (blob) {
+            if (blob && blob.size < file.size) {
+              var optimizedFile = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' });
+              callback(optimizedFile);
+            } else {
+              callback(file);
+            }
+          }, 'image/webp', 0.85);
+        } else {
+          callback(file);
+        }
+      };
+      img.onerror = function () { callback(file); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function () { callback(file); };
+    reader.readAsDataURL(file);
+  }
+
   // Subida de Fotografías con previsualización inmediata y auto-recuperación de sesión
   btnSelectPhoto.addEventListener('click', function () {
     photoFileInput.click();
@@ -665,7 +707,10 @@
       photoPreviewImg.src = localBlobUrl;
     } catch (e) {}
 
-    performUploadPhoto(file);
+    photoUploadStatus.textContent = 'Optimizando y reduciendo imagen...';
+    compressImageFile(file, function (processedFile) {
+      performUploadPhoto(processedFile);
+    });
   });
 
   function performUploadPhoto(file) {
