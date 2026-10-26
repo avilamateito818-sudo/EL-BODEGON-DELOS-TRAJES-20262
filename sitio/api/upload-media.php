@@ -69,10 +69,12 @@ if ($fileSize > $maxBytes) {
 }
 
 // 4. Validación estricta de tipo MIME
-$finfo = finfo_open(FILEINFO_MIME_TYPE);
-$mime = is_resource($finfo) || is_object($finfo) ? finfo_file($finfo, $tmpPath) : '';
-if (is_resource($finfo) || is_object($finfo)) {
-    finfo_close($finfo);
+$mime = '';
+if (class_exists('finfo')) {
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($tmpPath) ?: '';
+} elseif (function_exists('mime_content_type')) {
+    $mime = (string) mime_content_type($tmpPath);
 }
 
 $allowedMimes = array(
@@ -114,15 +116,13 @@ if (function_exists('imagewebp') && in_array($ext, array('jpg', 'png'), true)) {
         $webpFilename = 'img_' . date('Ymd_His') . '_' . bin2hex(random_bytes(6)) . '.webp';
         $webpTarget = $uploadDir . '/' . $webpFilename;
         if (@imagewebp($imgRes, $webpTarget, 85)) {
-            imagedestroy($imgRes);
             @chmod($webpTarget, 0666);
             $filename = $webpFilename;
             $targetPath = $webpTarget;
             $ext = 'webp';
             $converted = true;
-        } else {
-            imagedestroy($imgRes);
         }
+        unset($imgRes);
     }
 }
 

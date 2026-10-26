@@ -140,6 +140,10 @@
 
 /* ============ CATÁLOGOS DENTRO DE TEMPORADA ============ */
 .season-catalog {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   border: 1px solid var(--season-accent, var(--m-accent, rgba(255, 140, 0, 0.35)));
   border-radius: 16px;
   padding: 2.5rem;
@@ -445,7 +449,12 @@
   flex-direction: column;
   gap: 3.5rem;
   width: 100%;
-  animation: seasonIn 0.7s ease-out;
+  opacity: 1;
+  animation: seasonIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .season-panel.is-active.season-panel-stack {
@@ -802,27 +811,15 @@
   flex-direction: column;
   gap: 3.5rem;
   width: 100%;
-}
-
-.season-panel:not(.is-expanded) .season-sub-sections {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-20px);
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
-  gap: 0;
-  transition: all 0.4s ease;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
 }
 
 .season-panel.is-expanded .season-sub-sections {
-  max-height: 60000px;
   opacity: 1;
   overflow: visible;
-  transform: translateY(0);
   pointer-events: auto;
-  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 @media (max-width: 768px) {
@@ -968,8 +965,8 @@
 }
 
 @keyframes seasonIn {
-  from { opacity: 0; transform: translateY(25px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0.9; }
+  to   { opacity: 1; }
 }
 
 @media (max-width: 1024px) {

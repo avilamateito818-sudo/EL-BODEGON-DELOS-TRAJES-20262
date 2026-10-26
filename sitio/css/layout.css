@@ -25,8 +25,12 @@ section {
 /* CATALOG GRID */
 .grid-haunted {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 2.5rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .card-ghost {
@@ -41,6 +45,9 @@ section {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .card-ghost:hover {
@@ -49,30 +56,50 @@ section {
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 140, 0, 0.15);
 }
 
-/* La caja toma la proporción real de la foto (--foto-relacion la midió el
-   navegador al cargarla). Antes tenía alto fijo de 480px y "cover", que
-   recortaba entre el 6% y el 52% de cada foto; con la proporción real la
-   imagen se ve completa y sin franjas vacías alrededor. */
+/* Proporción estética y balanceada para las tarjetas del catálogo.
+   Garantiza que ninguna foto se vea gorda, aplastada ni recortada */
 .img-ghost {
   aspect-ratio: var(--foto-relacion, 3 / 4);
+  max-height: 480px;
   overflow: hidden;
   position: relative;
-  background: #0d0d12;
+  background: radial-gradient(circle at center, rgba(32, 24, 38, 0.5) 0%, #0a070e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  width: 100%;
 }
 
 .img-ghost img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 2s var(--transition-haunted);
-  filter: contrast(1.1) brightness(0.9);
+  object-position: center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: contrast(1.05) brightness(0.98);
+}
+
+/* Modificadores de proporción elegidos por el administrador */
+.card-formato-carta .img-ghost {
+  aspect-ratio: 3 / 4;
+}
+
+.card-formato-cuadrado .img-ghost {
+  aspect-ratio: 1 / 1;
+}
+
+.card-formato-panoramico .img-ghost {
+  aspect-ratio: 16 / 9;
 }
 
 .img-ghost img[src*="er.jpg"] {
   filter: contrast(1.25) brightness(1.3);
 }
 
-/* Foto que no se pudo cargar: se retira el icono roto y queda el aviso. */
+/* Foto que no se pudo cargar: se retira el icono roto y queda el aviso */
 .foto-no-carga {
   display: flex;
   align-items: center;
@@ -91,25 +118,24 @@ section {
 }
 
 .card-ghost:hover .img-ghost img {
-  transform: scale(1.1) rotate(1deg);
-  filter: contrast(1.2) brightness(1.1);
+  transform: scale(1.04);
 }
 
-.img-ghost {
-  cursor: zoom-in;
-}
-
+/* ============ LIGHTBOX LUXURY MODAL (AL ESPICHAR CADA FOTO) ============ */
 .lightbox {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(4, 3, 7, 0.94);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: max(1rem, var(--sat)) max(1rem, var(--sar)) max(1rem, var(--sab)) max(1rem, var(--sal));
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s var(--transition-haunted);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .lightbox.is-open {
@@ -117,49 +143,196 @@ section {
   pointer-events: auto;
 }
 
-.lightbox img {
-  max-width: 92vw;
-  max-height: 88vh;
-  border-radius: 12px;
-  box-shadow: 0 0 60px rgba(255, 140, 0, 0.25);
+.lightbox-dialog {
+  position: relative;
+  background: #0d0a13;
+  border: 1px solid rgba(255, 179, 71, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 157, 46, 0.12);
+  max-width: 840px;
+  width: 100%;
+  max-height: 90vh;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox.is-open .lightbox-dialog {
+  transform: scale(1) translateY(0);
 }
 
 .lightbox-close {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  background: rgba(18, 14, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   line-height: 1;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 2.8rem;
+  height: 2.8rem;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s var(--transition-haunted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
 }
 
 .lightbox-close:hover {
   background: var(--halloween-primary);
   border-color: var(--halloween-primary);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.05);
 }
 
+.lightbox-media-wrap {
+  width: 100%;
+  max-height: min(52vh, 480px);
+  max-height: min(52dvh, 480px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1c1524 0%, #0a070e 100%);
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: min(50vh, 460px);
+  max-height: min(50dvh, 460px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+.lightbox-details {
+  padding: 1.5rem 1.8rem 1.8rem;
+  background: #0d0a13;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lightbox-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(255, 157, 46, 0.15);
+  color: var(--halloween-vivid);
+  border: 1px solid rgba(255, 157, 46, 0.35);
+}
+
+.lightbox-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+  color: var(--halloween-vivid);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.lightbox-tallas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.2rem 0;
+}
+
+.lightbox-desc {
+  font-size: 0.95rem;
+  color: #dfd8cb;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lightbox-actions {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.lightbox-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.lightbox-wa-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.5);
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .lightbox-dialog {
+    flex-direction: row;
+    max-height: 80vh;
+    max-height: 80dvh;
+  }
+  .lightbox-media-wrap {
+    width: 52%;
+    max-height: none;
+    min-height: 420px;
+    padding: 1.5rem;
+  }
+  .lightbox-img {
+    max-height: min(72vh, 480px);
+    max-height: min(72dvh, 480px);
+  }
+  .lightbox-details {
+    width: 48%;
+    padding: 2.2rem 2rem;
+    justify-content: center;
+  }
+}
+
+
 .card-body-haunted {
-  padding: 3rem 2.5rem;
+  padding: 2.4rem 2rem;
   text-align: center;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .card-body-haunted h3 {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   color: var(--halloween-vivid);
   margin-bottom: 0.8rem;
   text-shadow: 0 0 12px rgba(255, 179, 71, 0.25);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .card-body-haunted p {
@@ -253,5 +426,49 @@ footer { order: 5; }
 
 html {
   scroll-padding-top: 120px;
+}
+
+/* ===== Botón flotante universal de WhatsApp ===== */
+.whatsapp-float {
+  position: fixed;
+  left: max(1.25rem, var(--sal));
+  bottom: max(1.25rem, calc(var(--sab) + 0.8rem));
+  z-index: 960;
+  width: 3.4rem;
+  height: 3.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.whatsapp-float:active {
+  transform: scale(0.95);
+}
+
+.whatsapp-float::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.5);
+  animation: whatsapp-pulse 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes whatsapp-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
 }
 

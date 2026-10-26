@@ -39,13 +39,14 @@
   <!-- El color de cada mes vive aqui; se carga al final para que mande -->
   <link rel="stylesheet" href="css/season-colors.css?v=20261016_v3">
   <link rel="stylesheet" href="css/in-page-admin.css?v=20261016_v3">
+  <link rel="preload" href="data/catalogo.json" as="fetch" crossorigin>
   <link rel="icon" href="assets/img/logo.jpg">
 </head>
 
 <body>
   <header id="main-header">
     <div class="logo-container">
-      <img src="assets/img/logo.jpg" alt="Logo Boutique Horror" loading="eager" fetchpriority="high" decoding="async" width="44" height="44">
+      <img src="assets/img/logo.jpg" alt="El Bodegón de los Trajes Tunja" loading="eager" fetchpriority="high" decoding="async" width="44" height="44">
       <h1>El Bodegón de los Trajes</h1>
     </div>
     <nav id="main-nav" aria-label="Menú principal">
@@ -80,8 +81,8 @@
         <li><a href="#catalogo">Catálogo</a></li>
         <li><a href="#contacto">Contacto</a></li>
         <li class="admin-menu-item">
-          <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Acción interactiva">
-            <span aria-hidden="true">&#128274;</span> Panel de administración
+          <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Acceso al panel administrativo">
+            <span aria-hidden="true">&#128274;</span> Administración
           </button>
         </li>
       </ul>
@@ -95,7 +96,7 @@
     <div class="datos-rapidos-inner">
       <div class="dato-detail">
         <span class="dato-icon" aria-hidden="true">&#128205;</span>
-        <p data-field="quick.address"><strong>Portal en Tunja:</strong> Diagonal 66 2B 04, Tunja, Boyacá</p>
+        <p data-field="quick.address"><strong>Taller en Tunja:</strong> Diagonal 66 2B 04, Tunja, Boyacá</p>
       </div>
       <div class="dato-detail">
         <span class="dato-icon" aria-hidden="true">&#128222;</span>
@@ -114,11 +115,10 @@
     </div>
     <div class="dato-detail dato-horario">
       <span class="dato-icon" aria-hidden="true">&#128197;</span>
-      <p data-field="quick.schedule"><strong>Lunes a sábado:</strong> 8:00 am a 6:00 pm &middot; <strong>Domingos y
+      <p data-field="quick.schedule"><strong>Lunes a sábado:</strong> 8:30 am a 6:30 pm &middot; <strong>Domingos y
           festivos:</strong> 9:00 am a 1:00 pm</p>
     </div>
-    <p class="datos-horario-nota" data-field="quick.schedule_note">Horario provisional — confírmalo por WhatsApp antes
-      de venir.</p>
+    <p class="datos-horario-nota" data-field="quick.schedule_note">Horario de atención — también puedes escribirnos por WhatsApp.</p>
   </div>
 
   <section id="inicio" class="hero-horror">
@@ -130,7 +130,7 @@
         class="btn-wa-hero" target="_blank" rel="noopener" data-field="hero.cta_wa">
         <span aria-hidden="true">&#128172;</span> Cotiza por WhatsApp
       </a>
-      <p class="hero-horario" data-field="hero.schedule">Lunes a sábado 8:00 am – 6:00 pm &middot; Domingos y festivos
+      <p class="hero-horario" data-field="hero.schedule">Lunes a sábado 8:30 am – 6:30 pm &middot; Domingos y festivos
         9:00 am – 1:00 pm</p>
 
     </div>
@@ -381,7 +381,7 @@
             <h4>Cotiza tu Enero</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20enero.">Cotizar por WhatsApp</a>
@@ -504,7 +504,7 @@
             <h4>Cotiza tu Febrero</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20febrero.">Cotizar por
@@ -628,7 +628,7 @@
             <h4>Cotiza tu Marzo</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20marzo.">Cotizar por WhatsApp</a>
@@ -751,7 +751,7 @@
             <h4>Cotiza tu Abril</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20abril.">Cotizar por WhatsApp</a>
@@ -874,7 +874,7 @@
             <h4>Cotiza tu Mayo</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20mayo.">Cotizar por WhatsApp</a>
@@ -996,7 +996,7 @@
             <h4>Cotiza tu Junio</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20junio.">Cotizar por WhatsApp</a>
@@ -1119,7 +1119,7 @@
             <h4>Cotiza tu Julio</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20julio.">Cotizar por WhatsApp</a>
@@ -1241,7 +1241,7 @@
             <h4>Cotiza tu Agosto</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20agosto.">Cotizar por
@@ -1366,7 +1366,7 @@
             <h4>Cotiza tu Septiembre</h4>
             <p class="season-subtitle">📍 Diagonal 66 2B 04, Tunja, Boyacá</p>
             <p class="season-subtitle">📞 +57 310 770 6615</p>
-            <p class="season-subtitle">📅 Lunes a sábado: 8:00 am a 6:00 pm</p>
+            <p class="season-subtitle">📅 Lunes a sábado: 8:30 am a 6:30 pm</p>
             <p class="season-subtitle">🏁 Domingos y festivos: 9:00 am a 1:00 pm</p>
             <a class="season-cta"
               href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20para%20septiembre.">Cotizar por
@@ -2006,20 +2006,19 @@
 
   <section id="contacto">
     <div class="section-head">
-      <span>¿Deseas conjurar un diseño?</span>
+      <span>¿Tienes un diseño o traje en mente?</span>
       <h2>Contáctanos</h2>
     </div>
     <div class="flex-contact">
       <div class="contact-card">
-        <h3>Portal en Tunja</h3>
-        <p class="contact-intro">Nuestro equipo está listo para transformar tu visión en una realidad aterradora con la
-          calidad que nos define.</p>
+        <h3>Taller &amp; Atención en Tunja</h3>
+        <p class="contact-intro">Nuestro equipo de sastrería y alta costura está listo para confeccionar o entallar tu vestuario con la máxima precisión, calidad y puntualidad.</p>
         <div class="contact-detail">
           <p>📍 <strong>Diagonal 66 2B 04</strong> — Tunja, Boyacá</p>
         </div>
         <div class="contact-horario">
           <h4>Horario de atención</h4>
-          <p><strong>Lunes a sábado:</strong> 8:00 am a 6:00 pm</p>
+          <p><strong>Lunes a sábado:</strong> 8:30 am a 6:30 pm</p>
           <p><strong>Domingos y festivos:</strong> 9:00 am a 1:00 pm</p>
         </div>
         <div class="contact-detail">
@@ -2045,12 +2044,12 @@
           <label for="contact-msg">Mensaje</label>
           <textarea id="contact-msg" name="mensaje" rows="5" placeholder="¿Qué traje o diseño necesitas?"
             required></textarea>
-          <button type="submit" class="season-cta contact-submit" aria-label="Acción interactiva">Enviar</button>
+          <button type="submit" class="season-cta contact-submit" aria-label="Acción interactiva">Enviar Solicitud</button>
           <p id="contact-status" class="contact-status" role="status" aria-live="polite" hidden></p>
         </form>
-        <p class="contact-alt">¿Prefieres WhatsApp? <a
-            href="https://wa.me/573107706615?text=Hola%2C%20quiero%20comunicarme." target="_blank"
-            rel="noopener">Escríbenos aquí</a></p>
+        <p class="contact-alt">¿Prefieres atención inmediata? <a
+            href="https://wa.me/573107706615?text=Hola%2C%20quiero%20cotizar%20un%20traje%20en%20El%20Bodeg%C3%B3n%20de%20los%20Trajes." target="_blank"
+            rel="noopener">Escríbenos por WhatsApp</a></p>
         <p class="contact-save">Para guardar nuestro contacto en tu celular, guárdalo como <strong>El Bodegón de los
             Trajes</strong> con el número <strong>+57 310 770 6615</strong>.</p>
       </div>
@@ -2061,9 +2060,9 @@
     <div class="footer-grid">
       <div class="footer-col footer-brand">
         <div class="footer-logo-wrapper">
-          <img src="assets/img/logo.jpg" alt="Logo de la Tienda" loading="lazy" decoding="async" width="44" height="44">
+          <img src="assets/img/logo.jpg" alt="El Bodegón de los Trajes Tunja" loading="lazy" decoding="async" width="44" height="44">
         </div>
-        <p>Donde la elegancia se encuentra con el horror. Disfraces, uniformes y alta costura a la medida en Tunja.</p>
+        <p>Donde la creatividad se une con la alta costura. Disfraces a la medida, trajes de época, uniformes y prendas de gala en Tunja, Boyacá.</p>
       </div>
       <nav class="footer-col" aria-label="Enlaces rápidos">
         <h4>Explora</h4>
@@ -2086,7 +2085,7 @@
           <li>📍 Diagonal 66 2B 04, Tunja</li>
           <li>📞 <a href="tel:+573107706615">+57 310 770 6615</a></li>
           <li>📧 <a href="mailto:elbodegondelostrajes@gmail.com">elbodegondelostrajes@gmail.com</a></li>
-          <li>📅 Lun–Sáb 8:00 am – 6:00 pm</li>
+          <li>📅 Lun–Sáb 8:30 am – 6:30 pm</li>
           <li>🏁 Dom y festivos 9:00 am – 1:00 pm</li>
         </ul>
       </div>
@@ -2103,6 +2102,14 @@
   <script src="js/catalog-renderer.js?v=20261016_v3"></script>
   <script src="js/in-page-admin.js?v=20261016_v5"></script>
   <script src="js/assistant.js?v=20261016_v3"></script>
+  <script>
+    /* Optimizador de Caché PWA y Modo Offline */
+    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
   <script>
     (function () {
       var form = document.getElementById('contact-form');

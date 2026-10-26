@@ -27,7 +27,7 @@ function default_config(): array
         'phone_display' => '+57 310 770 6615',
         'email' => 'elbodegondelostrajes@gmail.com',
         'address' => 'Diagonal 66 2B 04, Tunja, Boyacá',
-        'hours_week' => 'Lun–Sáb 8:00 am – 6:00 pm',
+        'hours_week' => 'Lun–Sáb 8:30 am – 6:30 pm',
         'hours_sun' => 'Dom y festivos 9:00 am – 1:00 pm',
         'ultima_actualizacion' => gmdate('Y-m-d\TH:i:s\Z')
     );

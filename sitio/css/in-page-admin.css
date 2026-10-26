@@ -325,12 +325,13 @@ body.inpage-admin-active .card-inpage-actions {
 }
 
 .inpage-photo-preview {
-  width: 72px;
-  height: 90px;
+  width: 80px;
+  height: 106px;
   border-radius: 8px;
-  object-fit: cover;
-  background: #0c0717;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  object-fit: contain;
+  object-position: center;
+  background: radial-gradient(circle at center, #1b1626 0%, #0a0612 100%);
+  border: 1px solid rgba(232, 201, 106, 0.3);
   flex-shrink: 0;
 }
 

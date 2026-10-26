@@ -22,8 +22,8 @@
     },
     {
       keys: ['horario', 'hora', 'abren', 'abierto', 'cierran', 'atención', 'atienden', 'abierto hasta'],
-      answer: 'Por ahora la atención es vía WhatsApp o por el formulario; escríbenos y coordinamos el horario de tu visita. 🕗\n\n¡Te responderemos con la hora exacta en Tunja!',
-      waText: 'Hola, ¿cuál es el horario de atención?'
+      answer: 'Nuestro horario de atención en Tunja es de Lunes a Sábado de 8:30 am a 6:30 pm (Domingos y festivos de 9:00 am a 1:00 pm). 🕗✨\n\n¿Deseas visitarnos o coordinar una cita previa por WhatsApp?',
+      waText: 'Hola, quiero consultar sobre el horario de atención.'
     },
     {
       keys: ['whatapp', 'wassap', 'whatsapp', 'wasap', 'celular', 'telefono', 'teléfono', 'número', 'numero', 'contactar', 'llamar'],

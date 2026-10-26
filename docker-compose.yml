@@ -18,13 +18,9 @@ services:
       GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
       GITHUB_REPO: "${GITHUB_REPO:-avilamateito818-sudo/EL-BODEGON-DELOS-TRAJES-20262}"
       GITHUB_BRANCH: "${GITHUB_BRANCH:-main}"
-    networks:
-      - default
-      - red_proxy
-
-networks:
-  default:
-    driver: bridge
-  red_proxy:
-    external: true
-    name: ${PROXY_NETWORK:-red_proxy}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

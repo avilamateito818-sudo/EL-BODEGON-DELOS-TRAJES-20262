@@ -21,8 +21,8 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-  --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
   --font-main: 'Quicksand', sans-serif;
   --font-title: 'Cinzel Decorative', serif;
 }
@@ -193,6 +193,7 @@ textarea:focus {
   background-color: var(--primary);
   color: var(--primary-contrast);
 }
+
 .btn-primary:hover {
   background-color: var(--primary-hover);
 }
@@ -201,6 +202,7 @@ textarea:focus {
   background-color: #2b3345;
   color: var(--text-main);
 }
+
 .btn-secondary:hover {
   background-color: #384259;
 }
@@ -209,6 +211,7 @@ textarea:focus {
   background-color: var(--success);
   color: #fff;
 }
+
 .btn-success:hover {
   background-color: var(--success-hover);
 }
@@ -217,6 +220,7 @@ textarea:focus {
   background-color: var(--danger);
   color: #fff;
 }
+
 .btn-danger:hover {
   background-color: var(--danger-hover);
 }
@@ -398,15 +402,20 @@ textarea:focus {
 .traje-card-img {
   position: relative;
   width: 100%;
-  height: 200px;
-  background-color: #080a0f;
+  aspect-ratio: 3 / 4;
+  max-height: 280px;
+  background: radial-gradient(circle at center, #181d2a 0%, #080a0f 100%);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .traje-card-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   transition: transform 0.3s ease;
 }
 
@@ -438,10 +447,12 @@ textarea:focus {
   font-weight: 700;
   border-radius: 4px;
 }
+
 .badge-status.active {
   background: rgba(34, 197, 94, 0.9);
   color: #fff;
 }
+
 .badge-status.inactive {
   background: rgba(239, 68, 68, 0.9);
   color: #fff;
@@ -476,6 +487,7 @@ textarea:focus {
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -562,6 +574,7 @@ textarea:focus {
   padding: 0.35rem 0.75rem;
   font-size: 0.8rem;
 }
+
 .btn-whatsapp:hover {
   background-color: #1ebe5d;
 }
@@ -613,6 +626,7 @@ textarea:focus {
   cursor: pointer;
   line-height: 1;
 }
+
 .modal-close:hover {
   color: var(--text-main);
 }
@@ -638,18 +652,23 @@ textarea:focus {
 }
 
 .photo-preview-box {
-  width: 90px;
-  height: 90px;
+  width: 105px;
+  height: 140px;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: #000;
+  background: radial-gradient(circle at center, #181d2a 0%, #080a0f 100%);
+  border: 1px solid var(--border-color);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .photo-preview-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .photo-upload-controls {
@@ -684,6 +703,7 @@ textarea:focus {
 .toast.toast-success {
   border-left: 4px solid var(--success);
 }
+
 .toast.toast-error {
   border-left: 4px solid var(--danger);
 }
@@ -693,6 +713,7 @@ textarea:focus {
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;

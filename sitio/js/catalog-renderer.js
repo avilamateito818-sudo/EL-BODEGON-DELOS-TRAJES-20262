@@ -12,13 +12,15 @@
 (function () {
   'use strict';
 
-  var CATALOG_URL = 'data/catalogo.json?v=' + Date.now();
+  var CATALOG_CACHE_KEY = 'bodegon_catalog_cache_v2';
+  var CONFIG_CACHE_KEY = 'bodegon_config_cache_v2';
+  var CATALOG_URL = 'data/catalogo.json';
   var businessConfig = {
     whatsapp: '573107706615',
     phone_display: '+57 310 770 6615',
     email: 'elbodegondelostrajes@gmail.com',
     address: 'Diagonal 66 2B 04, Tunja, Boyacá',
-    hours_week: 'Lun–Sáb 8:00 am – 6:00 pm',
+    hours_week: 'Lun–Sáb 8:30 am – 6:30 pm',
     hours_sun: 'Dom y festivos 9:00 am – 1:00 pm'
   };
 
@@ -71,17 +73,32 @@
   }
 
   function initBusinessConfig() {
-    fetch('api/config')
+    try {
+      var cachedCfg = localStorage.getItem(CONFIG_CACHE_KEY);
+      if (cachedCfg) {
+        applyBusinessConfig(JSON.parse(cachedCfg));
+      }
+    } catch (e) {}
+
+    fetch('api/config', { cache: 'default' })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data && data.ok && data.config) {
+          try {
+            localStorage.setItem(CONFIG_CACHE_KEY, JSON.stringify(data.config));
+          } catch (e) {}
           applyBusinessConfig(data.config);
         }
       })
       .catch(function () {
-        fetch('data/config-negocio.json?v=' + Date.now())
+        fetch('data/config-negocio.json', { cache: 'default' })
           .then(function (res) { return res.json(); })
-          .then(function (cfg) { applyBusinessConfig(cfg); })
+          .then(function (cfg) {
+            try {
+              localStorage.setItem(CONFIG_CACHE_KEY, JSON.stringify(cfg));
+            } catch (e) {}
+            applyBusinessConfig(cfg);
+          })
           .catch(function () {});
       });
   }
@@ -353,44 +370,68 @@
     });
   }
 
+  function applyCatalogData(data) {
+    if (!data || !data.trajes) return;
+    window.BODEGON_CATALOGO = data;
+
+    // Sincronizar temporada activa si está definida
+    if (data.temporada_activa && typeof window.selectSeason === 'function') {
+      window.selectSeason(data.temporada_activa);
+    }
+
+    // Sincronizar fotos de banner de temporadas si están definidas
+    if (data.temporadas) {
+      Object.keys(data.temporadas).forEach(function (m) {
+        var sInfo = data.temporadas[m];
+        if (sInfo && sInfo.foto_hero) {
+          var banner = document.querySelector('.season-hero-banner[data-hero-season="' + m + '"]');
+          if (banner) {
+            banner.style.backgroundImage = "url('" + sInfo.foto_hero + "')";
+          }
+        }
+      });
+    }
+
+    // Hidratar catálogo y vitrina de portada de forma inmediata
+    hydrateCards(data.trajes);
+
+    // Notificar a componentes externos (in-page-admin, etc.)
+    window.dispatchEvent(new CustomEvent('bodegon:catalog-updated', { detail: data }));
+  }
+
   function initCatalog(cb) {
-    fetch(CATALOG_URL)
+    // 1. FAST-PATH DE ALTO RENDIMIENTO (0ms):
+    // Cargar inmediatamente desde la caché local para evitar cualquier parpadeo en blanco/negro
+    try {
+      var cachedJson = localStorage.getItem(CATALOG_CACHE_KEY);
+      if (cachedJson) {
+        var cachedData = JSON.parse(cachedJson);
+        if (cachedData && cachedData.trajes) {
+          applyCatalogData(cachedData);
+        }
+      }
+    } catch (e) {}
+
+    // 2. NETWORK-PATH STALE-WHILE-REVALIDATE:
+    // Sincronizar en segundo plano con el servidor y actualizar la caché
+    var fetchUrl = CATALOG_URL + '?t=' + Math.floor(Date.now() / 60000);
+    fetch(fetchUrl, { cache: 'default' })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       })
       .then(function (data) {
         if (!data || !data.trajes) return;
-        window.BODEGON_CATALOGO = data;
+        try {
+          localStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify(data));
+        } catch (e) {}
 
-        // Sincronizar temporada activa si está definida
-        if (data.temporada_activa && typeof window.selectSeason === 'function') {
-          window.selectSeason(data.temporada_activa);
-        }
-
-        // Sincronizar fotos de banner de temporadas si están definidas
-        if (data.temporadas) {
-          Object.keys(data.temporadas).forEach(function (m) {
-            var sInfo = data.temporadas[m];
-            if (sInfo && sInfo.foto_hero) {
-              var banner = document.querySelector('.season-hero-banner[data-hero-season="' + m + '"]');
-              if (banner) {
-                banner.style.backgroundImage = "url('" + sInfo.foto_hero + "')";
-              }
-            }
-          });
-        }
-
-        // Hidratar catálogo y vitrina de portada
-        hydrateCards(data.trajes);
-
-        // Notificar a componentes externos (in-page-admin, etc.)
-        window.dispatchEvent(new CustomEvent('bodegon:catalog-updated', { detail: data }));
+        applyCatalogData(data);
         if (typeof cb === 'function') cb(data);
       })
       .catch(function (err) {
-        console.warn('[Catalogo] Usando contenido estático del HTML:', err.message);
-        if (typeof cb === 'function') cb(null, err);
+        console.warn('[Catalogo] Usando caché local o contenido estático:', err.message);
+        if (typeof cb === 'function') cb(window.BODEGON_CATALOGO || null, err);
       });
   }
 
@@ -398,6 +439,13 @@
   window.refreshBodegonCatalog = function (cb) {
     initCatalog(cb);
   };
+
+  // Soporte bfcache de Safari en iPhone
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted && window.BODEGON_CATALOGO) {
+      applyCatalogData(window.BODEGON_CATALOGO);
+    }
+  });
 
   // Inicializar al cargar el DOM
   if (document.readyState === 'loading') {

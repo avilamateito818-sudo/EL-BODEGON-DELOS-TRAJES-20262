@@ -94,8 +94,13 @@ function save_catalog(string $filePath, array $data): bool
 // =========================================================================
 if ($method === 'GET') {
     $catalog = load_catalog($catalogFile);
-    header('Cache-Control: no-cache, must-revalidate, max-age=0');
-    header('Pragma: no-cache');
+    $etag = '"' . md5(strval($catalog['ultima_actualizacion'] ?? filemtime($catalogFile))) . '"';
+    header('ETag: ' . $etag);
+    header('Cache-Control: public, max-age=60, stale-while-revalidate=300');
+    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) === $etag) {
+        http_response_code(304);
+        exit;
+    }
     api_send(200, array_merge(array('ok' => true), $catalog));
 }
 

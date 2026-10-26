@@ -338,9 +338,15 @@ section {
   section { padding: 5rem 5%; }
   #temporadas { padding: 5rem 5%; }
   .section-head { margin-bottom: 4rem; }
+  .grid-haunted {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    gap: 1.8rem;
+    width: 100%;
+    min-width: 0;
+  }
   .img-ghost { aspect-ratio: var(--foto-relacion, 3 / 4); }
-  .card-body-haunted { padding: 2rem 1.6rem; }
-  .season-catalog { padding: 2rem; }
+  .card-body-haunted { padding: 1.8rem 1.4rem; }
+  .season-catalog { padding: 2rem; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
   .season-tab { padding: 1.1rem 1.7rem; font-size: 1rem; }
   footer { padding: 4rem 5%; }
   .flex-contact { gap: 3rem; }
@@ -364,8 +370,10 @@ section {
   header.scrolled { padding: 0.8rem 4%; }
 
   .grid-haunted {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.6rem;
+    width: 100%;
+    min-width: 0;
   }
   .img-ghost { aspect-ratio: var(--foto-relacion, 3 / 4); }
   .season-catalog .grid-haunted { gap: 1.6rem; }
@@ -741,6 +749,8 @@ body > header {
   overflow: hidden;
   overflow-x: clip;
   max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Admin: elementos movidos/fotos se limitan a la vista (no salen de pantalla) */
@@ -1065,18 +1075,23 @@ textarea:focus-visible,
     padding-left: 6%;
     padding-right: 6%;
   }
-  /* Trade-especialmente las tarjetas en 2 columnas no queden apretadas */
+  /* Tarjetas del catálogo: 2 columnas balanceadas sin desbordamiento ni recortes */
   .grid-haunted {
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    gap: 1.8rem;
+    width: 100%;
+    min-width: 0;
   }
   .img-ghost {
     aspect-ratio: var(--foto-relacion, 3 / 4);
   }
   .card-body-haunted {
-    padding: 2rem 1.6rem;
+    padding: 1.8rem 1.4rem;
   }
   .card-body-haunted h3 {
     font-size: 1.4rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 }
 
@@ -1123,5 +1138,71 @@ textarea:focus-visible,
   .season-subsection .season-cta {
     width: 100%;
     text-align: center;
+  }
+}
+
+/* ===================================================================
+   OPTIMIZADOR PROFESIONAL PARA APPLE IPHONE (iOS SAFARI / WEBKIT)
+   -------------------------------------------------------------------
+   1. Previene parpadeos de renderizado y pantallas en blanco/negro en transiciones.
+   2. Asegura aceleración por GPU limpia sin tile thrashing.
+   3. Erradica zoom forzado, retrasos táctiles y desbordamiento con teclado abierto.
+   =================================================================== */
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    background-color: #05070c; /* Previene pantallazo blanco de fondo al rebotar scroll */
+  }
+
+  #temporadas {
+    background-color: #05070c;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .season-panel.is-active {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    contain: layout paint;
+  }
+
+  .season-marquee {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevenir zoom no deseado y saltos de pantalla en Safari al interactuar */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Blindaje de imágenes en tarjetas para evitar fallos de decodificación en WebKit */
+  .card-ghost img,
+  .season-hero-banner img,
+  .subsection-img img {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* En iOS Safari, visibilidad inmediata de elementos para erradicar cualquier retraso o pantalla en blanco */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Garantizar activación y visibilidad inmediata de cualquier panel de temporada */
+  .season-panel {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .season-panel.is-active {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: none !important;
   }
 }
